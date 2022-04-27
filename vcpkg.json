@@ -1,0 +1,14 @@
+{
+    "name":  "scar",
+    "version-string":  "0.0.1",
+    "description":  "",
+    "license":  "MIT",
+    "dependencies":  [
+                         "spdlog"
+                     ],
+    "features":  {
+                     "mo2-install":  {
+                                         "description":  "SCAR"
+                                     }
+                 }
+}
