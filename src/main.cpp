@@ -64,12 +64,12 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 
 	SKSE::Init(a_skse);
 
-	SCAR::AnimEventHook::InstallHook();
+	// For First Attack
+	SCAR::AttackActionHook::InstallHook();
+	SCAR::RecheckAttackDistancHook::Install();
 
-	SCAR::AttackAngleHook::InstallHook();
-	SCAR::AttackDistanceHook2::Install();
-
-	SCAR::NotifyAnimHook::install();
+	// For Combo
+	SCAR::AnimEventHook::InstallHook();  
 
 	return true;
 }
