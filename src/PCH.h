@@ -1,8 +1,9 @@
 #pragma once
 
+#include "effolkronium/random.hpp"
+using Random = effolkronium::random_static;
 
 // AdditionalInclude
-
 
 // CommonLib
 #include "RE/Skyrim.h"
@@ -17,6 +18,5 @@ using namespace std::literals;
 #include "DKUtil/Logger.hpp"
 
 namespace logger = SKSE::log;
-
 
 #define DLLEXPORT __declspec(dllexport)

@@ -1,4 +1,5 @@
-#include "Hook.h"
+#include "Hook_AttackCombo.h"
+#include "Hook_AttackStart.h"
 
 #if ANNIVERSARY_EDITION
 
@@ -65,11 +66,13 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	SKSE::Init(a_skse);
 
 	// For First Attack
-	SCAR::AttackActionHook::InstallHook();
 	SCAR::RecheckAttackDistancHook::Install();
+	SCAR::AttackActionHook::InstallHook();
 
 	// For Combo
-	SCAR::AnimEventHook::InstallHook();  
+	//SCAR::AnimEventHook::InstallHook();
+
+	//SCAR::Hook_GetAttackChance2::install();
 
 	return true;
 }
