@@ -57,14 +57,14 @@ namespace SCAR
 			};
 
 			if (a_attacker && a_target && a_attacker->GetAttackState() == RE::ATTACK_STATE_ENUM::kNone && GetDistanceVariable(a_attacker, distMap)) {
-				for (auto pair : distMap) {
-					logger::debug("{} value is {}", pair.first, pair.second);
-				}
-
 				auto currentDistance = a_attacker->GetPosition().GetDistance(a_target->GetPosition());
 
 				if (IsInDistance(currentDistance, distMap.at(FIRST_NORMAL_DISTANCE_MIN), a_attacker->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX)) ||
 					IsInDistance(currentDistance, distMap.at(FIRST_POWER_DISTANCE_MIN), a_attacker->GetReach() + distMap.at(FIRST_POWER_DISTANCE_MAX))) {
+					for (auto pair : distMap) {
+						logger::debug("{} value is {}", pair.first, pair.second);
+					}
+
 					logger::debug("Tagre in Attack Distance,Current Distance {}", currentDistance);
 					return true;
 				}
@@ -124,6 +124,8 @@ namespace SCAR
 				auto actor = a_actionData->Subject_8 ? a_actionData->Subject_8->As<RE::Actor>() : nullptr;
 				if (actor && !actor->IsPlayerRef() && actor->GetAttackState() == RE::ATTACK_STATE_ENUM::kNone && actor->currentCombatTarget.get() && GetDistanceVariable(actor, distMap)) {
 					actor->SetGraphVariableFloat(NEXT_ATTACK_CHANCE, 100.f);
+					actor->SetGraphVariableInt("MCO_nextattack", 1);
+					actor->SetGraphVariableInt("MCO_nextpowerattack", 1);
 
 					auto currentDistance = actor->GetPosition().GetDistance(actor->currentCombatTarget.get()->GetPosition());
 					auto InNormalDistance = IsInDistance(currentDistance, distMap.at(FIRST_NORMAL_DISTANCE_MIN), actor->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX));

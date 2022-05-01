@@ -21,6 +21,7 @@ namespace SCAR
 	{
 		float nextAttackChance = 0.f;
 		if (a_actor && a_actor->GetGraphVariableFloat(NEXT_ATTACK_CHANCE, nextAttackChance)) {
+			logger::debug("Next Attack Chacne is {}", nextAttackChance);
 			return nextAttackChance > Random::get<float>(0.f, 100.f);
 		}
 

@@ -36,7 +36,9 @@ namespace SCAR
 				return _ProcessEvent(a_sink, a_event, a_eventSource);
 
 			auto actor = a_event->holder->As<RE::Actor>();
-			if (actor && _strcmpi("MCO_WinOpen", a_event->tag.c_str()) == 0) {
+			auto combatTarg = actor ? actor->currentCombatTarget.get() : nullptr;
+
+			if (actor && actor->currentProcess && actor->currentProcess->high && combatTarg && _strcmpi("MCO_WinOpen", a_event->tag.c_str()) == 0 && actor->GetAttackState() != RE::ATTACK_STATE_ENUM::kNone) {
 				std::map<const std::string, float> distMap = {
 					std::make_pair(NEXT_NORMAL_DISTANCE_MAX, 0.f),
 					std::make_pair(NEXT_NORMAL_DISTANCE_MIN, 0.f),
@@ -44,7 +46,6 @@ namespace SCAR
 					std::make_pair(NEXT_POWER_DISTANCE_MIN, 0.f),
 				};
 
-				auto combatTarg = actor->currentCombatTarget ? actor->currentCombatTarget.get() : nullptr;
 				auto heightDiff = std::abs(combatTarg->GetPositionZ() - actor->GetPositionZ());
 
 				if (ShouldNextAttack(actor) && combatTarg && actor->HasLOS(combatTarg.get()) && heightDiff < actor->GetHeight() && GetDistanceVariable(actor, distMap)) {
@@ -59,11 +60,12 @@ namespace SCAR
 					auto InPowerDistance = IsInDistance(currentDistance, distMap.at(NEXT_POWER_DISTANCE_MIN), actor->GetReach() + distMap.at(NEXT_POWER_DISTANCE_MAX));
 
 					float powerAttackChance = 30.f;
-					if (InPowerDistance && powerAttackChance > Random::get<float>(0.f, 100.f))
+					if (InPowerDistance && powerAttackChance > Random::get<float>(0.f, 100.f)) {
 						eventName = POWER_ATTACK_EVENT;
-					else if (InNormalDistance)
+					} else if (InNormalDistance)
 						eventName = NORMAL_ATTACK_EVENT;
 
+					actor->SetGraphVariableFloat(NEXT_ATTACK_CHANCE, 100.f);
 					actor->NotifyAnimationGraph(eventName);
 				}
 			}
