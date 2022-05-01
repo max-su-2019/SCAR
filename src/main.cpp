@@ -70,7 +70,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	SCAR::AttackActionHook::InstallHook();
 
 	// For Combo
-	//SCAR::AnimEventHook::InstallHook();
+	SCAR::AnimEventHook::InstallHook();
 
 	//SCAR::Hook_GetAttackChance2::install();
 

@@ -1,7 +1,13 @@
 #pragma once
+#include "Function.h"
 
 namespace SCAR
 {
+	static constexpr char NEXT_NORMAL_DISTANCE_MAX[] = "SCAR_nextattackdistancemax",
+						  NEXT_NORMAL_DISTANCE_MIN[] = "SCAR_nextattackdistancemin",
+						  NEXT_POWER_DISTANCE_MAX[] = "SCAR_nextpowerattackdistancemax",
+						  NEXT_POWER_DISTANCE_MIN[] = "SCAR_nextpowerattackdistancemin";
+
 	class AnimEventHook
 	{
 		using EventResult = RE::BSEventNotifyControl;
@@ -22,29 +28,43 @@ namespace SCAR
 	private:
 		static EventResult ProcessEvent(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event, RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 		{
+			static constexpr char POWER_ATTACK_EVENT[] = "attackPowerStartForward", NORMAL_ATTACK_EVENT[] = "attackStart";
+
 			//logger::debug("Process Animation Event Fire!");
+
 			if (!a_event || !a_event->holder)
 				return _ProcessEvent(a_sink, a_event, a_eventSource);
 
 			auto actor = a_event->holder->As<RE::Actor>();
 			if (actor && _strcmpi("MCO_WinOpen", a_event->tag.c_str()) == 0) {
-				float nextAttackDistance = 0.f, nextPowerAttackDistance = 0.f;
-				if (actor->GetGraphVariableFloat("SCAR_nextattackdistancemax", nextAttackDistance) && actor->GetGraphVariableFloat("SCAR_nextpowerattackdistancemax", nextPowerAttackDistance)) {
-					auto combatTarg = actor->currentCombatTarget ? actor->currentCombatTarget.get() : nullptr;
-					if (!combatTarg || !actor->HasLOS(combatTarg.get()))
-						return _ProcessEvent(a_sink, a_event, a_eventSource);
+				std::map<const std::string, float> distMap = {
+					std::make_pair(NEXT_NORMAL_DISTANCE_MAX, 0.f),
+					std::make_pair(NEXT_NORMAL_DISTANCE_MIN, 0.f),
+					std::make_pair(NEXT_POWER_DISTANCE_MAX, 0.f),
+					std::make_pair(NEXT_POWER_DISTANCE_MIN, 0.f),
+				};
 
-					auto NormalAttackDistance = actor->GetReach() + nextAttackDistance;
-					auto PowerAttackDistance = actor->GetReach() + nextPowerAttackDistance;
-					auto distance = actor->GetPosition().GetDistance(combatTarg->GetPosition());
+				auto combatTarg = actor->currentCombatTarget ? actor->currentCombatTarget.get() : nullptr;
+				auto heightDiff = std::abs(combatTarg->GetPositionZ() - actor->GetPositionZ());
 
-					if (NormalAttackDistance * 1.1f >= distance) {
-						actor->NotifyAnimationGraph("attackStart");
-						logger::debug("Fire Next Normal Attack!, Distance {}", distance);
-					} else if (PowerAttackDistance >= distance && PowerAttackDistance >= NormalAttackDistance * 3.0f) {
-						actor->NotifyAnimationGraph("attackPowerStartForward");
-						logger::debug("Fire Next Power Attack!, Distance {}", distance);
+				if (ShouldNextAttack(actor) && combatTarg && actor->HasLOS(combatTarg.get()) && heightDiff < actor->GetHeight() && GetDistanceVariable(actor, distMap)) {
+					for (auto pair : distMap) {
+						logger::debug("{} value is {}", pair.first, pair.second);
 					}
+
+					std::string eventName = "";
+
+					auto currentDistance = actor->GetPosition().GetDistance(actor->currentCombatTarget.get()->GetPosition());
+					auto InNormalDistance = IsInDistance(currentDistance, distMap.at(NEXT_NORMAL_DISTANCE_MIN), actor->GetReach() + distMap.at(NEXT_NORMAL_DISTANCE_MAX));
+					auto InPowerDistance = IsInDistance(currentDistance, distMap.at(NEXT_POWER_DISTANCE_MIN), actor->GetReach() + distMap.at(NEXT_POWER_DISTANCE_MAX));
+
+					float powerAttackChance = 30.f;
+					if (InPowerDistance && powerAttackChance > Random::get<float>(0.f, 100.f))
+						eventName = POWER_ATTACK_EVENT;
+					else if (InNormalDistance)
+						eventName = NORMAL_ATTACK_EVENT;
+
+					actor->NotifyAnimationGraph(eventName);
 				}
 			}
 

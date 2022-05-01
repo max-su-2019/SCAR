@@ -123,7 +123,7 @@ namespace SCAR
 
 				auto actor = a_actionData->Subject_8 ? a_actionData->Subject_8->As<RE::Actor>() : nullptr;
 				if (actor && !actor->IsPlayerRef() && actor->GetAttackState() == RE::ATTACK_STATE_ENUM::kNone && actor->currentCombatTarget.get() && GetDistanceVariable(actor, distMap)) {
-					const std::string eventName = a_actionData->AnimationEvent_28.c_str();
+					actor->SetGraphVariableFloat(NEXT_ATTACK_CHANCE, 100.f);
 
 					auto currentDistance = actor->GetPosition().GetDistance(actor->currentCombatTarget.get()->GetPosition());
 					auto InNormalDistance = IsInDistance(currentDistance, distMap.at(FIRST_NORMAL_DISTANCE_MIN), actor->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX));
@@ -136,7 +136,7 @@ namespace SCAR
 					else if (InNormalDistance)
 						a_actionData->AnimationEvent_28 = NORMAL_ATTACK_EVENT;
 					else
-						a_actionData->AnimationEvent_28 = "";
+						return false;
 
 					logger::debug("Action Name is {}, Subject Name is {}", a_actionData->AnimationEvent_28.c_str(), a_actionData->Subject_8->GetName());
 				}
