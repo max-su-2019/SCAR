@@ -122,25 +122,30 @@ namespace SCAR
 				};
 
 				auto actor = a_actionData->Subject_8 ? a_actionData->Subject_8->As<RE::Actor>() : nullptr;
-				if (actor && !actor->IsPlayerRef() && actor->GetAttackState() == RE::ATTACK_STATE_ENUM::kNone && actor->currentCombatTarget.get() && GetDistanceVariable(actor, distMap)) {
+				auto targ = actor ? actor->currentCombatTarget.get() : nullptr;
+				if (actor && actor->currentProcess && !actor->IsPlayerRef() && targ && GetDistanceVariable(actor, distMap)) {
 					actor->SetGraphVariableFloat(NEXT_ATTACK_CHANCE, 100.f);
 					actor->SetGraphVariableInt("MCO_nextattack", 1);
 					actor->SetGraphVariableInt("MCO_nextpowerattack", 1);
 
-					auto currentDistance = actor->GetPosition().GetDistance(actor->currentCombatTarget.get()->GetPosition());
+					auto currentDistance = actor->GetPosition().GetDistance(targ->GetPosition());
 					auto InNormalDistance = IsInDistance(currentDistance, distMap.at(FIRST_NORMAL_DISTANCE_MIN), actor->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX));
 					auto InPowerDistance = IsInDistance(currentDistance, distMap.at(FIRST_POWER_DISTANCE_MIN), actor->GetReach() + distMap.at(FIRST_POWER_DISTANCE_MAX));
 
-					float powerAttackChance = InNormalDistance ? 30.f : 100.f;
+					float powerAttackChance = 30.f;
 
-					if (InPowerDistance && powerAttackChance >= Random::get<float>(0.f, 100.f))
-						a_actionData->AnimationEvent_28 = POWER_ATTACK_EVENT;
-					else if (InNormalDistance)
-						a_actionData->AnimationEvent_28 = NORMAL_ATTACK_EVENT;
-					else
+					auto normalAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCNormalAttackRoot");  //SCAR Normal Attack Root Idle Form
+					auto powerAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCPowerAttackRoot");    //SCAR_PowerAttackRoot Idle Form
+
+					if (powerAttackIdle && InPowerDistance && powerAttackChance >= Random::get<float>(0.f, 100.f) && !actor->IsPowerAttackCoolingDown()) {
+						logger::debug("Power Atatck Start! Subject: \"{}\"", actor->GetName());
+						actor->StartPowerAttackCoolDown();
+						return actor->currentProcess->PlayIdle(actor, RE::DEFAULT_OBJECT::kActionRightPowerAttack, powerAttackIdle, true, true, targ.get());
+					} else if (normalAttackIdle && InNormalDistance) {
+						logger::debug("Normal Atatck Start! Subject: \"{}\"", actor->GetName());
+						return actor->currentProcess->PlayIdle(actor, RE::DEFAULT_OBJECT::kActionRightAttack, normalAttackIdle, true, true, targ.get());
+					} else
 						return false;
-
-					logger::debug("Action Name is {}, Subject Name is {}", a_actionData->AnimationEvent_28.c_str(), a_actionData->Subject_8->GetName());
 				}
 			}
 

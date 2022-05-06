@@ -38,7 +38,7 @@ namespace SCAR
 			auto actor = a_event->holder->As<RE::Actor>();
 			auto combatTarg = actor ? actor->currentCombatTarget.get() : nullptr;
 
-			if (actor && actor->currentProcess && actor->currentProcess->high && combatTarg && _strcmpi("MCO_WinOpen", a_event->tag.c_str()) == 0 && actor->GetAttackState() != RE::ATTACK_STATE_ENUM::kNone) {
+			if (actor && actor->currentProcess && actor->currentProcess->high && ShouldNextAttack(actor) && combatTarg && _strcmpi("MCO_WinOpen", a_event->tag.c_str()) == 0) {
 				std::map<const std::string, float> distMap = {
 					std::make_pair(NEXT_NORMAL_DISTANCE_MAX, 0.f),
 					std::make_pair(NEXT_NORMAL_DISTANCE_MIN, 0.f),
@@ -48,25 +48,32 @@ namespace SCAR
 
 				auto heightDiff = std::abs(combatTarg->GetPositionZ() - actor->GetPositionZ());
 
-				if (ShouldNextAttack(actor) && combatTarg && actor->HasLOS(combatTarg.get()) && heightDiff < actor->GetHeight() && GetDistanceVariable(actor, distMap)) {
+				if (combatTarg && actor->HasLOS(combatTarg.get()) && heightDiff < actor->GetHeight() && GetDistanceVariable(actor, distMap)) {
 					for (auto pair : distMap) {
 						logger::debug("{} value is {}", pair.first, pair.second);
 					}
 
-					std::string eventName = "";
+					auto normalAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCNormalAttackRoot");  //SCAR Normal Attack Root Idle Form
+					auto powerAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCPowerAttackRoot");    //SCAR PowerAttackRoot Idle Form
 
-					auto currentDistance = actor->GetPosition().GetDistance(actor->currentCombatTarget.get()->GetPosition());
+					auto currentDistance = actor->GetPosition().GetDistance(combatTarg->GetPosition());
 					auto InNormalDistance = IsInDistance(currentDistance, distMap.at(NEXT_NORMAL_DISTANCE_MIN), actor->GetReach() + distMap.at(NEXT_NORMAL_DISTANCE_MAX));
 					auto InPowerDistance = IsInDistance(currentDistance, distMap.at(NEXT_POWER_DISTANCE_MIN), actor->GetReach() + distMap.at(NEXT_POWER_DISTANCE_MAX));
 
-					float powerAttackChance = 30.f;
-					if (InPowerDistance && powerAttackChance > Random::get<float>(0.f, 100.f)) {
-						eventName = POWER_ATTACK_EVENT;
-					} else if (InNormalDistance)
-						eventName = NORMAL_ATTACK_EVENT;
-
 					actor->SetGraphVariableFloat(NEXT_ATTACK_CHANCE, 100.f);
-					actor->NotifyAnimationGraph(eventName);
+					float powerAttackChance = 30.f;
+
+					if (powerAttackIdle && InPowerDistance && powerAttackChance > Random::get<float>(0.f, 100.f) &&
+						actor->currentProcess->PlayIdle(actor, RE::DEFAULT_OBJECT::kActionRightPowerAttack, powerAttackIdle, true, true, combatTarg.get())) {
+						logger::debug("Next Combo is Power Attack!");
+						return _ProcessEvent(a_sink, a_event, a_eventSource);
+					}
+
+					if (normalAttackIdle && InNormalDistance) {
+						logger::debug("Next Combo is Normal Attack!");
+						actor->currentProcess->PlayIdle(actor, RE::DEFAULT_OBJECT::kActionRightAttack, normalAttackIdle, true, true, combatTarg.get());
+						return _ProcessEvent(a_sink, a_event, a_eventSource);
+					}
 				}
 			}
 
