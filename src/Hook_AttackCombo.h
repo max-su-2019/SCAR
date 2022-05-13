@@ -46,31 +46,30 @@ namespace SCAR
 					std::make_pair(NEXT_POWER_DISTANCE_MIN, 0.f),
 				};
 
-				auto heightDiff = std::abs(combatTarg->GetPositionZ() - actor->GetPositionZ());
-
-				if (combatTarg && actor->HasLOS(combatTarg.get()) && heightDiff < actor->GetHeight() && GetDistanceVariable(actor, distMap)) {
+				if (combatTarg && actor->HasLOS(combatTarg.get()) && GetDistanceVariable(actor, distMap)) {
 					for (auto pair : distMap) {
 						logger::debug("{} value is {}", pair.first, pair.second);
 					}
 
-					auto normalAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCNormalAttackRoot");  //SCAR Normal Attack Root Idle Form
-					auto powerAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCPowerAttackRoot");    //SCAR PowerAttackRoot Idle Form
+					auto normalAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCNormalAttack");  //SCAR_NPCNormalAttack Idle Form
+					auto powerAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCPowerAttack");    //SCAR_PowerAttack Idle Form
 
-					auto currentDistance = actor->GetPosition().GetDistance(combatTarg->GetPosition());
-					auto InNormalDistance = IsInDistance(currentDistance, distMap.at(NEXT_NORMAL_DISTANCE_MIN), actor->GetReach() + distMap.at(NEXT_NORMAL_DISTANCE_MAX));
-					auto InPowerDistance = IsInDistance(currentDistance, distMap.at(NEXT_POWER_DISTANCE_MIN), actor->GetReach() + distMap.at(NEXT_POWER_DISTANCE_MAX));
+					auto InNormalRange = AttackRangeCheck::WithinAttackRange(actor, combatTarg.get(), actor->GetReach() + distMap.at(NEXT_NORMAL_DISTANCE_MAX), distMap.at(NEXT_NORMAL_DISTANCE_MIN), startAngle, endAngle);
+					auto InPowerRange = AttackRangeCheck::WithinAttackRange(actor, combatTarg.get(), actor->GetReach() + distMap.at(NEXT_POWER_DISTANCE_MAX), distMap.at(NEXT_POWER_DISTANCE_MIN), startAngle, endAngle);
 
 					actor->SetGraphVariableFloat(NEXT_ATTACK_CHANCE, 100.f);
 					float powerAttackChance = 30.f;
 
-					if (powerAttackIdle && InPowerDistance && powerAttackChance > Random::get<float>(0.f, 100.f) &&
+					if (powerAttackIdle && InPowerRange && powerAttackChance > Random::get<float>(0.f, 100.f) &&
 						actor->currentProcess->PlayIdle(actor, RE::DEFAULT_OBJECT::kActionRightPowerAttack, powerAttackIdle, true, true, combatTarg.get())) {
 						logger::debug("Next Combo is Power Attack!");
+						AttackRangeCheck::DrawOverlay(actor, combatTarg.get(), actor->GetReach() + distMap.at(NEXT_POWER_DISTANCE_MAX), distMap.at(NEXT_POWER_DISTANCE_MIN), startAngle, endAngle);
 						return _ProcessEvent(a_sink, a_event, a_eventSource);
 					}
 
-					if (normalAttackIdle && InNormalDistance) {
+					if (normalAttackIdle && InNormalRange) {
 						logger::debug("Next Combo is Normal Attack!");
+						AttackRangeCheck::DrawOverlay(actor, combatTarg.get(), actor->GetReach() + distMap.at(NEXT_NORMAL_DISTANCE_MAX), distMap.at(NEXT_NORMAL_DISTANCE_MIN), startAngle, endAngle);
 						actor->currentProcess->PlayIdle(actor, RE::DEFAULT_OBJECT::kActionRightAttack, normalAttackIdle, true, true, combatTarg.get());
 						return _ProcessEvent(a_sink, a_event, a_eventSource);
 					}
@@ -103,7 +102,7 @@ namespace SCAR
 			//logger::debug("{} Hook Trigger!", std::source_location::current().function_name());
 			auto result = _getAttackChance(a1, a2, atkData);
 
-			if (atkData && a1 && a2) {
+			if (atkData && a1 && a2 && _stricmp(atkData->event.c_str(), "attackStart") == 0) {
 				logger::debug("Attack Data Chance {},Name {}", result, atkData->event.c_str());
 			}
 

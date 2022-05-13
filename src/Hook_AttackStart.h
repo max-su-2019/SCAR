@@ -56,16 +56,14 @@ namespace SCAR
 				std::make_pair(FIRST_POWER_DISTANCE_MIN, 0.f),
 			};
 
-			if (a_attacker && a_target && a_attacker->GetAttackState() == RE::ATTACK_STATE_ENUM::kNone && GetDistanceVariable(a_attacker, distMap)) {
-				auto currentDistance = a_attacker->GetPosition().GetDistance(a_target->GetPosition());
-
-				if (IsInDistance(currentDistance, distMap.at(FIRST_NORMAL_DISTANCE_MIN), a_attacker->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX)) ||
-					IsInDistance(currentDistance, distMap.at(FIRST_POWER_DISTANCE_MIN), a_attacker->GetReach() + distMap.at(FIRST_POWER_DISTANCE_MAX))) {
+			if (a_attacker && a_target && GetDistanceVariable(a_attacker, distMap)) {
+				if (AttackRangeCheck::WithinAttackRange(a_attacker, a_target, a_attacker->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX), distMap.at(FIRST_NORMAL_DISTANCE_MIN), startAngle, endAngle) ||
+					AttackRangeCheck::WithinAttackRange(a_attacker, a_target, a_attacker->GetReach() + distMap.at(FIRST_POWER_DISTANCE_MAX), distMap.at(FIRST_POWER_DISTANCE_MIN), startAngle, endAngle)) {
 					for (auto pair : distMap) {
 						logger::debug("{} value is {}", pair.first, pair.second);
 					}
 
-					logger::debug("Tagre in Attack Distance,Current Distance {}", currentDistance);
+					logger::debug("Tagre in Attack Distance");
 					return true;
 				}
 
@@ -96,6 +94,7 @@ namespace SCAR
 #if ANNIVERSARY_EDITION
 			//Anniversary Edition
 #else
+			//ChoseAttackData_sub_14080C020+4D7	 call  TESActionData__sub_14075FF10
 			static std::uint32_t baseID = 48139, offset = 0x4D7;  //Special Edition
 #endif
 			SKSE::AllocTrampoline(1 << 4);
@@ -109,11 +108,11 @@ namespace SCAR
 	private:
 		static bool PerformAttackAction(RE::TESActionData* a_actionData)
 		{
-			static constexpr char POWER_ATTACK_EVENT[] = "attackPowerStartForward", NORMAL_ATTACK_EVENT[] = "attackStart";
-
 			//logger::debug("{} Hook Trigger!", std::source_location::current().function_name());
 
 			if (a_actionData) {
+				bool result = false;
+
 				std::map<const std::string, float> distMap = {
 					std::make_pair(FIRST_NORMAL_DISTANCE_MAX, 0.f),
 					std::make_pair(FIRST_NORMAL_DISTANCE_MIN, 0.f),
@@ -121,32 +120,37 @@ namespace SCAR
 					std::make_pair(FIRST_POWER_DISTANCE_MIN, 0.f),
 				};
 
-				auto actor = a_actionData->Subject_8 ? a_actionData->Subject_8->As<RE::Actor>() : nullptr;
-				auto targ = actor ? actor->currentCombatTarget.get() : nullptr;
-				if (actor && actor->currentProcess && !actor->IsPlayerRef() && targ && GetDistanceVariable(actor, distMap)) {
-					actor->SetGraphVariableFloat(NEXT_ATTACK_CHANCE, 100.f);
-					actor->SetGraphVariableInt("MCO_nextattack", 1);
-					actor->SetGraphVariableInt("MCO_nextpowerattack", 1);
+				auto attacker = a_actionData->Subject_8 ? a_actionData->Subject_8->As<RE::Actor>() : nullptr;
+				auto targ = attacker ? attacker->currentCombatTarget.get() : nullptr;
+				if (attacker && attacker->currentProcess && !attacker->IsPlayerRef() && targ && GetDistanceVariable(attacker, distMap)) {
+					attacker->SetGraphVariableFloat(NEXT_ATTACK_CHANCE, 100.f);
+					attacker->SetGraphVariableInt("MCO_nextattack", 1);
+					attacker->SetGraphVariableInt("MCO_nextpowerattack", 1);
 
-					auto currentDistance = actor->GetPosition().GetDistance(targ->GetPosition());
-					auto InNormalDistance = IsInDistance(currentDistance, distMap.at(FIRST_NORMAL_DISTANCE_MIN), actor->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX));
-					auto InPowerDistance = IsInDistance(currentDistance, distMap.at(FIRST_POWER_DISTANCE_MIN), actor->GetReach() + distMap.at(FIRST_POWER_DISTANCE_MAX));
+					auto InNormalRange = AttackRangeCheck::WithinAttackRange(attacker, targ.get(), attacker->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX), distMap.at(FIRST_NORMAL_DISTANCE_MIN), startAngle, endAngle);
+					auto InPowerRange = AttackRangeCheck::WithinAttackRange(attacker, targ.get(), attacker->GetReach() + distMap.at(FIRST_POWER_DISTANCE_MAX), distMap.at(FIRST_POWER_DISTANCE_MIN), startAngle, endAngle);
 
 					float powerAttackChance = 30.f;
 
-					auto normalAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCNormalAttackRoot");  //SCAR Normal Attack Root Idle Form
-					auto powerAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCPowerAttackRoot");    //SCAR_PowerAttackRoot Idle Form
+					auto normalAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCNormalAttack");  //SCAR_NPCNormalAttack Idle Form
+					auto powerAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCPowerAttack");    //SCAR_PowerAttack Idle Form
 
-					if (powerAttackIdle && InPowerDistance && powerAttackChance >= Random::get<float>(0.f, 100.f) && !actor->IsPowerAttackCoolingDown()) {
-						logger::debug("Power Atatck Start! Subject: \"{}\"", actor->GetName());
-						actor->StartPowerAttackCoolDown();
-						return actor->currentProcess->PlayIdle(actor, RE::DEFAULT_OBJECT::kActionRightPowerAttack, powerAttackIdle, true, true, targ.get());
-					} else if (normalAttackIdle && InNormalDistance) {
-						logger::debug("Normal Atatck Start! Subject: \"{}\"", actor->GetName());
-						return actor->currentProcess->PlayIdle(actor, RE::DEFAULT_OBJECT::kActionRightAttack, normalAttackIdle, true, true, targ.get());
-					} else
-						return false;
+					if (powerAttackIdle && InPowerRange && powerAttackChance >= Random::get<float>(0.f, 100.f)) {
+						logger::debug("Power Atatck Start! Subject: \"{}\"", attacker->GetName());
+						result = attacker->currentProcess->PlayIdle(attacker, RE::DEFAULT_OBJECT::kActionRightPowerAttack, powerAttackIdle, true, true, targ.get());
+						if (result)
+							AttackRangeCheck::DrawOverlay(attacker, targ.get(), attacker->GetReach() + distMap.at(FIRST_POWER_DISTANCE_MAX), distMap.at(FIRST_POWER_DISTANCE_MIN), startAngle, endAngle);
+					} else if (normalAttackIdle && InNormalRange) {
+						logger::debug("Normal Atatck Start! Subject: \"{}\"", attacker->GetName());
+						result = attacker->currentProcess->PlayIdle(attacker, RE::DEFAULT_OBJECT::kActionRightAttack, normalAttackIdle, true, true, targ.get());
+						if (result)
+							AttackRangeCheck::DrawOverlay(attacker, targ.get(), attacker->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX), distMap.at(FIRST_NORMAL_DISTANCE_MIN), startAngle, endAngle);
+					}
+
+					return result;
 				}
+
+				return _PerformAttackAction(a_actionData);
 			}
 
 			return _PerformAttackAction(a_actionData);
@@ -155,7 +159,8 @@ namespace SCAR
 		static inline REL::Relocation<decltype(PerformAttackAction)> _PerformAttackAction;
 	};
 
-	/*
+}
+/*
 	class NotifyAnimHook
 	{
 	public:
@@ -259,5 +264,4 @@ namespace SCAR
 			INFO("DistanceCheck Hooks installed"sv);
 		}
 	};
-	*/
-}
+*/

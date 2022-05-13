@@ -1,5 +1,7 @@
+#include "DebugAPI/DebugAPI.h"
 #include "Hook_AttackCombo.h"
 #include "Hook_AttackStart.h"
+#include "Hook_MainUpdate.h"
 
 #if ANNIVERSARY_EDITION
 
@@ -72,9 +74,13 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	// For Combo
 	SCAR::AnimEventHook::InstallHook();
 
-	spdlog::set_level(spdlog::level::debug);
-
 	//SCAR::Hook_GetAttackChance2::install();
+
+	//DebugOverlayMenu
+	DebugOverlayMenu::Register();
+	SCAR::MainUpdateHook::Hook();
+
+	spdlog::set_level(spdlog::level::debug);
 
 	return true;
 }
