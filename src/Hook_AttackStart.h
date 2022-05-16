@@ -1,5 +1,6 @@
 #pragma once
 #include "DKUtil/Hook.hpp"
+#include "DataHandler.h"
 #include "Function.h"
 #include "TESActionData.h"
 
@@ -56,7 +57,11 @@ namespace SCAR
 				std::make_pair(FIRST_POWER_DISTANCE_MIN, 0.f),
 			};
 
-			if (a_attacker && a_target && GetDistanceVariable(a_attacker, distMap)) {
+			if (a_attacker && !a_attacker->IsBlocking() && a_target && GetDistanceVariable(a_attacker, distMap)) {
+				auto dataHandler = DataHandler::GetSingleton();
+				const float startAngle = dataHandler->settings->GetStartAngle();
+				const float endAngle = dataHandler->settings->GetEndAngle();
+
 				if (AttackRangeCheck::WithinAttackRange(a_attacker, a_target, a_attacker->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX), distMap.at(FIRST_NORMAL_DISTANCE_MIN), startAngle, endAngle) ||
 					AttackRangeCheck::WithinAttackRange(a_attacker, a_target, a_attacker->GetReach() + distMap.at(FIRST_POWER_DISTANCE_MAX), distMap.at(FIRST_POWER_DISTANCE_MIN), startAngle, endAngle)) {
 					for (auto pair : distMap) {
@@ -122,15 +127,19 @@ namespace SCAR
 
 				auto attacker = a_actionData->Subject_8 ? a_actionData->Subject_8->As<RE::Actor>() : nullptr;
 				auto targ = attacker ? attacker->currentCombatTarget.get() : nullptr;
-				if (attacker && attacker->currentProcess && !attacker->IsPlayerRef() && targ && GetDistanceVariable(attacker, distMap)) {
+				if (attacker && !attacker->IsBlocking() && attacker->currentProcess && !attacker->IsPlayerRef() && targ && GetDistanceVariable(attacker, distMap)) {
 					attacker->SetGraphVariableFloat(NEXT_ATTACK_CHANCE, 100.f);
 					attacker->SetGraphVariableInt("MCO_nextattack", 1);
 					attacker->SetGraphVariableInt("MCO_nextpowerattack", 1);
 
+					auto dataHandler = DataHandler::GetSingleton();
+					const float startAngle = dataHandler->settings->GetStartAngle();
+					const float endAngle = dataHandler->settings->GetEndAngle();
+
+					const float powerAttackChance = dataHandler->settings->powerAttackChance.get_data();
+
 					auto InNormalRange = AttackRangeCheck::WithinAttackRange(attacker, targ.get(), attacker->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX), distMap.at(FIRST_NORMAL_DISTANCE_MIN), startAngle, endAngle);
 					auto InPowerRange = AttackRangeCheck::WithinAttackRange(attacker, targ.get(), attacker->GetReach() + distMap.at(FIRST_POWER_DISTANCE_MAX), distMap.at(FIRST_POWER_DISTANCE_MIN), startAngle, endAngle);
-
-					float powerAttackChance = 30.f;
 
 					auto normalAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCNormalAttack");  //SCAR_NPCNormalAttack Idle Form
 					auto powerAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCPowerAttack");    //SCAR_PowerAttack Idle Form
@@ -149,8 +158,6 @@ namespace SCAR
 
 					return result;
 				}
-
-				return _PerformAttackAction(a_actionData);
 			}
 
 			return _PerformAttackAction(a_actionData);
@@ -161,51 +168,6 @@ namespace SCAR
 
 }
 /*
-	class NotifyAnimHook
-	{
-	public:
-		static void install()
-		{  //IAnimationGraphManagerHolder__NotifyAnimationGraph_1404F12C0+3B	call    BSAnimationGraphManager__sub_140AE24A0
-
-			REL::Relocation<uintptr_t> Vtbl{ REL::ID(261400) };
-
-			_NotifyAnimationGraph = Vtbl.write_vfunc(0x1, NotifyAnimationGraph);
-
-			INFO("NotifyAnimationGraph hook installed.");
-		}
-
-	private:
-		static bool NotifyAnimationGraph(RE::IAnimationGraphManagerHolder* a_graphMgr, const RE::BSFixedString& a_eventName)
-		{
-			static constexpr char POWER_ATTACK_EVENT[] = "attackPowerStartForward", NORMAL_ATTACK_EVENT[] = "attackStart";
-
-			//logger::debug("{} Hook Trigger!", std::source_location::current().function_name());
-
-			auto actor = a_graphMgr ? skyrim_cast<RE::Actor*>(a_graphMgr) : nullptr;
-			if (actor && !actor->IsPlayerRef() && actor->GetAttackState() == RE::ATTACK_STATE_ENUM::kNone && actor->currentCombatTarget.get()) {
-				const std::string eventName = a_eventName.c_str();
-				if (eventName == "attackStart" || eventName.find("attackPower") != std::string::npos) {
-					auto NormalAttackDistance = actor->GetReach() + 110.f;
-					auto PowerAttackDistance = actor->GetReach() + 450.f;
-					auto distance = actor->GetPosition().GetDistance(actor->currentCombatTarget.get()->GetPosition());
-
-					std::string resultEvent = "";
-					if (distance <= NormalAttackDistance * 1.1f)
-						resultEvent = NORMAL_ATTACK_EVENT;
-					else
-						resultEvent = POWER_ATTACK_EVENT;
-
-					return _NotifyAnimationGraph(a_graphMgr, resultEvent);
-				}
-			}
-
-			return _NotifyAnimationGraph(a_graphMgr, a_eventName);
-		}
-
-		static inline REL::Relocation<decltype(NotifyAnimationGraph)> _NotifyAnimationGraph;
-	};
-
-
 	class AttackAngleHook
 	{
 	public:
@@ -245,23 +207,4 @@ namespace SCAR
 		static inline REL::Relocation<decltype(GetAttackAngle)> _GetAttackAngle;
 	};
 
-	class AttackDistanceHook2
-	{
-		static inline constexpr OpCode NOP = 0x90;
-		static inline constexpr std::uint64_t FuncID = 48139;
-		static inline constexpr std::ptrdiff_t DistanceCheckOffset = 0x4AD;
-
-		static inline OpCode DistanceCheckNop[6]{ NOP, NOP, NOP, NOP, NOP, NOP };
-
-	public:
-		static void Install()
-		{
-			const auto funcAddr = DKUtil::Hook::IDToAbs(FuncID);
-
-			// Distance Check
-			DKUtil::Hook::WriteData(funcAddr + DistanceCheckOffset, &DistanceCheckNop, sizeof(DistanceCheckNop));
-
-			INFO("DistanceCheck Hooks installed"sv);
-		}
-	};
 */

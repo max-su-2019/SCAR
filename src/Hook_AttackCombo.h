@@ -1,5 +1,6 @@
 #pragma once
 #include "Function.h"
+#include "DataHandler.h"
 
 namespace SCAR
 {
@@ -28,8 +29,6 @@ namespace SCAR
 	private:
 		static EventResult ProcessEvent(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event, RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 		{
-			static constexpr char POWER_ATTACK_EVENT[] = "attackPowerStartForward", NORMAL_ATTACK_EVENT[] = "attackStart";
-
 			//logger::debug("Process Animation Event Fire!");
 
 			if (!a_event || !a_event->holder)
@@ -51,6 +50,12 @@ namespace SCAR
 						logger::debug("{} value is {}", pair.first, pair.second);
 					}
 
+					auto dataHandler = DataHandler::GetSingleton();
+					const float startAngle = dataHandler->settings->GetStartAngle();
+					const float endAngle = dataHandler->settings->GetEndAngle();
+
+					const float powerAttackChance = dataHandler->settings->powerAttackChance.get_data();
+
 					auto normalAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCNormalAttack");  //SCAR_NPCNormalAttack Idle Form
 					auto powerAttackIdle = RE::TESForm::LookupByEditorID<RE::TESIdleForm>("SCAR_NPCPowerAttack");    //SCAR_PowerAttack Idle Form
 
@@ -58,7 +63,6 @@ namespace SCAR
 					auto InPowerRange = AttackRangeCheck::WithinAttackRange(actor, combatTarg.get(), actor->GetReach() + distMap.at(NEXT_POWER_DISTANCE_MAX), distMap.at(NEXT_POWER_DISTANCE_MIN), startAngle, endAngle);
 
 					actor->SetGraphVariableFloat(NEXT_ATTACK_CHANCE, 100.f);
-					float powerAttackChance = 30.f;
 
 					if (powerAttackIdle && InPowerRange && powerAttackChance > Random::get<float>(0.f, 100.f) &&
 						actor->currentProcess->PlayIdle(actor, RE::DEFAULT_OBJECT::kActionRightPowerAttack, powerAttackIdle, true, true, combatTarg.get())) {
@@ -81,34 +85,4 @@ namespace SCAR
 		static inline REL::Relocation<decltype(ProcessEvent)> _ProcessEvent;
 	};
 
-	class Hook_GetAttackChance2
-	{
-	public:
-		static void install()
-		{  //Up	p	sub_14080C020+2AE	call    Character__sub_140845B30
-			auto& trampoline = SKSE::GetTrampoline();
-			SKSE::AllocTrampoline(1 << 4);
-
-			REL::Relocation<uintptr_t> hook{ REL::ID(48139) };
-
-			_getAttackChance = trampoline.write_call<5>(hook.address() + 0x2AE, getAttackChance2);
-			INFO("Get Attackchance2 hook installed.");
-		}
-
-	private:
-		static float getAttackChance2(RE::Actor* a1, RE::Actor* a2, RE::BGSAttackData* atkData)
-		{
-			using AttackFlag = RE::AttackData::AttackFlag;
-			//logger::debug("{} Hook Trigger!", std::source_location::current().function_name());
-			auto result = _getAttackChance(a1, a2, atkData);
-
-			if (atkData && a1 && a2 && _stricmp(atkData->event.c_str(), "attackStart") == 0) {
-				logger::debug("Attack Data Chance {},Name {}", result, atkData->event.c_str());
-			}
-
-			return result;
-		}
-
-		static inline REL::Relocation<decltype(getAttackChance2)> _getAttackChance;
-	};
 }

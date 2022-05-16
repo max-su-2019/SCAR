@@ -1,3 +1,4 @@
+#include "DataHandler.h"
 #include "DebugAPI/DebugAPI.h"
 #include "Hook_AttackCombo.h"
 #include "Hook_AttackStart.h"
@@ -74,13 +75,14 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	// For Combo
 	SCAR::AnimEventHook::InstallHook();
 
-	//SCAR::Hook_GetAttackChance2::install();
-
 	//DebugOverlayMenu
 	DebugOverlayMenu::Register();
 	SCAR::MainUpdateHook::Hook();
 
-	spdlog::set_level(spdlog::level::debug);
+	if (SCAR::DataHandler::GetSingleton()->settings->enableDebugLog.get_data()) {
+		spdlog::set_level(spdlog::level::debug);
+		logger::debug("Enable Debug Log!");
+	}
 
 	return true;
 }

@@ -1,5 +1,6 @@
 #include "Function.h"
 #include "DebugAPI/DebugAPI.h"
+#include "DataHandler.h"
 
 namespace SCAR
 {
@@ -77,6 +78,10 @@ namespace SCAR
 
 	void AttackRangeCheck::DrawOverlay(RE::Actor* a_attacker, RE::Actor* a_targ, float max_distance, float min_distance, float a_startAngle, float a_endAngle)
 	{
+		auto dataHandler = DataHandler::GetSingleton();
+		if (!dataHandler || !dataHandler->settings || !dataHandler->settings->enableDebugOverlay.get_data())
+			return;
+
 		if (!a_attacker || !a_targ || !a_attacker->Get3D() || !a_targ->Get3D() || !a_targ->currentProcess)
 			return;
 

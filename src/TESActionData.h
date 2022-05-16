@@ -16,19 +16,19 @@ namespace RE
 		virtual void function5() = 0;  //05
 
 		TESObjectREFR* Subject_8;         //08
-		TESObjectREFR* Target_10;         //0F
-		BGSAction* Action_18;             //1F
-		std::int32_t _unk_20;             //23
-		std::int32_t _unk_24;             //27
-		BSFixedString AnimationEvent_28;  //2B
-		std::int64_t _unk_30;
-		std::int32_t _unk_38;
-		std::int32_t _unk_3C;
-		std::int64_t _unk_40;
-		TESIdleForm* IdleForm_48;
-		std::int64_t _unk_50;
-		std::int32_t Flags_58;
-		std::int32_t _unk_5C;
+		TESObjectREFR* Target_10;         //10
+		BGSAction* Action_18;             //18
+		std::int32_t _unk_20;             //20
+		std::int32_t _unk_24;             //24
+		BSFixedString AnimationEvent_28;  //28
+		std::int64_t _unk_30;             //30
+		std::int32_t _unk_38;             //38
+		std::int32_t _unk_3C;             //3C
+		std::int64_t _unk_40;             //40
+		TESIdleForm* IdleForm_48;         //48
+		std::int64_t _unk_50;             //50
+		std::int32_t Flags_58;            //58
+		std::int32_t _unk_5C;             //5C
 	};
 	static_assert(sizeof(TESActionData) == 0x60);
 }
