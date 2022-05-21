@@ -38,7 +38,7 @@ public:
 
 	static bool DEBUG_API_REGISTERED;
 
-	static constexpr int CIRCLE_NUM_SEGMENTS = 108;
+	static constexpr int CIRCLE_NUM_SEGMENTS = 50;
 
 	static constexpr float DRAW_LOC_MAX_DIF = 1.0f;
 

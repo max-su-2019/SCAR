@@ -62,7 +62,7 @@ namespace SCAR
 				const float startAngle = dataHandler->settings->GetStartAngle();
 				const float endAngle = dataHandler->settings->GetEndAngle();
 
-				if (a_attacker->HasLOS(a_target) &&
+				if (a_attacker->HasLOS(a_target) && AttackRangeCheck::CheckPathing(a_attacker, a_target) &&
 					(AttackRangeCheck::WithinAttackRange(a_attacker, a_target, a_attacker->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX), distMap.at(FIRST_NORMAL_DISTANCE_MIN), startAngle, endAngle) ||
 						AttackRangeCheck::WithinAttackRange(a_attacker, a_target, a_attacker->GetReach() + distMap.at(FIRST_POWER_DISTANCE_MAX), distMap.at(FIRST_POWER_DISTANCE_MIN), startAngle, endAngle))) {
 					for (auto pair : distMap) {
@@ -128,7 +128,8 @@ namespace SCAR
 
 				auto attacker = a_actionData->Subject_8 ? a_actionData->Subject_8->As<RE::Actor>() : nullptr;
 				auto targ = attacker ? attacker->currentCombatTarget.get() : nullptr;
-				if (attacker && !attacker->IsBlocking() && attacker->currentProcess && !attacker->IsPlayerRef() && targ && GetDistanceVariable(attacker, distMap) && attacker->HasLOS(targ.get())) {
+				if (attacker && !attacker->IsBlocking() && attacker->currentProcess && !attacker->IsPlayerRef() && targ && GetDistanceVariable(attacker, distMap) &&
+					attacker->HasLOS(targ.get()) && AttackRangeCheck::CheckPathing(attacker, targ.get())) {
 					attacker->SetGraphVariableFloat(NEXT_ATTACK_CHANCE, 100.f);
 					attacker->SetGraphVariableInt("MCO_nextattack", 1);
 					attacker->SetGraphVariableInt("MCO_nextpowerattack", 1);

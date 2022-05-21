@@ -25,6 +25,28 @@ namespace SCAR
 		return false;
 	}
 
+	bool AttackRangeCheck::CheckPathing(RE::Actor* a_attacker, RE::Actor* a_target)
+	{
+		if (!a_attacker || !a_target || !a_attacker->Get3D() || !a_target->Get3D() || !a_target->currentProcess || !a_attacker->currentProcess)
+			return false;
+
+		auto attackerPos = a_attacker->Get3D()->world.translate;
+		auto targPos = a_target->Get3D()->world.translate;
+		auto matrix = a_attacker->Get3D()->world.rotate;
+
+		RE::NiMatrix3 invMatrix;
+		if (!GetMatrixInverse(matrix.entry, invMatrix.entry))
+			return false;
+
+		auto localVector = invMatrix * (targPos - attackerPos);
+		auto localDistance = std::sqrtf(localVector.x * localVector.x + localVector.y * localVector.y);
+
+		if (localDistance <= a_attacker->currentProcess->cachedValues->cachedRadius + a_target->currentProcess->cachedValues->cachedRadius + a_attacker->GetReach())
+			return true;
+
+		return a_attacker->CanNavigateToPosition(a_attacker->GetPosition(), a_target->GetPosition());
+	}
+
 	bool AttackRangeCheck::WithinAttackRange(RE::Actor* a_attacker, RE::Actor* a_targ, float max_distance, float min_distance, float a_startAngle, float a_endAngle)
 	{
 		if (!a_attacker || !a_targ || !a_attacker->Get3D() || !a_targ->Get3D() || !a_targ->currentProcess)

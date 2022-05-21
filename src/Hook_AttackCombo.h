@@ -1,6 +1,6 @@
 #pragma once
-#include "Function.h"
 #include "DataHandler.h"
+#include "Function.h"
 
 namespace SCAR
 {
@@ -45,7 +45,7 @@ namespace SCAR
 					std::make_pair(NEXT_POWER_DISTANCE_MIN, 0.f),
 				};
 
-				if (combatTarg && actor->HasLOS(combatTarg.get()) && GetDistanceVariable(actor, distMap)) {
+				if (combatTarg && actor->HasLOS(combatTarg.get()) && GetDistanceVariable(actor, distMap) && AttackRangeCheck::CheckPathing(actor, combatTarg.get())) {
 					for (auto pair : distMap) {
 						logger::debug("{} value is {}", pair.first, pair.second);
 					}
