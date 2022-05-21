@@ -1,6 +1,6 @@
-#include "Function.h"
-#include "DebugAPI/DebugAPI.h"
 #include "DataHandler.h"
+#include "DebugAPI/DebugAPI.h"
+#include "Function.h"
 
 namespace SCAR
 {
