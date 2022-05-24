@@ -14,11 +14,11 @@ namespace SCAR
 
 		MainConfig.Load();
 
-		PrintSettingValue(enableDebugLog.get_key(), enableDebugLog.get_data());
-		PrintSettingValue(enableDebugOverlay.get_key(), enableDebugOverlay.get_data());
-		PrintSettingValue(startAngle.get_key(), startAngle.get_data());
-		PrintSettingValue(endAngle.get_key(), endAngle.get_data());
-		PrintSettingValue(powerAttackChance.get_key(), powerAttackChance.get_data());
+		PrintSettingValue(enableDebugLog);
+		PrintSettingValue(enableDebugOverlay);
+		PrintSettingValue(startAngle);
+		PrintSettingValue(endAngle);
+		PrintSettingValue(powerAttackChance);
 	}
 
 	DataHandler::DataHandler()

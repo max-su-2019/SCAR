@@ -11,9 +11,9 @@ namespace SCAR
 		{
 		private:
 			template <class T>
-			static void PrintSettingValue(const std::string a_key, const T a_data)
+			static void PrintSettingValue(const T& a_setting)
 			{
-				logger::info("Setting:\"{}\" is {}"sv, a_key, a_data);
+				logger::info("Setting:\"{}\" is {}"sv, a_setting.get_key(), a_setting.get_data());
 			}
 
 		public:
