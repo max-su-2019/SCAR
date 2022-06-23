@@ -36,6 +36,35 @@ namespace SCAR
 			return a_originResult;
 	}
 
+	bool AttackAngleHook::GetAttackAngle(RE::Actor* a_attacker, RE::Actor* a_target, const RE::NiPoint3& a3, const RE::NiPoint3& a4, RE::BGSAttackData* a_attackData, float a6, void* a7, bool a8)
+	{
+		std::map<const std::string, float> distMap = {
+			std::make_pair(FIRST_NORMAL_DISTANCE_MAX, 0.f),
+			std::make_pair(FIRST_NORMAL_DISTANCE_MIN, 0.f),
+			std::make_pair(FIRST_POWER_DISTANCE_MAX, 0.f),
+			std::make_pair(FIRST_POWER_DISTANCE_MIN, 0.f),
+		};
+
+		if (a_attacker && !a_attacker->IsBlocking() && a_target && GetDistanceVariable(a_attacker, distMap)) {
+			auto dataHandler = DataHandler::GetSingleton();
+			const float startAngle = dataHandler->settings->GetStartAngle();
+			const float endAngle = dataHandler->settings->GetEndAngle();
+
+			if (a_attacker->RequestLOS(a_target) && AttackRangeCheck::CheckPathing(a_attacker, a_target) &&
+				(AttackRangeCheck::WithinAttackRange(a_attacker, a_target, a_attacker->GetReach() + distMap.at(FIRST_NORMAL_DISTANCE_MAX), distMap.at(FIRST_NORMAL_DISTANCE_MIN), startAngle, endAngle) ||
+					AttackRangeCheck::WithinAttackRange(a_attacker, a_target, a_attacker->GetReach() + distMap.at(FIRST_POWER_DISTANCE_MAX), distMap.at(FIRST_POWER_DISTANCE_MIN), startAngle, endAngle))) {
+				for (auto pair : distMap) {
+					logger::debug("{} value is {}", pair.first, pair.second);
+				}
+				logger::debug("Tagre in Attack Angle Range");
+				return true;
+			}
+
+			return false;
+		} else
+			return _GetAttackAngle(a_attacker, a_target, a3, a4, a_attackData, a6, a7, a8);
+	}
+
 	bool AttackActionHook::PerformAttackAction(RE::TESActionData* a_actionData)
 	{
 		if (a_actionData) {

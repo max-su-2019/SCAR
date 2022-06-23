@@ -95,7 +95,9 @@ namespace SCAR
 		else if (localAngle > std::numbers::pi)
 			localAngle -= 2 * std::numbers::pi;
 
-		return localDistance <= max_distance && localDistance >= min_distance && localAngle >= a_startAngle && localAngle <= a_endAngle;
+		const bool withInAngle = a_startAngle < a_endAngle ? localAngle >= a_startAngle && localAngle <= a_endAngle : !(localAngle >= a_endAngle && localAngle <= a_startAngle);
+
+		return localDistance <= max_distance && localDistance >= min_distance && withInAngle;
 	}
 
 	void AttackRangeCheck::DrawOverlay(RE::Actor* a_attacker, RE::Actor* a_targ, float max_distance, float min_distance, float a_startAngle, float a_endAngle)

@@ -59,6 +59,30 @@ namespace SCAR
 		}
 	};
 
+	class AttackAngleHook
+	{
+	public:
+		static void InstallHook()
+		{
+#if ANNIVERSARY_EDITION
+			//Anniversary Edition
+#else
+			static std::uint32_t baseID = 48139, offset = 0x493;  //Special Edition
+#endif
+			SKSE::AllocTrampoline(1 << 4);
+			auto& trampoline = SKSE::GetTrampoline();
+
+			REL::Relocation<std::uintptr_t> AttackDistanceBase{ REL::ID(baseID) };
+			_GetAttackAngle = trampoline.write_call<5>(AttackDistanceBase.address() + offset, GetAttackAngle);
+			logger::info("Hook GetAttackAngle!");
+		}
+
+	private:
+		static bool GetAttackAngle(RE::Actor* a1, RE::Actor* a2, const RE::NiPoint3& a3, const RE::NiPoint3& a4, RE::BGSAttackData* a5, float a6, void* a7, bool a8);
+
+		static inline REL::Relocation<decltype(GetAttackAngle)> _GetAttackAngle;
+	};
+
 	class AttackActionHook
 	{
 	public:
@@ -84,45 +108,3 @@ namespace SCAR
 		static inline REL::Relocation<decltype(PerformAttackAction)> _PerformAttackAction;
 	};
 }
-
-/*
-	class AttackAngleHook
-	{
-	public:
-		static void InstallHook()
-		{
-#if ANNIVERSARY_EDITION
-			//Anniversary Edition
-#else
-			static std::uint32_t baseID = 48139, offset = 0x493;  //Special Edition
-#endif
-			SKSE::AllocTrampoline(1 << 4);
-			auto& trampoline = SKSE::GetTrampoline();
-
-			REL::Relocation<std::uintptr_t> AttackDistanceBase{ REL::ID(baseID) };
-			_GetAttackAngle = trampoline.write_call<5>(AttackDistanceBase.address() + offset, GetAttackAngle);
-			logger::info("Hook GetAttackAngle!");
-		}
-
-	private:
-		static bool GetAttackAngle(RE::Actor* a1, RE::Actor* a2, const RE::NiPoint3& a3, const RE::NiPoint3& a4, RE::BGSAttackData* a5, float a6, void* a7, bool a8)
-		{
-			using AttackFlag = RE::AttackData::AttackFlag;
-
-			//logger::debug("{} Hook Trigger!", std::source_location::current().function_name());
-
-			auto result = _GetAttackAngle(a1, a2, a3, a4, a5, a6, a7, a8);
-			if (result && a1 && a2 && a5) {
-				auto distance = a1->GetPosition().GetDistance(a2->GetPosition());
-				auto PowerAttackDistance = a1->GetReach() + 450.f;
-				if (distance > PowerAttackDistance)
-					return false;
-			}
-
-			return result;
-		}
-
-		static inline REL::Relocation<decltype(GetAttackAngle)> _GetAttackAngle;
-	};
-
-*/
