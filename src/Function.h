@@ -2,11 +2,6 @@
 
 namespace SCAR
 {
-	static constexpr char NEXT_ATTACK_CHANCE[] = "SCAR_nextattackchance";
-	//static constexpr float startAngle = -std::numbers::pi / 3.0f, endAngle = std::numbers::pi / 3.0f;
-
-	bool GetDistanceVariable(RE::Actor* a_actor, std::map<const std::string, float>& a_map);
-
 	bool ShouldNextAttack(RE::Actor* a_actor);
 
 	class AttackRangeCheck

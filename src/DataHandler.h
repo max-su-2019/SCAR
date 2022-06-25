@@ -1,5 +1,6 @@
 #pragma once
 #include "DKUtil/Config.hpp"
+#include "SCARActionData.h"
 
 namespace SCAR
 {
@@ -22,14 +23,7 @@ namespace SCAR
 			Boolean enableDebugLog{ "EnableDebugLog", "Debug" };
 			Boolean enableDebugOverlay{ "EnableDebugOverlay", "Debug" };
 
-			Double powerAttackChance{ "PowerAttackChance", "AttackChance" };
-
-			float GetStartAngle() const { return startAngle.get_data() / 180.f * std::numbers::pi; };
-			float GetEndAngle() const { return endAngle.get_data() / 180.f * std::numbers::pi; };
-
 		private:
-			Double startAngle{ "StartAngle", "AttackAngle" };
-			Double endAngle{ "EndAngle", "AttackAngle" };
 		};
 
 	public:
@@ -40,6 +34,9 @@ namespace SCAR
 		}
 
 		std::unique_ptr<Settings> settings;
+
+		static const RE::hkbClipGenerator* GetSCARDataClip(RE::Actor* a_actor);
+		static std::vector<SCARActionData> GetSCARActionData(const RE::hkbClipGenerator* a_clip);
 
 	private:
 		DataHandler();

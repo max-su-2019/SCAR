@@ -3,7 +3,7 @@
 #include "Hook_AttackCombo.h"
 
 namespace SCAR
-{
+{ /*
 	static constexpr char NEXT_NORMAL_DISTANCE_MAX[] = "SCAR_nextattackdistancemax",
 						  NEXT_NORMAL_DISTANCE_MIN[] = "SCAR_nextattackdistancemin",
 						  NEXT_POWER_DISTANCE_MAX[] = "SCAR_nextpowerattackdistancemax",
@@ -62,4 +62,5 @@ namespace SCAR
 
 		return _ProcessEvent(a_sink, a_event, a_eventSource);
 	}
+*/
 }
