@@ -6,7 +6,7 @@ namespace SCAR
 {
 	bool ShouldNextAttack(RE::Actor* a_actor)
 	{
-		return false;
+		return true;
 	}
 
 	bool AttackRangeCheck::CheckPathing(RE::Actor* a_attacker, RE::Actor* a_target)

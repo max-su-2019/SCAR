@@ -27,6 +27,8 @@ namespace SCAR
 
 		bool PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target);
 
+		static bool SortByWeight(SCARActionData a_data1, SCARActionData a_data2);
+
 	private:
 		const DefaultObject GetActionObject() const;
 		const float GetStartAngle() const { return startAngle / 180.f * std::numbers::pi; };

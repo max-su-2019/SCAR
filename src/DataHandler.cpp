@@ -38,7 +38,7 @@ namespace SCAR
 
 		std::vector<SCARActionData> dataArr;
 
-		auto binding = a_clip->binding;
+		auto binding = a_clip ? a_clip->binding : nullptr;
 		auto animation = binding ? binding->animation : nullptr;
 
 		if (!animation || animation->annotationTracks.empty())
