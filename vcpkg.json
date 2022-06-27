@@ -1,6 +1,6 @@
 {
     "name":  "scar",
-    "version-string":  "0.1.6",
+    "version-string":  "0.8.1",
     "description":  "",
     "license":  "MIT",
     "dependencies":  [

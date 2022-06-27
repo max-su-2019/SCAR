@@ -11,8 +11,7 @@ namespace SCAR
 
 		auto actor = a_event->holder->As<RE::Actor>();
 		auto combatTarg = actor ? actor->currentCombatTarget.get() : nullptr;
-
-		if (actor && actor->currentProcess && actor->currentProcess->high && ShouldNextAttack(actor) && combatTarg && _strcmpi("MCO_WinOpen", a_event->tag.c_str()) == 0 &&
+		if (actor && actor->currentProcess && actor->currentProcess->high && ShouldNextAttack(actor) && combatTarg && _strcmpi("SCAR_ComboStart", a_event->tag.c_str()) == 0 &&
 			combatTarg && actor->RequestLOS(combatTarg.get()) && AttackRangeCheck::CheckPathing(actor, combatTarg.get())) {
 			auto scarClip = DataHandler::GetSCARDataClip(actor);
 			if (scarClip) {
