@@ -15,7 +15,7 @@
 <br/> 
 以下是一条储存ActionData的注解的例子：
 
-```json
+```
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":0, "MaxDistance":139, "StartAngle":-60, "EndAngle":60, "Chance":30, "Type":"RPA"}
 ```
 注解的内容可以分解为三个主要部分，如下图所示：   
