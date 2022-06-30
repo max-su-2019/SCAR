@@ -11,8 +11,8 @@ namespace SCAR
 
 		auto actor = a_event->holder->As<RE::Actor>();
 		auto combatTarg = actor ? actor->currentCombatTarget.get() : nullptr;
-		if (actor && actor->currentProcess && actor->currentProcess->high && ShouldNextAttack(actor) && combatTarg && _strcmpi("SCAR_ComboStart", a_event->tag.c_str()) == 0 &&
-			combatTarg && actor->RequestLOS(combatTarg.get()) && AttackRangeCheck::CheckPathing(actor, combatTarg.get())) {
+		if (actor && actor->currentProcess && actor->currentProcess->high && combatTarg && _strcmpi("SCAR_ComboStart", a_event->tag.c_str()) == 0 &&
+			ShouldNextAttack(a_event->payload.c_str()) && actor->RequestLOS(combatTarg.get()) && AttackRangeCheck::CheckPathing(actor, combatTarg.get())) {
 			auto scarClip = DataHandler::GetSCARDataClip(actor);
 			if (scarClip) {
 				logger::debug("Find SCAR Action Data in clip \"{}\" of \"{}\"", scarClip->animationName.c_str(), actor->GetName());

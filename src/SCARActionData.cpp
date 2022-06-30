@@ -6,11 +6,22 @@ namespace SCAR
 	void from_json(const json& j, SCARActionData& a_data)
 	{
 		j.at("IdleAnimation").get_to(a_data.IdleAnimationEditorID);
+
 		j.at("MinDistance").get_to(a_data.minDistance);
+		a_data.minDistance = max(a_data.minDistance, 0.f);
+
 		j.at("MaxDistance").get_to(a_data.maxDistance);
+		a_data.maxDistance = max(a_data.maxDistance, 0.f);
+
 		j.at("StartAngle").get_to(a_data.startAngle);
+		a_data.startAngle = std::clamp(a_data.startAngle, -180.f, 180.f);
+
 		j.at("EndAngle").get_to(a_data.endAngle);
+		a_data.endAngle = std::clamp(a_data.endAngle, -180.f, 180.f);
+
 		j.at("Chance").get_to(a_data.chance);
+		a_data.chance = std::clamp(a_data.chance, -180.f, 180.f);
+
 		j.at("Type").get_to(a_data.actionType);
 	}
 
