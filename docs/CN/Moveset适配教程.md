@@ -26,7 +26,7 @@
 * `json data`: 最后的部分是两个花括号包含着的长字段，这是一个标准的JSON格式字符串，里面储存的正是一个ActionData所应包含的几项主要数据：
     * `IdleAnimation` : 存储一条 ActionData 中所使用的闲置动画的EditorID,当所有 ActionData 的条件都满足时便会播放执行此闲置动画。
     闲置动画需在esp中定义，*ADXP V1.4* 及以上版本已经包含了两个可用的闲置动画`ADXP_NPCPowerAttack` 和 `ADXP_NPCNormalAttack`，分别可用来执行NPC重击和轻击。闲置动画的执行还需满足闲置动画自身在esp中设置的条件。  
-    *  `MaxDistance`: 表示这条 ActionData 的最大执行距离范围，仅当Moveset的持有者与其攻击目标之间的距离不大于这个数值时，此条ActionData才可以被执行。距离的值必须大于0。
+    *  `MaxDistance`: 表示这条 ActionData 的最大执行距离范围，仅当Moveset的持有者与其攻击目标之间的距离不大于这个数值时，此条ActionData才可以被执行。距离的值必须大于0。  
     注意这里的MaxDistance不需要考虑武器的距离，武器的距离会在实际计算最大距离时动态地加上。
     *  `MinDistance`: 表示这条ActionData的最小执行距离范围，仅当Moveset的持有者与其攻击目标之间的距离不小于这个数值时，此条ActionData才可以被执行。距离的值必须大于0。  
     最小距离可用于限制远距离的攻击只在与攻击目标距离达到一定大小时才执行。  
