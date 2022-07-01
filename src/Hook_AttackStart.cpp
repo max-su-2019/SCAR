@@ -19,13 +19,15 @@ namespace SCAR
 		auto attacker = a_actionData && a_actionData->Subject_8 ? a_actionData->Subject_8->As<RE::Actor>() : nullptr;
 		auto targ = attacker ? attacker->currentCombatTarget.get() : nullptr;
 		auto scarClip = attacker ? DataHandler::GetSCARDataClip(attacker) : nullptr;
-		if (scarClip && targ && attacker->currentProcess && !attacker->IsPlayerRef() && attacker->RequestLOS(targ.get()) && AttackRangeCheck::CheckPathing(attacker, targ.get())) {
-			logger::debug("Find SCAR Action Data in clip \"{}\" of \"{}\"", scarClip->animationName.c_str(), attacker->GetName());
-			auto dataArr = DataHandler::GetSCARActionData(scarClip);
-			std::sort(dataArr.begin(), dataArr.end(), SCARActionData::SortByWeight);
-			for (auto data : dataArr) {
-				if (data.PerformSCARAction(attacker, targ.get()))
-					return true;
+		if (scarClip){
+			if (targ && attacker->currentProcess && !attacker->IsPlayerRef() && attacker->RequestLOS(targ.get()) && AttackRangeCheck::CheckPathing(attacker, targ.get())) {
+				logger::debug("Find SCAR Action Data in clip \"{}\" of \"{}\"", scarClip->animationName.c_str(), attacker->GetName());
+				auto dataArr = DataHandler::GetSCARActionData(scarClip);
+				std::sort(dataArr.begin(), dataArr.end(), SCARActionData::SortByWeight);
+				for (auto data : dataArr) {
+					if (data.PerformSCARAction(attacker, targ.get()))
+						return true;
+				}
 			}
 
 			return false;
