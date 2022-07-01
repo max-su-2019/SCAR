@@ -63,7 +63,8 @@
 要为攻击连招阶段添加SCAR支持，首先需要你在攻击动画所属的 **行为图(Behavior Graph)** 中添加一个名为 `SCAR_ComboStart` 的 **动作事件(animation event)** ，用来作为执行下一个连招攻击的AI判定窗口。  
 幸运的是，SCAR和ADXP V1.4的行为补丁中已经添加了此动作事件，你无需自己修改行为或制作行为补丁(如果是生物moveset则需要)。  
 
-下一步需要找到moveset里所有会继续衔接连招到下一个攻击的攻击动画文件，并为其添加表示可衔接到的下一个连招攻击动作的 ActionData 注解，方式和 `SCAR_1hmReadyDummy.hkx` 中的相同。比如，若你的`mco_attack1.hkx`动画分别可衔接到`mco_attack2`或`mco_powerattack2`，则需加入后两个动画对应的ActionData注解到  `mco_attack1.hkx` 文件中。
+下一步需要找到moveset里所有会继续衔接连招到下一个攻击的攻击动画文件，并为其添加表示可衔接到的下一个连招攻击动作的 ActionData 注解，方式和 `SCAR_1hmReadyDummy.hkx` 中的相同。比如，若你的`mco_attack1.hkx`动画分别可衔接到`mco_attack2`或`mco_powerattack2`，则需加入后两个动画对应的ActionData注解到  `mco_attack1.hkx` 文件中。  
+
 除此之外，还需额外在你认为可开始执行衔接到下一个攻击动作的窗口时间里，加上 `SCAR_ComboStart` 这个动作事件。 对于ADXP而言，`SCAR_ComboStart` 的时间应位于 MCO_WinOpen 和 MCO_WinClose 之间、 或位于 MCO_PowerWinOpen 和 MCO_PowerWinClose 之间。  
 
 以下是ADXP V1.4默认双手斧动作（既SCAR默认动作包20006）Moveset中的 `mco_attack1.hkx` 动画内的SCAR相关注解:  
