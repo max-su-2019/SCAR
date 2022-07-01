@@ -10,7 +10,7 @@
 ---  
 要为你的Moveset的第一下出手攻击添加SCAR的AI行动数据- *SCAR Action Data* (以下简称ActionData)，首先需要对角色的 **行为(behavior)** 进行修改：通过在角色行为的 **攻击预备状态机(AttackReadyStateMachine)** 下添加一个 **虚设动画(Dummy Animation)** ,以作为储存记录第一下出手攻击对应的ActionData的容器。
 <br/>  
-幸运的是，对于**人物角色(character)** 的攻击行为，SCAR自带的Nemesis行为补丁里已经为其添加了一个命名为`SCAR_1hmReadyDummy.hkx`的虚设动画文件；因此对于人物角色你无需自己修改行为或制作行为补丁(如果是生物moveset则需要)，只需将Moveset第一次出手攻击对应的ActionData通过 **注解（annotation）** 的方式加进`SCAR_1hmReadyDummy.hkx`动画文件并将此动画文件包含进你的Moveset中即可。  
+幸运的是，对于**人物角色(character)** 的攻击行为，SCAR自带的Nemesis行为补丁里已经为其添加了一个命名为 `SCAR_1hmReadyDummy.hkx` 的虚设动画文件；因此对于人物角色你无需自己修改行为或制作行为补丁(如果是生物moveset则需要)，只需将Moveset第一次出手攻击对应的ActionData通过 **注解（annotation）** 的方式加进 `SCAR_1hmReadyDummy.hkx` 动画文件并将此动画文件包含进你的Moveset中即可。  
 <br/> 
 以下是一条储存ActionData的注解的例子：
 
@@ -49,7 +49,7 @@
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":120, "MaxDistance":247, "StartAngle":-45, "EndAngle":45, "Chance":30, "Type":"RPA"}
 0.500000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCNormalAttack", "MinDistance":0, "MaxDistance":48, "StartAngle":-60, "EndAngle":60, "Chance":100, "Type":"RA"}
 ```
-上面有两条 ActionData 数据注解，SCAR会首先根据权重来进行排序并依次逐个做判定，由于第一条 ActionData 的权重为1.000000、第二条权重为0.500000，所以SCAR会先对第一条ActionData 进行条件判定：  
+上面代码段包含有两条 ActionData 数据注解，SCAR会首先根据权重对其进行排序并依次逐个做判定，由于第一条 ActionData 的权重为1.000000、第二条权重为0.500000，所以SCAR会先对第一条ActionData 进行条件判定：  
 * 当攻击目标的距离处于120到（247+武器距离）的范围内、攻击目标的角度范围处于-45到45度时，则NPC有30%的几率执行esp中名为 `ADXP_NPCPowerAttack` 的闲置动画，类型为 *RightPowerAttack* - 右手重击。在ADXP框架下，这意味着NPC会播放`mco_powerattack1.hkx`攻击动画。  
 
 若第一条 ActionData 的不符合条件或闲置动画未能成功执行，则会继续往下执行权重较低的第二条 ActionData：  
@@ -63,7 +63,7 @@
 要为攻击连招阶段添加SCAR支持，首先需要你在攻击动画所属的 **行为图(Behavior Graph)** 中添加一个名为 `SCAR_ComboStart` 的 **动作事件(animation event)** ，用来作为执行下一个连招攻击的AI判定窗口。  
 幸运的是，SCAR和ADXP V1.4的行为补丁中已经添加了此动作事件，你无需自己修改行为或制作行为补丁(如果是生物moveset则需要)。  
 
-下一步需要找到moveset里所有会继续衔接连招到下一个攻击的攻击动画文件，并为其添加表示可衔接到的下一个连招攻击动作的 ActionData 注解，方式和 `SCAR_1hmReadyDummy.hkx` 中的相同。  
+下一步需要找到moveset里所有会继续衔接连招到下一个攻击的攻击动画文件，并为其添加表示可衔接到的下一个连招攻击动作的 ActionData 注解，方式和 `SCAR_1hmReadyDummy.hkx` 中的相同。比如，若你的`mco_attack1.hkx`动画分别可衔接到`mco_attack2`或`mco_powerattack2`，则需加入后两个动画对应的ActionData注解到  `mco_attack1.hkx` 文件中。
 除此之外，还需额外在你认为可开始执行衔接到下一个攻击动作的窗口时间里，加上 `SCAR_ComboStart` 这个动作事件。 对于ADXP而言，`SCAR_ComboStart` 的时间应位于 MCO_WinOpen 和 MCO_WinClose 之间、 或位于 MCO_PowerWinOpen 和 MCO_PowerWinClose 之间。  
 
 以下是ADXP V1.4默认双手斧动作（既SCAR默认动作包20006）Moveset中的 `mco_attack1.hkx` 动画内的SCAR相关注解:  
@@ -72,7 +72,14 @@
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":0, "MaxDistance":29, "StartAngle":-60, "EndAngle":60, "Chance":30, "Type":"RPA"}
 0.500000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCNormalAttack", "MinDistance":0, "MaxDistance":193, "StartAngle":-60, "EndAngle":60, "Chance":100, "Type":"RA"}
 ```
-上述注解代表：当  `mco_attack1.hkx` 动画执行到1.550000秒时，会对注解中的两条 ActionData 进行判定和执行。
+上述注解表示：当  `mco_attack1.hkx` 动画执行到1.550000秒时，会对注解中的两条 ActionData 进行判定和执行，若符合相应条件则会衔接到 `mco_attack2` 或 `mco_powerattack2` 中。  
+<br/> 
+### 额外可选操作：  
+你可以在`SCAR_ComboStart`事件注解中通过后缀的方式设置下一个连招攻击触发的总几率，若不设置则默认为100%触发。代码实例：
+```
+1.550000 SCAR_ComboStart.60
+```
+表示有60%几率会继续执行下一个连招，40%几率停止攻击不再继续连招。
 
 ---
 
