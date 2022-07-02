@@ -74,7 +74,7 @@ If the first ActionData above doesn't meet all the conditions, then SCAR will ch
 ## Attack Combos Stage
 ---
 In order to implement SCAR attack combos for the moveset, first thing to do is adding a animation event named `SCAR_ComboStart` into the *Behavior Graph* that your attack animation belongs to.  
-This animation event would be the trigger of doing SCAR Action Data checking, and the window to fire next attack if an ActionData meet the conditions.  
+This animation event would be the trigger of doing SCAR Action Data checking, also as the window to fire next attack if an ActionData meet the conditions.  
 
 Luckily, SCAR and ADXP-Beta-1.4 already added this animation event into the characer behavior graph, therefore you don't need to patch behavior yourself (still need to do for creature).  
 
