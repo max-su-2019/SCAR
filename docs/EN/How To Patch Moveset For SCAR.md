@@ -62,7 +62,7 @@ The SCAR related annotations inside its `SCAR_1hmReadyDummy.hkx` are as followin
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":120, "MaxDistance":247, "StartAngle":-45, "EndAngle":45, "Chance":30, "Type":"RPA"}
 0.500000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCNormalAttack", "MinDistance":0, "MaxDistance":48, "StartAngle":-60, "EndAngle":60, "Chance":100, "Type":"RA"}
 ```
-The codes above contains two ActionData annotations, SCAR will check the annotation one by one by the descending order of the weight, Due to the fisrt line of annotation has weight 1.000000, while the second line has weight 0.500000, SCAR will firstly check the conditions of the first line:
+The codes above contains two ActionData annotations, SCAR will check the annotation one by one by the descending order of the weight, Due to the first line of annotation has weight 1.000000, while the second line has weight 0.500000, SCAR will start from checking the conditions of the first line:
 * When the distance to the combat target within the range of 120 to (247 + weapon reach), as well as the heading angle to the combat target within -45 to 45 degree, then the moveset owner would has 30% of chance to perform the "ADXP_NPCPowerAttack" Idle animation that defined in the "mco.esp", the attack action type would be *right power attack*. While under ADXP framework, that mean the moveset owner would play "mco_powerattack1.hkx" next.  
 
 If the first ActionData above doesn't meet all the conditions, then SCAR will check for the second one in lower weight:
