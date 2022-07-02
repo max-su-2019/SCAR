@@ -1,8 +1,8 @@
 # How To Patch Moveset for SCAR
 This tutorial would instruct you to patch your moveset to supporting the customize AI attack combos feature of SCAR.   
 The tutorial would be separated into two stages：  
-* **[Attack Ready Stage](https://github.com/max-su-2019/SCAR/edit/main/docs/EN/How%20To%20Patch%20Moveset%20For%20SCAR.md#attack-ready-stage)** 
-* **[Attack Combos Stage](https://github.com/max-su-2019/SCAR/edit/main/docs/EN/How%20To%20Patch%20Moveset%20For%20SCAR.md#attack-combos-stage)**
+* **[Attack Ready Stage](https://github.com/max-su-2019/SCAR/blob/main/docs/EN/How%20To%20Patch%20Moveset%20For%20SCAR.md#attack-ready-stage)** 
+* **[Attack Combos Stage](https://github.com/max-su-2019/SCAR/blob/main/docs/EN/How%20To%20Patch%20Moveset%20For%20SCAR.md#attack-combos-stage)**
    
 <br/> 
 
