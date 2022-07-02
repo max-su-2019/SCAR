@@ -23,7 +23,7 @@ The content of the annotations could divided into three segments, as the picture
 
 ![1](../images/SCAR%20Action%20Data.jpg) 
 *  `weight`: The float number `1.000000` in the leftmost originally represents the *local time* of the annotations, SCAR using it as the *weight* of the ActionData here.  
-When there are multiple line of ActionData annotations inside an animation file, weight would be used to decide the proirty of the ActionData, SCAR will check the anooations one by one following the descending order of the weight, that mean the ActionData with higher weight would be checking first, and the first ActionData that meet all the conditions would be perform, while the rest would be igronaed.
+When there are multiple line of ActionData annotations inside an animation file, weight would be used to decide the priority of the ActionData, SCAR will check the anooations one by one following the descending order of the weight, that mean the ActionData with higher weight would be checking first, and the first ActionData that meet all the conditions would be perform, while the rest would be igronaed.
 
 * `prefix text`: The "SCAR_ActionData" text segment is nothing but a prefix identifier text. It does not contains any valid data, SCAR only use it to find out the one with SCAR Action Data from the many annotations.
    
