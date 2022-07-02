@@ -15,11 +15,11 @@ Luckily, For the attack behavior of <u>*Character*</u>, SCAR already created a D
 
 The remaining things you need to do is annoate the ActionData of your first attack inside the "SCAR_1hmReadyDummy.hkx", then include this animation file into your moveset.  
 <br/> 
-Here is a code example of annotations that containing an ActionData:
+Here is a code example of an annotation that contains an ActionData:
 ```
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":0, "MaxDistance":139, "StartAngle":-60, "EndAngle":60, "Chance":30, "Type":"RPA"}
 ```
-The content of the annotations could divided into three segments, as the picture below illustrate：  
+The content of the annotation could divided into three segments, as the picture below illustrate：  
 
 ![1](../images/SCAR%20Action%20Data.jpg) 
 *  `weight`: The float number `1.000000` in the leftmost originally represents the *local time* of the annotations, SCAR using it as the *weight* of the ActionData here.  
