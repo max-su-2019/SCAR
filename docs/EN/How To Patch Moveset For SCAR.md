@@ -1,15 +1,15 @@
 # How To Patch Moveset for SCAR
-This tutorial would instruct you on how to patch your moveset to supporting the customize AI attack combos feature of SCAR.   
+This tutorial would instruct you to patch your moveset to supporting the customize AI attack combos feature of SCAR.   
 The tutorial would be separated into two stages：  
-* **Attack Ready Stage** 
-* **Attack Combos Stage**
+* **[Attack Ready Stage](https://github.com/max-su-2019/SCAR/edit/main/docs/EN/How%20To%20Patch%20Moveset%20For%20SCAR.md#attack-ready-stage)** 
+* **[Attack Combos Stage](https://github.com/max-su-2019/SCAR/edit/main/docs/EN/How%20To%20Patch%20Moveset%20For%20SCAR.md#attack-combos-stage)**
    
 <br/> 
 
 ## Attack Ready Stage
 ---  
 
-In order to add SCAR AI data- <u>*SCAR Action Data*</u> (refer as "ActionData") for the first attack action of your moveset, You have to patch the <u>*Behavior*</u> first: creating a <u>*DummyAnimation*</u>  under the behavior‘s <u>*AttackReadyStateMachine*</u>, then using this DummyAnimation as the container to store the ActionData of the first attack animations (In ADXP, that would be "MCO_attack1.hkx" & "MCO_powerattack1.hkx"), with it SCAR could retrieves the data on SKSE plugin end.
+In order to add SCAR AI data- <u>*SCAR Action Data*</u> (refer as "ActionData") for the first attack action of your moveset, You have to patch the <u>*Behavior*</u> first: creating a <u>*DummyAnimation*</u>  under the behavior‘s <u>*AttackReadyStateMachine*</u>, then using this DummyAnimation as the container to store the ActionData of the first attack animations (In ADXP, that would be "MCO_attack1.hkx" & "MCO_powerattack1.hkx"), with it SCAR could retrieves the data from SKSE plugin end.
 <br/>  
 Luckily, For the attack behavior of <u>*Character*</u>, SCAR already created a DummyAnimation named "SCAR_1hmReadyDummy.hkx", so you don't need to patch behavior for character yourself (still need to do for creature).   
 
@@ -56,7 +56,7 @@ When there are multiple line of ActionData annotations inside an animation file,
     *IDLE - Regular Idle*   
 <br/> 
 
-Let's take the battleaxe moveset(DAR Folder 20006) of SCAR's default moveset package for example, to explain how SCAR doing it compute through the annotations.  
+Let's take the battleaxe moveset (DAR Folder 20006) of SCAR's default moveset package for example, to explain how SCAR doing it compute through the annotations.  
 The SCAR related annotations inside its `SCAR_1hmReadyDummy.hkx` are as following： 
 ```
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":120, "MaxDistance":247, "StartAngle":-45, "EndAngle":45, "Chance":30, "Type":"RPA"}
@@ -83,7 +83,7 @@ Next step, you need to find out all the attack animation files that able to tran
 Moreover, you have to annotate "SCAR_ComboStart" at the local time that you want the animation to start the next attack transition.  
 For ADXP, the time of "SCAR_ComboStart" should annotate between "MCO_WinOpen" to "MCO_WinClose" or between "MCO_PowerWinOpen" to "MCO_PowerWinClose". 
 
-Below are the SCAR related annoations inside the "mco_attack1.hkx" file that belongs to the SCAR default battleaxe moveset(DAR Folder 20006).
+Below are the SCAR related annoations inside the "mco_attack1.hkx" file that belongs to the SCAR default battleaxe moveset (DAR Folder 20006):
 ```
 1.550000 SCAR_ComboStart
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":0, "MaxDistance":29, "StartAngle":-60, "EndAngle":60, "Chance":30, "Type":"RPA"}
