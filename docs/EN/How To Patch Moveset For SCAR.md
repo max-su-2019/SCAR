@@ -11,11 +11,11 @@ The tutorial would be separated into two stages：
 
 In order to add SCAR AI data- <u>*SCAR Action Data*</u> (refer as "ActionData") for the first attack action of your moveset, You have to patch the <u>*Behavior*</u> first: creating a <u>*DummyAnimation*</u>  under the behavior‘s <u>*AttackReadyStateMachine*</u>, then using this DummyAnimation as the container to store the ActionData of the first attack animations (In ADXP, that would be "MCO_attack1.hkx" & "MCO_powerattack1.hkx"), with it SCAR could retrieves the data on SKSE plugin end.
 <br/>  
-Luckily, For the attack behavior of <u>*Character*</u>, SCAR already created a DummyAnimation named "SCAR_1hmReadyDummy.hkx", so you don't need to patch behavior for character yourself. (For creature stil have to)   
+Luckily, For the attack behavior of <u>*Character*</u>, SCAR already created a DummyAnimation named "SCAR_1hmReadyDummy.hkx", so you don't need to patch behavior for character yourself. (Stil have to If for creature)   
 
-The rest things you need to do is annoate the ActionData of your first attack inside the "SCAR_1hmReadyDummy.hkx", then include this animation file into your moveset.  
+The remaining things you need to do is annoate the ActionData of your first attack inside the "SCAR_1hmReadyDummy.hkx", then include this animation file into your moveset.  
 <br/> 
-Here is a code example of an annotations that containing an ActionData:
+Here is a code example of annotations that containing an ActionData:
 ```
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":0, "MaxDistance":139, "StartAngle":-60, "EndAngle":60, "Chance":30, "Type":"RPA"}
 ```
@@ -23,7 +23,7 @@ The content of the annotations could divided into three segments, as the picture
 
 ![1](../images/SCAR%20Action%20Data.jpg) 
 *  `weight`: The float number `1.000000` in the leftmost originally represents the *local time* of the annotations, SCAR using it as the *weight* of the ActionData here.  
-When there are mulitpe line of ActionData annoations inside an animation file, weight would be used to decide the proirty of the ActionData, SCAR will check the anooations one by one following the descend order of the weight, that mean the ActionData with higher weight would be checking first, and the first ActionData that meet all the conditions would be perform, while the rest would be igronaed.
+When there are mulitpe line of ActionData annoations inside an animation file, weight would be used to decide the proirty of the ActionData, SCAR will check the anooations one by one following the descending order of the weight, that mean the ActionData with higher weight would be checking first, and the first ActionData that meet all the conditions would be perform, while the rest would be igronaed.
 
 * `prefix text`: The "SCAR_ActionData" text segment is nothing but a prefix identifier text. It does not contains any valid data, SCAR only use it to find out the one with SCAR Action Data from the many annotations.
    
@@ -56,16 +56,17 @@ When there are mulitpe line of ActionData annoations inside an animation file, w
     *IDLE - Regular Idle*   
 <br/> 
 
-下面以ADXP V1.4默认双手斧动作（既SCAR默认动作包20006）Moveset中的 `SCAR_1hmReadyDummy.hkx` 动画里的SCAR注解作为例子，来说明SCAR如何读取其中的数据做AI判定：
+Let's take the battleaxe moveset(DAR Folder 20006) of SCAR's default moveset package for example, to explain how SCAR doing it compute through the annotations.  
+The SCAR related annotations inside its `SCAR_1hmReadyDummy.hkx` are as following： 
 ```
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":120, "MaxDistance":247, "StartAngle":-45, "EndAngle":45, "Chance":30, "Type":"RPA"}
 0.500000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCNormalAttack", "MinDistance":0, "MaxDistance":48, "StartAngle":-60, "EndAngle":60, "Chance":100, "Type":"RA"}
 ```
-上面代码段包含有两条 ActionData 数据注解，SCAR会首先根据权重对其进行排序并依次逐个做判定，由于第一条 ActionData 的权重为1.000000、第二条权重为0.500000，所以SCAR会先对第一条ActionData 进行条件判定：  
-* 当攻击目标的距离处于120到（247+武器距离）的范围内、攻击目标的角度范围处于-45到45度时，则NPC有30%的几率执行esp中名为 `ADXP_NPCPowerAttack` 的闲置动画，类型为 *RightPowerAttack* - 右手重击。在ADXP框架下，这意味着NPC会播放`mco_powerattack1.hkx`攻击动画。  
+The codes above contains two ActionData annotations, SCAR will check the annotation one by one by the descending order of the weight, Due to the fisrt line of annotation has weight 1.000000, while the second line has weight 0.500000, SCAR will firstly check the conditions of the first line:
+* When the distance to the combat target within the range of 120 to (247 + weapon reach), as well as the heading angle to the combat target within -45 to 45 degree, then the moveset owner would has 30% of chance to perform the "ADXP_NPCPowerAttack" Idle animation that defined in the "mco.esp", the attack action type would be *right power attack*. While under ADXP framework, that mean the moveset owner would play "mco_powerattack1.hkx" next.  
 
-若第一条 ActionData 的不符合条件或闲置动画未能成功执行，则会继续往下执行权重较低的第二条 ActionData：  
-* 当攻击目标的距离处于0到（48+武器距离）的范围内、攻击目标的角度范围位于-60到60度时，则NPC有100%的几率执行esp中名为 `ADXP_NPCNormalAttack` 的闲置动画，类型为 *RightAttack* - 右手攻击。在ADXP框架下，这意味着NPC会播放`mco_attack1.hkx`攻击动画。  
+If the first ActionData above doesn't meet all the conditions, then SCAR will check for the second one in lower weight:
+* When the distance to the combat target within the range of 0 to (48 + weapon reach), as well as the heading angle to the combat target within -60 to 60 degree, then the moveset owner would has 100% of chance to perform the "ADXP_NPCNormalAttack" Idle animation that defined in the "mco.esp", the attack action type would be *right attack*. While under ADXP framework, that mean the moveset owner would play "mco_attack1.hkx" next. 
 
 ---    
 <br/> <br/> 
