@@ -11,9 +11,9 @@ The tutorial would be separated into two stages：
 
 In order to add SCAR AI data- <u>*SCAR Action Data*</u> (refer as "ActionData") for the first attack action of your moveset, You have to patch the <u>*Behavior*</u> first: creating a <u>*DummyAnimation*</u>  under the behavior‘s <u>*AttackReadyStateMachine*</u>, then using this DummyAnimation as the container to store the ActionData of the first attack animations (In ADXP, that would be "MCO_attack1.hkx" & "MCO_powerattack1.hkx"), with it SCAR could retrieves the data on SKSE plugin end.
 <br/>  
-Luckily, For the attack behavior of <u>*Character*</u>, SCAR already created a DummyAnimation named "SCAR_1hmReadyDummy.hkx", so you don't need to patch behavior for character yourself. (Stil have to If for creature)   
+Luckily, For the attack behavior of <u>*Character*</u>, SCAR already created a DummyAnimation named "SCAR_1hmReadyDummy.hkx", so you don't need to patch behavior for character yourself (still need to do for creature).   
 
-The remaining things you need to do is annoate the ActionData of your first attack inside the "SCAR_1hmReadyDummy.hkx", then include this animation file into your moveset.  
+The remaining things you need to do is annotate the ActionData of your first attack inside the "SCAR_1hmReadyDummy.hkx", then include this animation file into your moveset.  
 <br/> 
 Here is a code example of an annotation that contains an ActionData:
 ```
@@ -71,29 +71,34 @@ If the first ActionData above doesn't meet all the conditions, then SCAR will ch
 ---    
 <br/> <br/> 
 
-## 攻击连招阶段
----  
-要为攻击连招阶段添加SCAR支持，首先需要你在攻击动画所属的 **行为图(Behavior Graph)** 中添加一个名为 `SCAR_ComboStart` 的 **动作事件(animation event)** ，用来作为执行下一个连招攻击的AI判定窗口。  
-幸运的是，SCAR和ADXP V1.4的行为补丁中已经添加了此动作事件，你无需自己修改行为或制作行为补丁(如果是生物moveset则需要)。  
+## Attack Combos Stage
+---
+In order to implement SCAR attack combos for the moveset, first thing to do is adding a animation event named `SCAR_ComboStart` into the *Behavior Graph* that your attack animation belongs to.  
+This animation event would be the trigger of doing SCAR Action Data checking, and the window to fire next attack if an ActionData meet the conditions.  
 
-下一步需要找到moveset里所有会继续衔接连招到下一个攻击的攻击动画文件，并为其添加表示可衔接到的下一个连招攻击动作的 ActionData 注解，方式和 `SCAR_1hmReadyDummy.hkx` 中的相同。比如，若你的`mco_attack1.hkx`动画分别可衔接到`mco_attack2`或`mco_powerattack2`，则需加入后两个动画对应的ActionData注解到  `mco_attack1.hkx` 文件中。  
+Luckily, SCAR and ADXP-Beta-1.4 already added this animation event into the characer behavior graph, therefore you don't need to patch behavior yourself (still need to do for creature).  
 
-除此之外，还需额外在你认为可开始执行衔接到下一个攻击动作的窗口时间里，加上 `SCAR_ComboStart` 这个动作事件。 对于ADXP而言，`SCAR_ComboStart` 的时间应位于 MCO_WinOpen 和 MCO_WinClose 之间、 或位于 MCO_PowerWinOpen 和 MCO_PowerWinClose 之间。  
+Next step, you need to find out all the attack animation files that able to transit to next attack of the moveset, and adding SCAR Action Data annotations into the attack animation file, the same ways as you annotate ActionData in `SCAR_1hmReadyDummy.hkx`.
 
-以下是ADXP V1.4默认双手斧动作（既SCAR默认动作包20006）Moveset中的 `mco_attack1.hkx` 动画内的SCAR相关注解:  
+Moreover, you have to annotate "SCAR_ComboStart" at the local time that you want the animation to start the next attack transition.  
+For ADXP, the time of "SCAR_ComboStart" should annotate between "MCO_WinOpen" to "MCO_WinClose" or between "MCO_PowerWinOpen" to "MCO_PowerWinClose". 
+
+Below are the SCAR related annoations inside the "mco_attack1.hkx" file that belongs to the SCAR default battleaxe moveset(DAR Folder 20006).
 ```
 1.550000 SCAR_ComboStart
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":0, "MaxDistance":29, "StartAngle":-60, "EndAngle":60, "Chance":30, "Type":"RPA"}
 0.500000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCNormalAttack", "MinDistance":0, "MaxDistance":193, "StartAngle":-60, "EndAngle":60, "Chance":100, "Type":"RA"}
 ```
-上述注解表示：当  `mco_attack1.hkx` 动画执行到1.550000秒时，会对注解中的两条 ActionData 进行判定和执行，若符合相应条件则会衔接到 `mco_attack2` 或 `mco_powerattack2` 中。  
+The annotations indicate that: When "mco_attack1.hkx" animation is played to 1.550000, SCAR will start checking for the ActionData annotations, and excute the ActionData that meet the conditions.  
+Animation would then transit to "mco_attack2" or "mco_powerattack2" if ActionData exctue.  
 <br/> 
-### 额外可选操作：  
-你可以在`SCAR_ComboStart`事件注解中通过后缀的方式设置下一个连招攻击触发的总几率，若不设置则默认为100%触发。代码实例：
+### Optional Operation：  
+You can add a suffix after the `SCAR_ComboStart` annotation to set up the total chance to trigger next attack, if you don't add the suffix the chance will be 100% by default.  
+Codes Example:
 ```
 1.550000 SCAR_ComboStart.60
 ```
-表示有60%几率会继续执行下一个连招，40%几率停止攻击不再继续连招。
+Indicate that there has 60% chance start the next attack, 40% chance to stop the attack combos.
 
 ---
 
