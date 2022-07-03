@@ -33,6 +33,10 @@ namespace SCAR
 		const DefaultObject GetActionObject() const;
 		const float GetStartAngle() const { return startAngle / 180.f * std::numbers::pi; };
 		const float GetEndAngle() const { return endAngle / 180.f * std::numbers::pi; };
+
+		const bool IsLeftAttack() const;
+		const bool IsBashAttack() const;
+		float GetWeaponReach(RE::Actor* a_attacker) const;
 	};
 
 	void from_json(const json& j, SCARActionData& a_data);

@@ -25,6 +25,36 @@ namespace SCAR
 		j.at("Type").get_to(a_data.actionType);
 	}
 
+	const bool SCARActionData::IsLeftAttack() const
+	{
+		return _strcmpi(actionType.c_str(), "LA") == 0 || _strcmpi(actionType.c_str(), "LPA") == 0;
+	}
+
+	const bool SCARActionData::IsBashAttack() const
+	{
+		return _strcmpi(actionType.c_str(), "BA") == 0 || _strcmpi(actionType.c_str(), "BPA") == 0;
+	}
+
+	float SCARActionData::GetWeaponReach(RE::Actor* a_attacker) const
+	{
+		if (a_attacker) {
+			if (IsBashAttack()) {
+				auto setting = RE::GameSettingCollection::GetSingleton()->GetSetting("fCombatBashReach");
+				if (setting)
+					return setting->GetFloat() * a_attacker->GetScale();
+			} else {
+				auto obj = a_attacker->GetEquippedObject(IsLeftAttack());
+				auto weap = obj ? obj->As<RE::TESObjectWEAP>() : nullptr;
+				auto setting = RE::GameSettingCollection::GetSingleton()->GetSetting("fCombatDistance");
+				if (weap && setting) {
+					return weap->GetReach() * setting->GetFloat() * a_attacker->GetScale();
+				}
+			}
+		}
+
+		return a_attacker->GetRace() ? a_attacker->GetRace()->data.unarmedReach : 0.f;
+	}
+
 	const DefaultObject SCARActionData::GetActionObject() const
 	{
 		static std::map<const std::string, const DefaultObject> actionMap = {
@@ -34,6 +64,8 @@ namespace SCAR
 			{ "LPA", DefaultObject::kActionLeftPowerAttack },
 			{ "DA", DefaultObject::kActionDualAttack },
 			{ "DPA", DefaultObject::kActionDualPowerAttack },
+			{ "BA", DefaultObject::kActionRightAttack },
+			{ "BPA", DefaultObject::kActionRightPowerAttack },
 			{ "IDLE", DefaultObject::kActionIdle }
 		};
 
@@ -44,7 +76,7 @@ namespace SCAR
 	bool SCARActionData::PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target)
 	{
 		if (a_attacker && a_target && a_attacker->currentProcess &&
-			chance >= Random::get<float>(0.f, 100.f) && AttackRangeCheck::WithinAttackRange(a_attacker, a_target, maxDistance + a_attacker->GetReach(), minDistance, GetStartAngle(), GetEndAngle())) {
+			chance >= Random::get<float>(0.f, 100.f) && AttackRangeCheck::WithinAttackRange(a_attacker, a_target, maxDistance + GetWeaponReach(a_attacker), minDistance, GetStartAngle(), GetEndAngle())) {
 			auto IdleAnimation = RE::TESForm::LookupByEditorID<RE::TESIdleForm>(IdleAnimationEditorID);
 			if (!IdleAnimation) {
 				logger::error("Not Vaild Idle Animation Form Get: \"{}\"!", IdleAnimationEditorID);
@@ -55,7 +87,7 @@ namespace SCAR
 			if (result) {
 				logger::debug("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 					IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
-				AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + a_attacker->GetReach(), minDistance, GetStartAngle(), GetEndAngle());
+				AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + GetWeaponReach(a_attacker), minDistance, GetStartAngle(), GetEndAngle());
 			}
 
 			return result;

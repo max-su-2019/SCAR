@@ -12,7 +12,7 @@ endif()
 # info
 project(
 	SCAR
-	VERSION 0.8.3
+	VERSION 0.8.5
 	LANGUAGES CXX
 )
 
