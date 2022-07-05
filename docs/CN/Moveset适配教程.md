@@ -25,7 +25,7 @@
    
 * `json data`: 最后的部分是两个花括号包含着的长字段，这是一个标准的JSON格式字符串，里面储存的正是一个ActionData所应包含的几项主要数据：
     * `IdleAnimation` : 存储一条 ActionData 中所使用的 **闲置动画([Idle Animation](https://www.creationkit.com/index.php?title=Idle_Animations))** 的EditorID,当所有 ActionData 的条件都满足时便会播放执行此闲置动画。
-    闲置动画需在esp中定义，*ADXP V1.4* 及以上版本已经包含了两个可用的闲置动画`ADXP_NPCPowerAttack` 和 `ADXP_NPCNormalAttack`，分别可用来执行NPC重击和轻击。闲置动画的执行还需满足闲置动画自身在esp中设置的条件。  
+    闲置动画需在esp中定义，*ADXP V.131* 及以上版本已经包含了两个可用的闲置动画`ADXP_NPCPowerAttack` 和 `ADXP_NPCNormalAttack`，分别可用来执行NPC重击和轻击。闲置动画的执行还需满足闲置动画自身在esp中设置的条件。  
     *  `MaxDistance`: 表示这条 ActionData 的最大执行距离范围，仅当Moveset的持有者与其攻击目标之间的距离不大于这个数值时，此条ActionData才可以被执行。距离的值必须大于0。  
     注意这里的MaxDistance不需要考虑武器的距离，武器的距离会在实际计算最大距离时动态地加上。
     *  `MinDistance`: 表示这条ActionData的最小执行距离范围，仅当Moveset的持有者与其攻击目标之间的距离不小于这个数值时，此条ActionData才可以被执行。距离的值必须大于0。  
@@ -44,7 +44,7 @@
     *IDLE - Regular Idle*   
 <br/> 
 
-下面以ADXP V1.4默认双手斧动作（既SCAR默认动作包20006）Moveset中的 `SCAR_1hmReadyDummy.hkx` 动画里的SCAR注解作为例子，来说明SCAR如何读取其中的数据做AI判定：
+下面以ADXP V.131默认双手斧动作（既SCAR默认动作包20006）Moveset中的 `SCAR_1hmReadyDummy.hkx` 动画里的SCAR注解作为例子，来说明SCAR如何读取其中的数据做AI判定：
 ```
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":120, "MaxDistance":247, "StartAngle":-45, "EndAngle":45, "Chance":30, "Type":"RPA"}
 0.500000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCNormalAttack", "MinDistance":0, "MaxDistance":48, "StartAngle":-60, "EndAngle":60, "Chance":100, "Type":"RA"}
@@ -61,13 +61,13 @@
 ## 攻击连招阶段
 ---  
 要为攻击连招阶段添加SCAR支持，首先需要你在攻击动画所属的 **行为图(Behavior Graph)** 中添加一个名为 `SCAR_ComboStart` 的 **动作事件(animation event)** ，用来作为执行下一个连招攻击的AI判定窗口。  
-幸运的是，SCAR和ADXP V1.4的行为补丁中已经添加了此动作事件，你无需自己修改行为或制作行为补丁(如果是生物moveset则需要)。  
+幸运的是，SCAR和ADXP V.131的行为补丁中已经添加了此动作事件，你无需自己修改行为或制作行为补丁(如果是生物moveset则需要)。  
 
 下一步需要找到moveset里所有会继续衔接连招到下一个攻击的攻击动画文件，并为其添加表示可衔接到的下一个连招攻击动作的 ActionData 注解，方式和 `SCAR_1hmReadyDummy.hkx` 中的相同。比如，若你的`mco_attack1.hkx`动画分别可衔接到`mco_attack2`或`mco_powerattack2`，则需加入后两个动画对应的ActionData注解到  `mco_attack1.hkx` 文件中。  
 
 除此之外，还需额外在你认为可开始执行衔接到下一个攻击动作的窗口时间里，加上 `SCAR_ComboStart` 这个动作事件。 对于ADXP而言，`SCAR_ComboStart` 的时间应位于 MCO_WinOpen 和 MCO_WinClose 之间、 或位于 MCO_PowerWinOpen 和 MCO_PowerWinClose 之间。  
 
-以下是ADXP V1.4默认双手斧动作（既SCAR默认动作包20006）Moveset中的 `mco_attack1.hkx` 动画内的SCAR相关注解:  
+以下是ADXP V.131默认双手斧动作（既SCAR默认动作包20006）Moveset中的 `mco_attack1.hkx` 动画内的SCAR相关注解:  
 ```
 1.550000 SCAR_ComboStart
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":0, "MaxDistance":29, "StartAngle":-60, "EndAngle":60, "Chance":30, "Type":"RPA"}

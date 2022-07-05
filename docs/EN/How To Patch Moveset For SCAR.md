@@ -30,7 +30,7 @@ When there are multiple line of ActionData annotations inside an animation file,
 * `json data`:  The last segment that enclosed in two curly braces is a standard [json format string](https://www.w3schools.com/js/js_json_syntax.asp), stored the actual data of an SCAR Action Data:
 
     * `IdleAnimation` : The EditorID of the [Idle Animation](https://www.creationkit.com/index.php?title=Idle_Animations) that would be performed by the ActionData when all the conditions are meeting.  
-    Idle Animation is defined by the esp plugin, *ADXP-Beta-1.4* and above version already contains two valid idle animation: "ADXP_NPCPowerAttack" and "ADXP_NPCNormalAttack" in it mco.esp, which could be used to perform powerAttack and normalAttack separately.  
+    Idle Animation is defined by the esp plugin, *ADXP-Beta-1.31* and above version already contains two valid idle animation: "ADXP_NPCPowerAttack" and "ADXP_NPCNormalAttack" in it mco.esp, which could be used to perform powerAttack and normalAttack separately.  
     The conditions items of the idle animation would also be take into consideration when doing conditions checking.  
 
     *  `MaxDistance`: The maximum distance range for the ActionData to execute, only when the distance between the moveset owner to the target less than this value, the ActionData could be executed. The value of the distance must be greater than zero.  
@@ -76,7 +76,7 @@ If the first ActionData above doesn't meet all the conditions, then SCAR will ch
 In order to implement SCAR attack combos for the moveset, first thing to do is adding a animation event named `SCAR_ComboStart` into the *Behavior Graph* that your attack animation belongs to.  
 This animation event would be the trigger of doing SCAR Action Data checking, also as the window to fire next attack if an ActionData meet the conditions.  
 
-Luckily, SCAR and ADXP-Beta-1.4 already added this animation event into the characer behavior graph, therefore you don't need to patch behavior yourself (still need to do for creature).  
+Luckily, SCAR and ADXP-Beta-1.31 already added this animation event into the characer behavior graph, therefore you don't need to patch behavior yourself (still need to do for creature).  
 
 Next step, you need to find out all the attack animation files that able to transit to next attack of the moveset, and adding SCAR Action Data annotations into the attack animation file, the same ways as you annotate ActionData in `SCAR_1hmReadyDummy.hkx`.
 
