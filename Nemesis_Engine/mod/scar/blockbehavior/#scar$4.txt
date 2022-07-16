@@ -1,9 +1,9 @@
-		<hkobject name="#scar$1" class="hkbClipGenerator" signature="0x333b85b9">
+		<hkobject name="#scar$4" class="hkbClipGenerator" signature="0x333b85b9">
 			<hkparam name="variableBindingSet">null</hkparam>
 			<hkparam name="userData">0</hkparam>
-			<hkparam name="name">SCAR_1HM_Ready_Dummy1</hkparam>
-			<hkparam name="animationName">Animations\SCAR_1hmReadyDummy.hkx</hkparam>
-			<hkparam name="triggers">#scar$0</hkparam>
+			<hkparam name="name">SCAR_BlockIdleDummy1</hkparam>
+			<hkparam name="animationName">Animations\SCAR_BlockIdleDummy.hkx</hkparam>
+			<hkparam name="triggers">#scar$5</hkparam>
 			<hkparam name="cropStartAmountLocalTime">0.000000</hkparam>
 			<hkparam name="cropEndAmountLocalTime">0.000000</hkparam>
 			<hkparam name="startTime">0.000000</hkparam>

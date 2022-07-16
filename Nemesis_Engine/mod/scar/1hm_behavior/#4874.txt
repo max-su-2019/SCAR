@@ -5,7 +5,7 @@
 			<hkparam name="exitNotifyEvents">null</hkparam>
 			<hkparam name="transitions">#4872</hkparam>
 <!-- MOD_CODE ~scar~ OPEN -->
-			<hkparam name="generator">#scar$3</hkparam>
+			<hkparam name="generator">#scar$11</hkparam>
 <!-- ORIGINAL -->
 			<hkparam name="generator">#3974</hkparam>
 <!-- CLOSE -->

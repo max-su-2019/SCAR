@@ -463,6 +463,7 @@
 				<hkcstring>EndAnimatedCamera</hkcstring>
 <!-- MOD_CODE ~scar~ OPEN -->
 				<hkcstring>SCAR_ComboStart</hkcstring>
+				<hkcstring>SCAR_UpdateDummy</hkcstring>
 <!-- CLOSE -->
 			</hkparam>
 			<hkparam name="attributeNames" numelements="0"></hkparam>
