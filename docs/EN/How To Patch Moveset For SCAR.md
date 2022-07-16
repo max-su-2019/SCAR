@@ -13,7 +13,7 @@ In order to add SCAR AI data- <u>*SCAR Action Data*</u> (refer as "ActionData") 
 <br/>  
 Luckily, For the attack behavior of <u>*Character*</u>, SCAR already created a DummyAnimation named "SCAR_1hmReadyDummy.hkx", so you don't need to patch behavior for character yourself (still need to do for creature).   
 
-The remaining things you need to do is annotate the ActionData of your first attack inside the "SCAR_1hmReadyDummy.hkx", then include this animation file into your moveset.  
+The remaining things you need to do is annotate the ActionData of your first attack inside the "SCAR_1hmReadyDummy.hkx", then include this animation file into your moveset's DAR folder.  
 <br/> 
 Here is a code example of an annotation that contains an ActionData:
 ```
@@ -67,6 +67,18 @@ The codes above contains two ActionData annotations, SCAR will check the annotat
 
 If the first ActionData above doesn't meet all the conditions, then SCAR will check for the second one in lower weight:
 * When the distance to the combat target within the range of 0 to (48 + weapon reach), as well as the heading angle to the combat target within -60 to 60 degree, then the moveset owner would has 100% of chance to perform the "ADXP_NPCNormalAttack" Idle animation that defined in the "mco.esp", the attack action type would be *right attack*. While under ADXP framework, that mean the moveset owner would play "mco_attack1.hkx" next. 
+  
+<br/> 
+
+### Optional Operation：  
+ 
+SCAR-V0.85c and newer has added another dummy animation file named `SCAR_BlockIdleDummy.hkx` which could be used to apply SCAR Action Data when the character blocking, it works the same ways as `SCAR_1hmReadyDummy.hkx` but only active for blockIdle state.   
+<br/>
+
+### CAUTION:
+
+Do not put your dummy animation files(`SCAR_1hmReadyDummy.hkx`, `SCAR_BlockIdleDummy.hkx`) under the "meshes\actors\character\animations" path,that would trigger a CTD issue of DAR if you do so.  
+Ensure that all your dummy animation files are located in DAR condtion folder("meshes\actors\character\animations\DynamicAnimationReplacer\_CustomConditions\xxxxx").
 
 ---    
 <br/> <br/> 
@@ -101,4 +113,8 @@ Codes Example:
 Indicate that there has 60% chance start the next attack, 40% chance to stop the attack combos.
 
 ---
+<br/> <br/> 
 
+## Debugging:
+---
+To debug your moveset in game, oepn "SKSE\Plugins\SCAR.ini", set options "EnableDebugLog" and "EnableDebugOverlay" to `true`.
