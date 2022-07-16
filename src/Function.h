@@ -2,8 +2,6 @@
 
 namespace SCAR
 {
-	bool ShouldNextAttack(const std::string a_payload);
-
 	class AttackRangeCheck
 	{
 	private:

@@ -4,6 +4,14 @@
 
 namespace SCAR
 {
+	static bool ShouldNextAttack(const std::string a_payload)
+	{
+		if (a_payload.empty())
+			return true;
+
+		return std::atoi(a_payload.c_str()) >= Random::get<float>(0.f, 100.f);
+	}
+
 	EventResult AnimEventHook::ProcessEvent(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_sink, RE::BSAnimationGraphEvent* a_event, RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_eventSource)
 	{
 		if (!a_event || !a_event->holder)

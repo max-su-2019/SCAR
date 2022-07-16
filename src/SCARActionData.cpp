@@ -75,8 +75,11 @@ namespace SCAR
 
 	bool SCARActionData::PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target)
 	{
-		if (a_attacker && a_target && a_attacker->currentProcess &&
-			chance >= Random::get<float>(0.f, 100.f) && AttackRangeCheck::WithinAttackRange(a_attacker, a_target, maxDistance + GetWeaponReach(a_attacker), minDistance, GetStartAngle(), GetEndAngle())) {
+		if (!a_attacker || !a_target || !a_attacker->currentProcess)
+			return false;
+
+		const float weaponReach = GetWeaponReach(a_attacker);
+		if (chance >= Random::get<float>(0.f, 100.f) && AttackRangeCheck::WithinAttackRange(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle())) {
 			auto IdleAnimation = RE::TESForm::LookupByEditorID<RE::TESIdleForm>(IdleAnimationEditorID);
 			if (!IdleAnimation) {
 				logger::error("Not Vaild Idle Animation Form Get: \"{}\"!", IdleAnimationEditorID);
@@ -87,7 +90,7 @@ namespace SCAR
 			if (result) {
 				logger::debug("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 					IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
-				AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + GetWeaponReach(a_attacker), minDistance, GetStartAngle(), GetEndAngle());
+				AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle());
 			}
 
 			return result;

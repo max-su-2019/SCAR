@@ -7,8 +7,11 @@ namespace SCAR
 
 	using DefaultObject = RE::BGSDefaultObjectManager::DefaultObject;
 
+	extern class DataHandler;
+
 	struct SCARActionData
 	{
+	private:
 		float weight = 0.f;
 
 		std::string IdleAnimationEditorID = "";
@@ -24,6 +27,10 @@ namespace SCAR
 		float chance = 100.f;
 
 		std::string actionType = "RA";
+
+	public:
+		friend void from_json(const json& j, SCARActionData& a_data);
+		friend class DataHandler;
 
 		bool PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target);
 

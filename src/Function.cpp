@@ -4,13 +4,6 @@
 
 namespace SCAR
 {
-	bool ShouldNextAttack(const std::string a_payload)
-	{
-		if (a_payload.empty())
-			return true;
-
-		return std::atoi(a_payload.c_str()) >= Random::get<float>(0.f, 100.f);
-	}
 
 	bool AttackRangeCheck::CheckPathing(RE::Actor* a_attacker, RE::Actor* a_target)
 	{
