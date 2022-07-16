@@ -72,7 +72,9 @@ If the first ActionData above doesn't meet all the conditions, then SCAR will ch
 
 ### Optional Operation：  
  
-SCAR-V0.85c and newer has added another dummy animation file named `SCAR_BlockIdleDummy.hkx` which could be used to apply SCAR Action Data when the character blocking, it works the same ways as `SCAR_1hmReadyDummy.hkx` but only active for blockIdle state.   
+1. SCAR-V0.85c and newer has added another dummy animation file named `SCAR_BlockIdleDummy.hkx` which could be used to apply SCAR Action Data when the character blocking, it works the same ways as `SCAR_1hmReadyDummy.hkx` but only active for blockIdle state.   
+   
+2.  SCAR-V0.85c and newer allow you to reactive the dummy animation immediately by sending an animaiton event named `SCAR_UpdateDummy`, This could help useful if you make feature that allow quick switch NPC's moveset during combat, for exmaple change the stance of an NPC.
 <br/>
 
 ### CAUTION:
