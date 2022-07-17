@@ -10,7 +10,7 @@
 ---  
 要为你的Moveset的第一下出手攻击添加SCAR的AI行动数据- *SCAR Action Data* (以下简称ActionData)，首先需要对角色的 **行为(behavior)** 进行修改：通过在角色行为的 **攻击预备状态机(AttackReadyStateMachine)** 下添加一个 **虚设动画(Dummy Animation)** ,以作为储存记录第一下出手攻击对应的ActionData的容器。
 <br/>  
-幸运的是，对于**人物角色(character)** 的攻击行为，SCAR自带的Nemesis行为补丁里已经为其添加了一个命名为 `SCAR_1hmReadyDummy.hkx` 的虚设动画文件；因此对于人物角色你无需自己修改行为或制作行为补丁(如果是生物moveset则需要)，只需将Moveset第一次出手攻击对应的ActionData通过 **注解（annotation）** 的方式加进 `SCAR_1hmReadyDummy.hkx` 动画文件并将此动画文件包含进你的Moveset中即可。  
+幸运的是，对于**人物角色(character)** 的攻击行为，SCAR自带的Nemesis行为补丁里已经为其添加了一个命名为 `SCAR_1hmReadyDummy.hkx` 的虚设动画文件；因此对于人物角色你无需自己修改行为或制作行为补丁(如果是生物moveset则需要)，只需将Moveset第一次出手攻击对应的ActionData通过 **注解（annotation）** 的方式加进 `SCAR_1hmReadyDummy.hkx` 动画文件并将此动画文件包含进你的Moveset的DAR文件夹中即可。  
 <br/> 
 以下是一条储存ActionData的注解的例子：
 
@@ -44,7 +44,7 @@
     *IDLE - Regular Idle*   
 <br/> 
 
-下面以ADXP V.131默认双手斧动作（既SCAR默认动作包20006）Moveset中的 `SCAR_1hmReadyDummy.hkx` 动画里的SCAR注解作为例子，来说明SCAR如何读取其中的数据做AI判定：
+下面以ADXP V.131默认双手斧动作（既SCAR默认动作包20006）Moveset中的 `SCAR_1hmReadyDummy.hkx` 虚设动画文件里的SCAR注解作为例子，来说明SCAR如何读取其中的数据做AI判定：
 ```
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":120, "MaxDistance":247, "StartAngle":-45, "EndAngle":45, "Chance":30, "Type":"RPA"}
 0.500000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCNormalAttack", "MinDistance":0, "MaxDistance":48, "StartAngle":-60, "EndAngle":60, "Chance":100, "Type":"RA"}
@@ -54,6 +54,20 @@
 
 若第一条 ActionData 的不符合条件或闲置动画未能成功执行，则会继续往下执行权重较低的第二条 ActionData：  
 * 当攻击目标的距离处于0到（48+武器距离）的范围内、攻击目标的角度范围位于-60到60度时，则NPC有100%的几率执行esp中名为 `ADXP_NPCNormalAttack` 的闲置动画，类型为 *RightAttack* - 右手攻击。在ADXP框架下，这意味着NPC会播放`mco_attack1.hkx`攻击动画。  
+
+<br/> 
+
+### 额外可选操作：  
+1. SCAR-v0.85c及以上版本添加了另一个命名为 `SCAR_BlockIdleDummy.hkx` 的虚设动画文件，以支持在角色格挡状态下时运用SCAR Action Data。它的使用方法和 `SCAR_1hmReadyDummy.hkx` 动画一样，但是只有在角色处于 **格挡闲置(BlockIdle)** 状态下才会激活生效。  
+
+2.   SCAR-v0.85c及以上版本允许你通过发送一个名为 `SCAR_UpdateDummy` 的动作事件来重新激活虚设动画文件，这可以用于在战斗中快速切换movest.
+ 
+<br/>    
+
+### 特别注意事项：
+请注意千万不要把虚设动画文件：`SCAR_1hmReadyDummy.hkx` 或 `SCAR_BlockIdleDummy.hkx` 放到DAR文件夹外面的 `meshes\actors\character\animations` 路径下, 否则**会造成CTD问题!**(目前已知是DAR那边的原因造成的闪退)。  
+
+确保一定要把虚设动画文件放到DAR条件文件夹`meshes\actors\character\animations\DynamicAnimationReplacer\_CustomConditions\xxxxx` 路径下!
 
 ---    
 <br/> <br/> 
@@ -75,6 +89,7 @@
 ```
 上述注解表示：当  `mco_attack1.hkx` 动画执行到1.550000秒时，会对注解中的两条 ActionData 进行判定和执行，若符合相应条件则会衔接到 `mco_attack2` 或 `mco_powerattack2` 中。  
 <br/> 
+
 ### 额外可选操作：  
 你可以在`SCAR_ComboStart`事件注解中通过后缀的方式设置下一个连招攻击触发的总几率，若不设置则默认为100%触发。代码实例：
 ```
@@ -83,4 +98,8 @@
 表示有60%几率会继续执行下一个连招，40%几率停止攻击不再继续连招。
 
 ---
+<br/> <br/> 
 
+## Debug调试：
+---
+要开启DEBUG模式，请打开 `SKSE\Plugins\SCAR.ini`, 将选项 `EnableDebugLog` 和 `EnableDebugOverlay` 设置为`true`.
