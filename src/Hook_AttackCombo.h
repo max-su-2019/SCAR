@@ -10,7 +10,7 @@ namespace SCAR
 		static void InstallHook()
 		{
 #if ANNIVERSARY_EDITION
-			//Anniversary Edition
+			static std::uint32_t baseID = 207890, offset = 0x1;  //Anniversary Edition
 #else
 			static std::uint32_t baseID = 261399, offset = 0x1;  //Special Edition
 #endif

@@ -7,11 +7,16 @@ namespace SCAR
 	public:
 		static void Hook()
 		{
-			REL::Relocation<uintptr_t> hook{ REL::ID(35551) };
-
+#if ANNIVERSARY_EDITION
+			static std::uint32_t baseID = 36544, offset = 0x160;  //Anniversary Edition
+#else
+			static std::uint32_t baseID = 35551, offset = 0x11F;  //Special Edition
+		};
+#endif
+			REL::Relocation<uintptr_t> hook{ REL::ID(baseID) };
 			auto& trampoline = SKSE::GetTrampoline();
 			SKSE::AllocTrampoline(1 << 4);
-			_Update = trampoline.write_call<5>(hook.address() + 0x11F, Update);  // SkyrimSE.exe+5AF4EF
+			_Update = trampoline.write_call<5>(hook.address() + offset, Update);
 		}
 
 	private:
