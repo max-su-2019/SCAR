@@ -237,14 +237,14 @@
 				<hkcstring>Animations\2HW_WalkRtAttackRight.hkx</hkcstring>
 				<hkcstring>Animations\Altar_LeftExit.hkx</hkcstring>
 				<hkcstring>Animations\Altar_LeftIdle.hkx</hkcstring>
-				<hkcstring>Animations\male\AnimObjectChairDrinkingIdleBase.hkx</hkcstring>
-				<hkcstring>Animations\male\AnimObjectChairDrinkingIdleStart.hkx</hkcstring>
-				<hkcstring>Animations\male\AnimObjectChairDrinkingIdleVar1.hkx</hkcstring>
-				<hkcstring>Animations\male\AnimObjectChairDrinkingIdleVar2.hkx</hkcstring>
-				<hkcstring>Animations\male\AnimObjectChairEatingIdleBase.hkx</hkcstring>
-				<hkcstring>Animations\male\AnimObjectChairEatingIdleStart.hkx</hkcstring>
-				<hkcstring>Animations\male\AnimObjectChairEatingIdleVar1.hkx</hkcstring>
-				<hkcstring>Animations\male\AnimObjectChairEatingIdleVar2.hkx</hkcstring>
+				<hkcstring>Animations\female\AnimObjectChairDrinkingIdleBase.hkx</hkcstring>
+				<hkcstring>Animations\female\AnimObjectChairDrinkingIdleStart.hkx</hkcstring>
+				<hkcstring>Animations\female\AnimObjectChairDrinkingIdleVar1.hkx</hkcstring>
+				<hkcstring>Animations\female\AnimObjectChairDrinkingIdleVar2.hkx</hkcstring>
+				<hkcstring>Animations\female\AnimObjectChairEatingIdleBase.hkx</hkcstring>
+				<hkcstring>Animations\female\AnimObjectChairEatingIdleStart.hkx</hkcstring>
+				<hkcstring>Animations\female\AnimObjectChairEatingIdleVar1.hkx</hkcstring>
+				<hkcstring>Animations\female\AnimObjectChairEatingIdleVar2.hkx</hkcstring>
 				<hkcstring>Animations\AnimObjectCheer.hkx</hkcstring>
 				<hkcstring>Animations\AnimObjectCheers.hkx</hkcstring>
 				<hkcstring>Animations\AnimObjectCheerSlow.hkx</hkcstring>
@@ -464,30 +464,30 @@
 				<hkcstring>Animations\CartTravelPlayerEnter.hkx</hkcstring>
 				<hkcstring>Animations\CartTravelPlayerExit.hkx</hkcstring>
 				<hkcstring>Animations\CartTravelPlayerIdle.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_BaseVar1ToBaseVar2.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_BaseVar1ToCrossedVar1.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_BaseVar1ToCrossedVar2.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_BaseVar1ToLookDown.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_BaseVar1ToBaseVar2.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_BaseVar1ToCrossedVar1.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_BaseVar1ToCrossedVar2.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_BaseVar1ToLookDown.hkx</hkcstring>
 				<hkcstring>Animations\Chair_EnterChildBaseVar1.HKX</hkcstring>
 				<hkcstring>Animations\Chair_EnterChildLeft.HKX</hkcstring>
 				<hkcstring>Animations\Chair_EnterChildRight.HKX</hkcstring>
 				<hkcstring>Animations\Chair_ExitChildBaseVar1.HKX</hkcstring>
 				<hkcstring>Animations\Chair_ExitChildLeft.HKX</hkcstring>
 				<hkcstring>Animations\Chair_ExitChildRight.HKX</hkcstring>
-				<hkcstring>Animations\male\Chair_FrontEnterVar1.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_FrontExit.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_IdleArmsCrossedVar1.HKX</hkcstring>
-				<hkcstring>Animations\male\Chair_IdleArmsCrossedVar2.HKX</hkcstring>
-				<hkcstring>Animations\male\Chair_IdleBaseVar1.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_IdleBaseVar1Shoulders.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_IdleBaseVar2.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_FrontEnterVar1.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_FrontExit.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_IdleArmsCrossedVar1.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_IdleArmsCrossedVar2.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_IdleBaseVar1.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_IdleBaseVar1Shoulders.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_IdleBaseVar2.hkx</hkcstring>
 				<hkcstring>Animations\Chair_IdleChildBaseVar1.HKX</hkcstring>
-				<hkcstring>Animations\male\Chair_IdleLookDown.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_IdleLookDown.hkx</hkcstring>
 				<hkcstring>Animations\DLC01\Chair_IdleVampireEat.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_LeftEnter.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_LeftExit.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_RightEnter.hkx</hkcstring>
-				<hkcstring>Animations\male\Chair_RightExit.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_LeftEnter.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_LeftExit.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_RightEnter.hkx</hkcstring>
+				<hkcstring>Animations\female\Chair_RightExit.hkx</hkcstring>
 				<hkcstring>Animations\DLC01\Chair_SnowElfPrinceBigSpellIntro.HKX</hkcstring>
 				<hkcstring>Animations\DLC01\Chair_SnowElfPrinceBigSpellLoop.HKX</hkcstring>
 				<hkcstring>Animations\DLC01\Chair_SnowElfPrinceBigSpellRelease.HKX</hkcstring>
@@ -595,30 +595,30 @@
 				<hkcstring>Animations\DB_AstridIdle.hkx</hkcstring>
 				<hkcstring>Animations\DB_MaroSarcasticClapping.hkx</hkcstring>
 				<hkcstring>Animations\DeathAnimationA.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueAngryA.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueAngryA.hkx</hkcstring>
 				<hkcstring>Animations\DialogueAngryB.hkx</hkcstring>
 				<hkcstring>Animations\DialogueAngryBase.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueAngryE.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueAngryE.hkx</hkcstring>
 				<hkcstring>Animations\DLC01\DialogueDefensiveHandGesture.HKX</hkcstring>
 				<hkcstring>Animations\DLC01\DialogueHandOnChinGesture.HKX</hkcstring>
-				<hkcstring>Animations\male\DialogueMovingTalkA.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueMovingTalkB.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueMovingTalkC.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueMovingTalkD.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveA.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveB.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveC.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveD.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveE.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveF.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveG.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveH.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveI.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveJ.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveK.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveL.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveM.hkx</hkcstring>
-				<hkcstring>Animations\male\DialogueNeutralExpressiveN.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueMovingTalkA.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueMovingTalkB.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueMovingTalkC.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueMovingTalkD.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveA.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveB.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveC.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveD.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveE.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveF.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveG.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveH.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveI.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveJ.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveK.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveL.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveM.hkx</hkcstring>
+				<hkcstring>Animations\female\DialogueNeutralExpressiveN.hkx</hkcstring>
 				<hkcstring>Animations\DialogueResponseNegativeC.hkx</hkcstring>
 				<hkcstring>Animations\DialogueResponseNegativeD.hkx</hkcstring>
 				<hkcstring>Animations\DialogueResponsePositiveC.hkx</hkcstring>
@@ -714,15 +714,15 @@
 				<hkcstring>Animations\IdleBlessingKneel_Enter.HKX</hkcstring>
 				<hkcstring>Animations\IdleBlessingKneel_Exit.HKX</hkcstring>
 				<hkcstring>Animations\IdleBlessingKneel_Loop.HKX</hkcstring>
-				<hkcstring>Animations\male\IdleBloodPortalActivate.HKX</hkcstring>
+				<hkcstring>Animations\female\IdleBloodPortalActivate.HKX</hkcstring>
 				<hkcstring>Animations\IdleBook_OnePage.hkx</hkcstring>
 				<hkcstring>Animations\IdleBook_PagesTurn.hkx</hkcstring>
 				<hkcstring>Animations\IdleBook_Read.hkx</hkcstring>
 				<hkcstring>Animations\IdleBookDoubleCheckTable.hkx</hkcstring>
-				<hkcstring>Animations\male\IdleChairBook_OnePage.hkx</hkcstring>
-				<hkcstring>Animations\male\IdleChairBook_PagesTurn.hkx</hkcstring>
-				<hkcstring>Animations\male\IdleChairBook_Read.hkx</hkcstring>
-				<hkcstring>Animations\male\IdleChairGive.hkx</hkcstring>
+				<hkcstring>Animations\female\IdleChairBook_OnePage.hkx</hkcstring>
+				<hkcstring>Animations\female\IdleChairBook_PagesTurn.hkx</hkcstring>
+				<hkcstring>Animations\female\IdleChairBook_Read.hkx</hkcstring>
+				<hkcstring>Animations\female\IdleChairGive.hkx</hkcstring>
 				<hkcstring>Animations\DLC02\IdleChiselKneeling.HKX</hkcstring>
 				<hkcstring>Animations\DLC02\IdleChiselKneeling_Enter.HKX</hkcstring>
 				<hkcstring>Animations\DLC02\IdleChiselKneeling_Exit.HKX</hkcstring>
@@ -1024,40 +1024,40 @@
 				<hkcstring>Animations\MT_GetUpFromFront.hkx</hkcstring>
 				<hkcstring>Animations\MT_HandCut.hkx</hkcstring>
 				<hkcstring>Animations\DLC01\MT_HandCut_Standing.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_Idle.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_Idle.hkx</hkcstring>
 				<hkcstring>Animations\MT_idle_A_arms_crossed.HKX</hkcstring>
 				<hkcstring>Animations\MT_idle_A_arms_crossedLoop.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_idle_A_left_long.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_idle_A_leg_shift.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_idle_A_shakeout.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_idle_A_shoulders.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_idle_A_sigh_var1.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_idle_A_sigh_var2.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_idle_A_soft_right.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_idle_A_sway_fast.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_idle_A_left_long.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_idle_A_leg_shift.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_idle_A_shakeout.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_idle_A_shoulders.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_idle_A_sigh_var1.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_idle_A_sigh_var2.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_idle_A_soft_right.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_idle_A_sway_fast.hkx</hkcstring>
 				<hkcstring>Animations\MT_Idle_Nervous.hkx</hkcstring>
 				<hkcstring>Animations\MT_Idle_Nervous_LookAround.hkx</hkcstring>
 				<hkcstring>Animations\MT_Idle_Nervous_LookLeft.hkx</hkcstring>
 				<hkcstring>Animations\MT_Idle_Nervous_LookRight.hkx</hkcstring>
 				<hkcstring>Animations\MT_Idle_Skinny.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHDLeftEnter.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHDLeftIdle.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHDLeftToRight.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHDRightEnter.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHDRightIdle.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHDRightToLeft.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHLeftEnter.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHLeftExit.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHLeftIdle.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHLeftToRight.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHRightEnter.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHRightExit.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHRightIdle.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleHHRightToLeft.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_IdleLookingA.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_IdleLookingB.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_IdleLookingC.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_IdleLookingD.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHDLeftEnter.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHDLeftIdle.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHDLeftToRight.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHDRightEnter.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHDRightIdle.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHDRightToLeft.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHLeftEnter.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHLeftExit.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHLeftIdle.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHLeftToRight.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHRightEnter.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHRightExit.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHRightIdle.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleHHRightToLeft.HKX</hkcstring>
+				<hkcstring>Animations\female\MT_IdleLookingA.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_IdleLookingB.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_IdleLookingC.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_IdleLookingD.hkx</hkcstring>
 				<hkcstring>Animations\MT_IdleLounge.hkx</hkcstring>
 				<hkcstring>Animations\MT_IdleLoungeStand.hkx</hkcstring>
 				<hkcstring>Animations\MT_IdleMuscularOffset.hkx</hkcstring>
@@ -1076,22 +1076,22 @@
 				<hkcstring>Animations\MT_PointClose.hkx</hkcstring>
 				<hkcstring>Animations\MT_PointFar_01.hkx</hkcstring>
 				<hkcstring>Animations\MT_PointFar_02.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_RunBackward.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_RunBackwardLeft.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_RunBackwardRight.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_RunForward.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_RunBackward.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_RunBackwardLeft.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_RunBackwardRight.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_RunForward.hkx</hkcstring>
 				<hkcstring>Animations\MT_RunForwardCameraBob.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_RunForwardLeft.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_RunForwardRight.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_RunLeft.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_RunRight.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_RunForwardLeft.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_RunForwardRight.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_RunLeft.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_RunRight.hkx</hkcstring>
 				<hkcstring>Animations\MT_Shackled_01.hkx</hkcstring>
 				<hkcstring>Animations\MT_Shackled_02.hkx</hkcstring>
 				<hkcstring>Animations\MT_Shout_Exhale.hkx</hkcstring>
 				<hkcstring>Animations\MT_Shout_Exhale_Long.hkx</hkcstring>
 				<hkcstring>Animations\MT_Shout_Exhale_Medium.hkx</hkcstring>
 				<hkcstring>Animations\MT_Shout_Inhale.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_SprintForward.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_SprintForward.hkx</hkcstring>
 				<hkcstring>Animations\MT_SprintForwardSword.hkx</hkcstring>
 				<hkcstring>Animations\MT_TurnLeft360.HKX</hkcstring>
 				<hkcstring>Animations\MT_TurnLeft60.hkx</hkcstring>
@@ -1099,16 +1099,16 @@
 				<hkcstring>Animations\MT_TurnRight60.hkx</hkcstring>
 				<hkcstring>Animations\DLC01\MT_VampireFeast_VictimIdle.hkx</hkcstring>
 				<hkcstring>Animations\DLC01\MT_VampireLord_Transform.HKX</hkcstring>
-				<hkcstring>Animations\male\MT_WalkBackward.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_WalkBackwardLeft.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_WalkBackwardRight.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_WalkForward.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_WalkBackward.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_WalkBackwardLeft.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_WalkBackwardRight.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_WalkForward.hkx</hkcstring>
 				<hkcstring>Animations\MT_WalkForwardCameraBob.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_WalkForwardLeft.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_WalkForwardRight.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_WalkForwardLeft.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_WalkForwardRight.hkx</hkcstring>
 				<hkcstring>Animations\MT_WalkingCamera.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_WalkLeft.hkx</hkcstring>
-				<hkcstring>Animations\male\MT_WalkRight.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_WalkLeft.hkx</hkcstring>
+				<hkcstring>Animations\female\MT_WalkRight.hkx</hkcstring>
 				<hkcstring>Animations\DLC01\MT_Wound03Exit.hkx</hkcstring>
 				<hkcstring>Animations\MT_Wounded_01.hkx</hkcstring>
 				<hkcstring>Animations\MT_Wounded_02.hkx</hkcstring>
@@ -1125,14 +1125,14 @@
 				<hkcstring>Animations\NPC_Applaud3.hkx</hkcstring>
 				<hkcstring>Animations\NPC_Applaud4.hkx</hkcstring>
 				<hkcstring>Animations\NPC_Applaud5.hkx</hkcstring>
-				<hkcstring>Animations\male\NPC_TurnLeft180.hkx</hkcstring>
-				<hkcstring>Animations\male\NPC_TurnLeft90.hkx</hkcstring>
-				<hkcstring>Animations\male\NPC_TurnRight180.hkx</hkcstring>
-				<hkcstring>Animations\male\NPC_TurnRight90.hkx</hkcstring>
-				<hkcstring>Animations\male\NPC_TurnToWalkLeft180.hkx</hkcstring>
-				<hkcstring>Animations\male\NPC_TurnToWalkLeft90.hkx</hkcstring>
-				<hkcstring>Animations\male\NPC_TurnToWalkRight180.hkx</hkcstring>
-				<hkcstring>Animations\male\NPC_TurnToWalkRight90.hkx</hkcstring>
+				<hkcstring>Animations\female\NPC_TurnLeft180.hkx</hkcstring>
+				<hkcstring>Animations\female\NPC_TurnLeft90.hkx</hkcstring>
+				<hkcstring>Animations\female\NPC_TurnRight180.hkx</hkcstring>
+				<hkcstring>Animations\female\NPC_TurnRight90.hkx</hkcstring>
+				<hkcstring>Animations\female\NPC_TurnToWalkLeft180.hkx</hkcstring>
+				<hkcstring>Animations\female\NPC_TurnToWalkLeft90.hkx</hkcstring>
+				<hkcstring>Animations\female\NPC_TurnToWalkRight180.hkx</hkcstring>
+				<hkcstring>Animations\female\NPC_TurnToWalkRight90.hkx</hkcstring>
 				<hkcstring>Animations\Nurelion_Uncontrollable cough.hkx</hkcstring>
 				<hkcstring>Animations\OffsetArmsCrossed.HKX</hkcstring>
 				<hkcstring>Animations\OffsetBoundStanding.hkx</hkcstring>
@@ -1502,9 +1502,9 @@
 				<hkcstring>Animations\DLC02\Special_DragonMountSitIdle.HKX</hkcstring>
 				<hkcstring>Animations\Special_DwemerExtractor.HKX</hkcstring>
 				<hkcstring>Animations\Special_HollowHornBlow.HKX</hkcstring>
-				<hkcstring>Animations\male\Special_HorzCoffinEnter.HKX</hkcstring>
-				<hkcstring>Animations\male\Special_HorzCoffinExit.HKX</hkcstring>
-				<hkcstring>Animations\male\Special_HorzCoffinIdle.HKX</hkcstring>
+				<hkcstring>Animations\female\Special_HorzCoffinEnter.HKX</hkcstring>
+				<hkcstring>Animations\female\Special_HorzCoffinExit.HKX</hkcstring>
+				<hkcstring>Animations\female\Special_HorzCoffinIdle.HKX</hkcstring>
 				<hkcstring>Animations\Special_JarlChairEnterWR.HKX</hkcstring>
 				<hkcstring>Animations\Special_JarlChairExitWR.HKX</hkcstring>
 				<hkcstring>Animations\Special_JarlChairIdleWR.HKX</hkcstring>
@@ -1514,9 +1514,9 @@
 				<hkcstring>Animations\Special_RitualSkull3.HKX</hkcstring>
 				<hkcstring>Animations\Special_StrHornBlow.HKX</hkcstring>
 				<hkcstring>Animations\Special_Surrender.HKX</hkcstring>
-				<hkcstring>Animations\male\Special_VertCoffinEnter.HKX</hkcstring>
-				<hkcstring>Animations\male\Special_VertCoffinExit.HKX</hkcstring>
-				<hkcstring>Animations\male\Special_VertCoffinIdle.HKX</hkcstring>
+				<hkcstring>Animations\female\Special_VertCoffinEnter.HKX</hkcstring>
+				<hkcstring>Animations\female\Special_VertCoffinExit.HKX</hkcstring>
+				<hkcstring>Animations\female\Special_VertCoffinIdle.HKX</hkcstring>
 				<hkcstring>Animations\Special_WaveOver.HKX</hkcstring>
 				<hkcstring>Animations\SpectatorCheer.hkx</hkcstring>
 				<hkcstring>Animations\SpectatorClap.hkx</hkcstring>
@@ -1631,7 +1631,7 @@
 				<hkcstring>Animations\Wall_Soldier_IdleToHandsOnHips.HKX</hkcstring>
 				<hkcstring>Animations\DLC01\WayShrinePourWater.HKX</hkcstring>
 				<hkcstring>Animations\DLC01\WayShrineScoopingWater.HKX</hkcstring>
-				<hkcstring>Animations\male\weaponAdjustment.hkx</hkcstring>
+				<hkcstring>Animations\female\weaponAdjustment.hkx</hkcstring>
 				<hkcstring>Animations\WeapSoloEquip.hkx</hkcstring>
 				<hkcstring>Animations\WebIdleAlerted.hkx</hkcstring>
 				<hkcstring>Animations\WebIdleBase.hkx</hkcstring>
@@ -1709,8 +1709,8 @@
 			<hkparam name="lodNames" numelements="0"></hkparam>
 			<hkparam name="mirroredSyncPointSubstringsA" numelements="0"></hkparam>
 			<hkparam name="mirroredSyncPointSubstringsB" numelements="0"></hkparam>
-			<hkparam name="name">DefaultMale</hkparam>
-			<hkparam name="rigName">Character Assets\skeleton.HKX</hkparam>
-			<hkparam name="ragdollName">Character Assets\skeleton.HKX</hkparam>
+			<hkparam name="name">DefaultFemale</hkparam>
+			<hkparam name="rigName">Character Assets Female\skeleton_female.hkx</hkparam>
+			<hkparam name="ragdollName">&#9216;</hkparam>
 			<hkparam name="behaviorFilename">Behaviors\0_Master.hkx</hkparam>
 		</hkobject>
