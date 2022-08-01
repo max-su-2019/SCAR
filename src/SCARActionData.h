@@ -7,8 +7,6 @@ namespace SCAR
 
 	using DefaultObject = RE::BGSDefaultObjectManager::DefaultObject;
 
-	extern class DataHandler;
-
 	struct SCARActionData
 	{
 	private:

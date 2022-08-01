@@ -17,6 +17,7 @@ namespace SCAR
 
 	DataHandler::DataHandler()
 	{
+		precisionPtr = reinterpret_cast<PRECISION_API::IVPrecision1*>(PRECISION_API::RequestPluginAPI());
 		settings = std::make_unique<Settings>();
 	}
 

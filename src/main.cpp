@@ -1,8 +1,4 @@
-#include "DataHandler.h"
-#include "DebugAPI/DebugAPI.h"
-#include "Hook_AttackCombo.h"
-#include "Hook_AttackStart.h"
-#include "Hook_MainUpdate.h"
+#include "LoadGame.h"
 
 #if ANNIVERSARY_EDITION
 
@@ -68,22 +64,13 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 
 	SKSE::Init(a_skse);
 
-	// For First Attack
-	SCAR::RecheckAttackDistancHook::Install();
-	SCAR::AttackAngleHook::InstallHook();
-	SCAR::AttackActionHook::InstallHook();
-
-	// For Combo
-	SCAR::AnimEventHook::InstallHook();
-
-	//DebugOverlayMenu
-	DebugOverlayMenu::Register();
-	SCAR::MainUpdateHook::Hook();
-
-	if (SCAR::DataHandler::GetSingleton()->settings->enableDebugLog.get_data()) {
-		spdlog::set_level(spdlog::level::debug);
-		logger::debug("Enable Debug Log!");
+	auto g_message = SKSE::GetMessagingInterface();
+	if (!g_message) {
+		ERROR("Messaging Interface Not Found!");
+		return false;
 	}
+
+	g_message->RegisterListener(SCAR::EventCallback);
 
 	return true;
 }

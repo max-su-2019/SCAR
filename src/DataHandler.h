@@ -1,10 +1,12 @@
 #pragma once
 #include "DKUtil/Config.hpp"
+#include "PrecisionAPI/PrecisionAPI.h"
 #include "SCARActionData.h"
 
 namespace SCAR
 {
 	using namespace DKUtil::Alias;
+	using namespace PRECISION_API;
 
 	class DataHandler
 	{
@@ -34,6 +36,7 @@ namespace SCAR
 		}
 
 		std::unique_ptr<Settings> settings;
+		IVPrecision1* precisionPtr = nullptr;
 
 		static const RE::hkbClipGenerator* GetSCARDataClip(RE::Actor* a_actor);
 		static std::vector<SCARActionData> GetSCARActionData(const RE::hkbClipGenerator* a_clip);

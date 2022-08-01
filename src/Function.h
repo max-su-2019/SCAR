@@ -1,17 +1,17 @@
-#pragma once
+ï»¿#pragma once
 
 namespace SCAR
 {
 	class AttackRangeCheck
 	{
 	private:
-		//°´µÚÒ»ĞĞÕ¹¿ª¼ÆËã|A|
+		//æŒ‰ç¬¬ä¸€è¡Œå±•å¼€è®¡ç®—|A|
 		static float getA(float arcs[3][3], int n);
 
-		//¼ÆËãÃ¿Ò»ĞĞÃ¿Ò»ÁĞµÄÃ¿¸öÔªËØËù¶ÔÓ¦µÄÓà×ÓÊ½£¬×é³ÉA*
+		//è®¡ç®—æ¯ä¸€è¡Œæ¯ä¸€åˆ—çš„æ¯ä¸ªå…ƒç´ æ‰€å¯¹åº”çš„ä½™å­å¼ï¼Œç»„æˆA*
 		static void getAStart(float arcs[3][3], int n, float ans[3][3]);
 
-		//µÃµ½¸ø¶¨¾ØÕósrcµÄÄæ¾ØÕó±£´æµ½desÖĞ¡£
+		//å¾—åˆ°ç»™å®šçŸ©é˜µsrcçš„é€†çŸ©é˜µä¿å­˜åˆ°desä¸­ã€‚
 		static bool GetMatrixInverse(float src[3][3], float des[3][3], int n = 3);
 
 	public:

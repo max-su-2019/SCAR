@@ -1,10 +1,9 @@
-#include "DataHandler.h"
+ï»¿#include "DataHandler.h"
 #include "DebugAPI/DebugAPI.h"
 #include "Function.h"
 
 namespace SCAR
 {
-
 	bool AttackRangeCheck::CheckPathing(RE::Actor* a_attacker, RE::Actor* a_target)
 	{
 		if (!a_attacker || !a_target || !a_attacker->Get3D() || !a_target->Get3D() || !a_target->currentProcess || !a_attacker->currentProcess)
@@ -118,7 +117,7 @@ namespace SCAR
 		DebugAPI::DrawCircle(Util::NiPointToVec(targCenter), a_targ->currentProcess->cachedValues->cachedRadius, Util::NiPointToVec(Rotation), time, yellowColor);
 	}
 
-	//°´µÚÒ»ĞĞÕ¹¿ª¼ÆËã|A|
+	//æŒ‰ç¬¬ä¸€è¡Œå±•å¼€è®¡ç®—|A|
 	float AttackRangeCheck::getA(float arcs[3][3], int n)
 	{
 		if (n == 1) {
@@ -143,7 +142,7 @@ namespace SCAR
 		return ans;
 	}
 
-	//¼ÆËãÃ¿Ò»ĞĞÃ¿Ò»ÁĞµÄÃ¿¸öÔªËØËù¶ÔÓ¦µÄÓà×ÓÊ½£¬×é³ÉA*
+	//è®¡ç®—æ¯ä¸€è¡Œæ¯ä¸€åˆ—çš„æ¯ä¸ªå…ƒç´ æ‰€å¯¹åº”çš„ä½™å­å¼ï¼Œç»„æˆA*
 	void AttackRangeCheck::getAStart(float arcs[3][3], int n, float ans[3][3])
 	{
 		if (n == 1) {
@@ -160,7 +159,7 @@ namespace SCAR
 					}
 				}
 
-				ans[j][i] = getA(temp, n - 1);  //´Ë´¦Ë³±ã½øĞĞÁË×ªÖÃ
+				ans[j][i] = getA(temp, n - 1);  //æ­¤å¤„é¡ºä¾¿è¿›è¡Œäº†è½¬ç½®
 				if ((i + j) % 2 == 1) {
 					ans[j][i] = -ans[j][i];
 				}
@@ -168,13 +167,13 @@ namespace SCAR
 		}
 	}
 
-	//µÃµ½¸ø¶¨¾ØÕósrcµÄÄæ¾ØÕó±£´æµ½desÖĞ¡£
+	//å¾—åˆ°ç»™å®šçŸ©é˜µsrcçš„é€†çŸ©é˜µä¿å­˜åˆ°desä¸­ã€‚
 	bool AttackRangeCheck::GetMatrixInverse(float src[3][3], float des[3][3], int n)
 	{
 		float flag = getA(src, n);
 		float t[3][3];
 		if (0 == flag) {
-			return false;  //Èç¹ûËã³ö¾ØÕóµÄĞĞÁĞÊ½Îª0£¬Ôò²»ÍùÏÂ½øĞĞ
+			return false;  //å¦‚æœç®—å‡ºçŸ©é˜µçš„è¡Œåˆ—å¼ä¸º0ï¼Œåˆ™ä¸å¾€ä¸‹è¿›è¡Œ
 		} else {
 			getAStart(src, n, t);
 			for (int i = 0; i < n; i++) {

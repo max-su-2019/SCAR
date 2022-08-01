@@ -1,3 +1,4 @@
+﻿#include "DataHandler.h"
 #include "Function.h"
 #include "SCARActionData.h"
 
@@ -43,11 +44,18 @@ namespace SCAR
 				if (setting)
 					return setting->GetFloat() * a_attacker->GetScale();
 			} else {
-				auto obj = a_attacker->GetEquippedObject(IsLeftAttack());
-				auto weap = obj ? obj->As<RE::TESObjectWEAP>() : nullptr;
-				auto setting = RE::GameSettingCollection::GetSingleton()->GetSetting("fCombatDistance");
-				if (weap && setting) {
-					return weap->GetReach() * setting->GetFloat() * a_attacker->GetScale();
+				const bool leftAttack = IsLeftAttack();
+				auto dataHandler = DataHandler::GetSingleton();
+				if (dataHandler && dataHandler->precisionPtr) {
+					auto collisionType = leftAttack ? RequestedAttackCollisionType::LeftWeapon : RequestedAttackCollisionType::RightWeapon;
+					return dataHandler->precisionPtr->GetAttackCollisionCapsuleLength(a_attacker->GetHandle(), collisionType);
+				} else {
+					auto obj = a_attacker->GetEquippedObject(leftAttack);
+					auto weap = obj ? obj->As<RE::TESObjectWEAP>() : nullptr;
+					auto setting = RE::GameSettingCollection::GetSingleton()->GetSetting("fCombatDistance");
+					if (weap && setting) {
+						return weap->GetReach() * setting->GetFloat() * a_attacker->GetScale();
+					}
 				}
 			}
 		}
