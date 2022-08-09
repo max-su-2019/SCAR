@@ -119,5 +119,5 @@ Indicate that there has 60% chance start the next attack, 40% chance to stop the
 
 ## Debugging:
 ---
-To debug your moveset in game, oepn "SKSE\Plugins\SCAR.ini", set options "EnableDebugLog" and "EnableDebugOverlay" to `true`.
+To debug your moveset in game, oepn "SKSE\Plugins\SCAR.ini", set options "EnableDebugLog" and "EnableDebugOverlay" to `true`.  
 You can check the plugin log in "C:\Users\Administrator\Documents\My Games\Skyrim Special Edition\SKSE\SCAR.log".
