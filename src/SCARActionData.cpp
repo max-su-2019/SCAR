@@ -1,6 +1,6 @@
-﻿#include "DataHandler.h"
+﻿#include "SCARActionData.h"
+#include "DataHandler.h"
 #include "Function.h"
-#include "SCARActionData.h"
 
 namespace SCAR
 {
@@ -58,9 +58,11 @@ namespace SCAR
 					}
 				}
 			}
+
+			return a_attacker->GetRace() ? a_attacker->GetRace()->data.unarmedReach : 0.f;
 		}
 
-		return a_attacker->GetRace() ? a_attacker->GetRace()->data.unarmedReach : 0.f;
+		return 0.f;
 	}
 
 	const DefaultObject SCARActionData::GetActionObject() const

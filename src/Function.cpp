@@ -1,6 +1,6 @@
-﻿#include "DataHandler.h"
+﻿#include "Function.h"
+#include "DataHandler.h"
 #include "DebugAPI/DebugAPI.h"
-#include "Function.h"
 
 namespace SCAR
 {
@@ -23,7 +23,7 @@ namespace SCAR
 		if (localDistance <= a_attacker->currentProcess->cachedValues->cachedRadius + a_target->currentProcess->cachedValues->cachedRadius + a_attacker->GetReach())
 			return true;
 
-		return a_attacker->CanNavigateToPosition(a_attacker->GetPosition(), a_target->GetPosition());
+		return a_attacker->CanNavigateToPosition(a_attacker->GetPosition(), a_target->GetPosition(), 2.0f, a_attacker->currentProcess->cachedValues->cachedRadius);
 	}
 
 	bool AttackRangeCheck::WithinAttackRange(RE::Actor* a_attacker, RE::Actor* a_targ, float max_distance, float min_distance, float a_startAngle, float a_endAngle)
