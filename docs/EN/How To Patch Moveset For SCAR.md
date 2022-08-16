@@ -33,10 +33,10 @@ When there are multiple line of ActionData annotations inside an animation file,
     Idle Animation is defined by the esp plugin, *ADXP-Beta-1.31* and above version already contains two valid idle animation: "ADXP_NPCPowerAttack" and "ADXP_NPCNormalAttack" in it mco.esp, which could be used to perform powerAttack and normalAttack separately.  
     The conditions items of the idle animation would also be take into consideration when doing conditions checking.  
 
-    *  `MaxDistance`: The maximum distance range for the ActionData to execute, only when the distance between the moveset owner to the target less than this value, the ActionData could be executed. The value of the distance must be greater than zero.  
+    *  `MaxDistance`: The maximum distance range for the ActionData to execute, only when the distance between the moveset owner to the target less than this value, the ActionData could be executed. The value of the distance must not be an negative number.  
     Be caution that the you don't need to consider the weapon reach when filling the Max Distance value there, the weapon reach would be computed dynamically on SKSE plugin end.
    
-    *  `MinDistance`: The minmum distance range for the ActionData to execute, only when the distance between the moveset owner to the target greater than this value, the ActionData could be executed. The value of the distance must be greater than zero.  
+    *  `MinDistance`: The minmum distance range for the ActionData to execute, only when the distance between the moveset owner to the target greater than this value, the ActionData could be executed. The value of the distance must not be an negative number.  
     MinDistance could be used to disable the performing of long distance attack when the distance to the target is close.
     
     *  `StartAngle` & `EndAngle` : These two variable are using together to generate a yaw angle range, only when the heading angle between the moveset owner to the target within this yaw angle range, the ActionData could be executed.  
@@ -119,4 +119,5 @@ Indicate that there has 60% chance start the next attack, 40% chance to stop the
 
 ## Debugging:
 ---
-To debug your moveset in game, oepn "SKSE\Plugins\SCAR.ini", set options "EnableDebugLog" and "EnableDebugOverlay" to `true`.
+To debug your moveset in game, oepn "SKSE\Plugins\SCAR.ini", set options "EnableDebugLog" and "EnableDebugOverlay" to `true`.  
+You can check the plugin log in "C:\Users\Administrator\Documents\My Games\Skyrim Special Edition\SKSE\SCAR.log".
