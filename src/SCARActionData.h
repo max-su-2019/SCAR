@@ -26,6 +26,8 @@ namespace SCAR
 
 		std::string actionType = "RA";
 
+		std::optional<float> weaponLength;
+
 	public:
 		friend void from_json(const json& j, SCARActionData& a_data);
 		friend class DataHandler;
@@ -36,12 +38,12 @@ namespace SCAR
 
 	private:
 		const DefaultObject GetActionObject() const;
-		const float GetStartAngle() const { return startAngle / 180.f * std::numbers::pi; };
-		const float GetEndAngle() const { return endAngle / 180.f * std::numbers::pi; };
+		_NODISCARD const float GetStartAngle() const { return startAngle / 180.f * std::numbers::pi; };
+		_NODISCARD const float GetEndAngle() const { return endAngle / 180.f * std::numbers::pi; };
 
-		const bool IsLeftAttack() const;
-		const bool IsBashAttack() const;
-		float GetWeaponReach(RE::Actor* a_attacker) const;
+		_NODISCARD const bool IsLeftAttack() const;
+		_NODISCARD const bool IsBashAttack() const;
+		_NODISCARD float GetWeaponReach(RE::Actor* a_attacker) const;
 	};
 
 	void from_json(const json& j, SCARActionData& a_data);

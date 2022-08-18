@@ -24,6 +24,9 @@ namespace SCAR
 		a_data.chance = std::clamp(a_data.chance, -180.f, 180.f);
 
 		j.at("Type").get_to(a_data.actionType);
+
+		if (j.find("WeaponLength") != j.end())
+			a_data.weaponLength.emplace(max(j.at("WeaponLength").get<float>(), 0.f));
 	}
 
 	const bool SCARActionData::IsLeftAttack() const
@@ -39,6 +42,10 @@ namespace SCAR
 	float SCARActionData::GetWeaponReach(RE::Actor* a_attacker) const
 	{
 		if (a_attacker) {
+			if (weaponLength.has_value()) {
+				return weaponLength.value() * a_attacker->GetScale();
+			}
+
 			if (IsBashAttack()) {
 				auto setting = RE::GameSettingCollection::GetSingleton()->GetSetting("fCombatBashReach");
 				if (setting)
