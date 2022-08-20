@@ -120,7 +120,7 @@ Indicate that there has 60% chance start the next attack, 40% chance to stop the
 ## Unarmed Moveset
 ---  
 For unarmed moveset, speical handling required to done to the ActionData annotations:  
-1. If you are patching an ADXP|MCO moveset, you must use Idle animation "ADXP_NPCPowerAttack_H2H" to perform power attack and "ADXP_NPCNormalAttack" for noraml attack.
+1. If you are patching an ADXP|MCO moveset, you must use Idle animation "ADXP_NPCPowerAttack_H2H" to perform power attack and "ADXP_NPCNormalAttack_H2H" for normal attack.
 2. You better assign an optional fixed `WeaponLength` value for your attack action, since the capsule length of fist is vert short in [Precision](https://www.nexusmods.com/skyrimspecialedition/mods/72347). Here is action data annotations example from the default unarmed moveset(DAR folder 20000):
 ```
 1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack_H2H", "MinDistance":0, "MaxDistance":80, "StartAngle":-60, "EndAngle":60, "Chance":30, "Type":"RPA", "WeaponLength":90}
