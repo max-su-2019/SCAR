@@ -123,7 +123,7 @@ For unarmed moveset, speical handling required to done to the ActionData annotat
 1. If you are patching an ADXP|MCO moveset, you must use Idle animation "ADXP_NPCPowerAttack_H2H" to perform power attack and "ADXP_NPCNormalAttack" for noraml attack.
 2. You better assign an optional fixed `WeaponLength` value for your attack action, since the capsule length of fist is vert short in [Precision](https://www.nexusmods.com/skyrimspecialedition/mods/72347). Here is action data annotations example from the default unarmed moveset(DAR folder 20000):
 ```
-0.100000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack_H2H", "MinDistance":0, "MaxDistance":80, "StartAngle":-60, "EndAngle":60, "Chance":30, "Type":"RPA", "WeaponLength":90}
+1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack_H2H", "MinDistance":0, "MaxDistance":80, "StartAngle":-60, "EndAngle":60, "Chance":30, "Type":"RPA", "WeaponLength":90}
 0.500000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCNormalAttack_H2H", "MinDistance":0, "MaxDistance":60, "StartAngle":-60, "EndAngle":60, "Chance":100, "Type":"RA", "WeaponLength":90}
 ```
  
