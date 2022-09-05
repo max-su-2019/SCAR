@@ -99,7 +99,7 @@ namespace SCAR
 
 			REL::Relocation<std::uintptr_t> AttackDistanceBase{ REL::ID(baseID) };
 			_GetAttackAngle = trampoline.write_call<5>(AttackDistanceBase.address() + offset, GetAttackAngle);
-			logger::info("Hook GetAttackAngle!");
+			INFO("Hook GetAttackAngle!");
 		}
 
 	private:
@@ -124,7 +124,7 @@ namespace SCAR
 
 			REL::Relocation<std::uintptr_t> AttackActionBase{ REL::ID(baseID) };
 			_PerformAttackAction = trampoline.write_call<5>(AttackActionBase.address() + offset, PerformAttackAction);
-			logger::info("Hook PerformAttackAction!");
+			INFO("Hook PerformAttackAction!");
 		}
 
 	private:

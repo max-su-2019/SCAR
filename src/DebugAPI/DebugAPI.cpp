@@ -348,7 +348,7 @@ DebugOverlayMenu::DebugOverlayMenu()
 {
 	auto scaleformManager = RE::BSScaleformManager::GetSingleton();
 	if (!scaleformManager) {
-		logger::error("BTPS: failed to initialize DebugOverlayMenu - ScaleformManager not found");
+		ERROR("BTPS: failed to initialize DebugOverlayMenu - ScaleformManager not found");
 		return;
 	}
 
@@ -368,16 +368,16 @@ DebugOverlayMenu::DebugOverlayMenu()
 
 void DebugOverlayMenu::Register()
 {
-	logger::info("BTPS: registering DebugOverlayMenu...");
+	INFO("BTPS: registering DebugOverlayMenu...");
 
 	auto ui = RE::UI::GetSingleton();
 	if (ui) {
 		ui->Register(MENU_NAME, Creator);
 		DebugOverlayMenu::Load();
 
-		logger::info("BTPS: successfully registered DebugOverlayMenu");
+		INFO("BTPS: successfully registered DebugOverlayMenu");
 	} else
-		logger::error("BTPS: failed to register DebugOverlayMenu");
+		ERROR("BTPS: failed to register DebugOverlayMenu");
 }
 
 void DebugOverlayMenu::Load()
@@ -446,7 +446,7 @@ void DebugAPI::CacheMenuData()
 	ScreenResY = abs(rect.top - rect.bottom);
 
 	CachedMenuData = true;
-	logger::info("BTPS: DebugAPI::CacheMenuData");
+	INFO("BTPS: DebugAPI::CacheMenuData");
 }
 
 // void DebugAPI::ClampVectorToScreen(glm::vec2& from, glm::vec2& to)

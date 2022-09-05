@@ -53,10 +53,10 @@ namespace SCAR
 					auto actionData = j.get<SCARActionData>();
 					actionData.weight = anno.time;
 					dataArr.push_back(actionData);
-					logger::debug("Get a Action Data, Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
+					DEBUG("Get a Action Data, Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 						actionData.IdleAnimationEditorID, actionData.minDistance, actionData.maxDistance, actionData.startAngle, actionData.endAngle, actionData.chance, actionData.actionType, actionData.weight);
 				} catch (json::exception& ex) {
-					logger::error("Caught an expection when convert annoation: {}", ex.what());
+					ERROR("Caught an expection when convert annoation: {}", ex.what());
 					continue;
 				}
 			}

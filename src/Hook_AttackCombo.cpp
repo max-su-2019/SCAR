@@ -1,6 +1,6 @@
+#include "Hook_AttackCombo.h"
 #include "DataHandler.h"
 #include "Function.h"
-#include "Hook_AttackCombo.h"
 
 namespace SCAR
 {
@@ -23,7 +23,7 @@ namespace SCAR
 			ShouldNextAttack(a_event->payload.c_str()) && actor->RequestLOS(combatTarg.get()) && AttackRangeCheck::CheckPathing(actor, combatTarg.get())) {
 			auto scarClip = DataHandler::GetSCARDataClip(actor);
 			if (scarClip) {
-				logger::debug("Find SCAR Action Data in clip \"{}\" of \"{}\"", scarClip->animationName.c_str(), actor->GetName());
+				DEBUG("Find SCAR Action Data in clip \"{}\" of \"{}\"", scarClip->animationName.c_str(), actor->GetName());
 				auto dataArr = DataHandler::GetSCARActionData(scarClip);
 				std::sort(dataArr.begin(), dataArr.end(), SCARActionData::SortByWeight);
 				for (auto data : dataArr) {

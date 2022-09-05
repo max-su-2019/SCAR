@@ -99,17 +99,17 @@ namespace SCAR
 		if (chance >= Random::get<float>(0.f, 100.f) && AttackRangeCheck::WithinAttackRange(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle())) {
 			auto IdleAnimation = RE::TESForm::LookupByEditorID<RE::TESIdleForm>(IdleAnimationEditorID);
 			if (!IdleAnimation) {
-				logger::error("Not Vaild Idle Animation Form Get: \"{}\"!", IdleAnimationEditorID);
+				ERROR("Not Vaild Idle Animation Form Get: \"{}\"!", IdleAnimationEditorID);
 				return false;
 			}
 
 			auto result = a_attacker->currentProcess->PlayIdle(a_attacker, GetActionObject(), IdleAnimation, true, true, a_target);
 			if (result) {
-				logger::debug("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
+				DEBUG("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 					IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
 				AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle());
 			} else
-				logger::debug("Play Idle Fail! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
+				DEBUG("Play Idle Fail! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 					IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
 
 			return result;

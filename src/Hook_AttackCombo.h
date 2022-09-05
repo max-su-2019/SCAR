@@ -16,7 +16,7 @@ namespace SCAR
 #endif
 			REL::Relocation<std::uintptr_t> AnimEventSinkVtbl{ REL::ID(baseID) };
 			_ProcessEvent = AnimEventSinkVtbl.write_vfunc(offset, ProcessEvent);
-			logger::info("Hook Process Animation Event!");
+			INFO("Hook Process Animation Event!");
 		}
 
 	private:

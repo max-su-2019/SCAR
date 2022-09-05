@@ -16,7 +16,7 @@ namespace SCAR
 			template <class T>
 			static void PrintSettingValue(const T& a_setting)
 			{
-				logger::info("Setting:\"{}\" is {}"sv, a_setting.get_key(), a_setting.get_data());
+				INFO("Setting:\"{}\" is {}"sv, a_setting.get_key(), a_setting.get_data());
 			}
 
 		public:

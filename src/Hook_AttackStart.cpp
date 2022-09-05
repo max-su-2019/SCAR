@@ -21,7 +21,7 @@ namespace SCAR
 		auto scarClip = attacker ? DataHandler::GetSCARDataClip(attacker) : nullptr;
 		if (scarClip){
 			if (targ && attacker->currentProcess && !attacker->IsPlayerRef() && attacker->RequestLOS(targ.get()) && AttackRangeCheck::CheckPathing(attacker, targ.get())) {
-				logger::debug("Find SCAR Action Data in clip \"{}\" of \"{}\"", scarClip->animationName.c_str(), attacker->GetName());
+				DEBUG("Find SCAR Action Data in clip \"{}\" of \"{}\"", scarClip->animationName.c_str(), attacker->GetName());
 				auto dataArr = DataHandler::GetSCARActionData(scarClip);
 				std::sort(dataArr.begin(), dataArr.end(), SCARActionData::SortByWeight);
 				for (auto data : dataArr) {

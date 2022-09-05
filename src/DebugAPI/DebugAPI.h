@@ -109,7 +109,7 @@ private:
 			std::vsnprintf(buf.data(), buf.size(), fmt.c_str(), args);
 			va_end(args);
 
-			logger::info("{}"sv, buf.data());
+			INFO("{}"sv, buf.data());
 		}
 	};
 };
