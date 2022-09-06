@@ -2,7 +2,6 @@
 #include "DKUtil/Hook.hpp"
 #include "DataHandler.h"
 #include "Function.h"
-#include "TESActionData.h"
 
 namespace SCAR
 {
@@ -89,16 +88,11 @@ namespace SCAR
 	public:
 		static void InstallHook()
 		{
-#if ANNIVERSARY_EDITION
-			static std::uint32_t baseID = 49170, offset = 0x3F1;  //Anniversary Edition
-#else
-			static std::uint32_t baseID = 48139, offset = 0x493;  //Special Edition
-#endif
 			SKSE::AllocTrampoline(1 << 4);
 			auto& trampoline = SKSE::GetTrampoline();
 
-			REL::Relocation<std::uintptr_t> AttackDistanceBase{ REL::ID(baseID) };
-			_GetAttackAngle = trampoline.write_call<5>(AttackDistanceBase.address() + offset, GetAttackAngle);
+			REL::Relocation<std::uintptr_t> AttackDistanceBase{ RELOCATION_ID(48139, 49170) };
+			_GetAttackAngle = trampoline.write_call<5>(AttackDistanceBase.address() + REL::Relocate(0x493, 0x3F1), GetAttackAngle);
 			INFO("Hook GetAttackAngle!");
 		}
 
@@ -113,17 +107,11 @@ namespace SCAR
 	public:
 		static void InstallHook()
 		{
-#if ANNIVERSARY_EDITION
-			static std::uint32_t baseID = 49170, offset = 0x435;  //Anniversary Edition
-#else
-			//ChoseAttackData_sub_14080C020+4D7	 call  TESActionData__sub_14075FF10
-			static std::uint32_t baseID = 48139, offset = 0x4D7;  //Special Edition
-#endif
 			SKSE::AllocTrampoline(1 << 4);
 			auto& trampoline = SKSE::GetTrampoline();
 
-			REL::Relocation<std::uintptr_t> AttackActionBase{ REL::ID(baseID) };
-			_PerformAttackAction = trampoline.write_call<5>(AttackActionBase.address() + offset, PerformAttackAction);
+			REL::Relocation<std::uintptr_t> AttackActionBase{ RELOCATION_ID(48139, 49170) };
+			_PerformAttackAction = trampoline.write_call<5>(AttackActionBase.address() + REL::Relocate(0x4D7, 0x435), PerformAttackAction);
 			INFO("Hook PerformAttackAction!");
 		}
 

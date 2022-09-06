@@ -7,15 +7,10 @@ namespace SCAR
 	public:
 		static void Hook()
 		{
-#if ANNIVERSARY_EDITION
-			static std::uint32_t baseID = 36544, offset = 0x160;  //Anniversary Edition
-#else
-			static std::uint32_t baseID = 35551, offset = 0x11F;  //Special Edition
-#endif
-			REL::Relocation<uintptr_t> hook{ REL::ID(baseID) };
+			REL::Relocation<uintptr_t> hook{ RELOCATION_ID(35551, 36544) };
 			auto& trampoline = SKSE::GetTrampoline();
 			SKSE::AllocTrampoline(1 << 4);
-			_Update = trampoline.write_call<5>(hook.address() + offset, Update);
+			_Update = trampoline.write_call<5>(hook.address() + REL::Relocate(0x11F, 0x160), Update);
 		};
 
 	private:

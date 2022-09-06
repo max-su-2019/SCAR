@@ -328,11 +328,7 @@ glm::vec2 DebugAPI::WorldToScreenLoc(RE::GPtr<RE::GFxMovieView> movie, glm::vec3
 
 	float zVal;
 
-#if ANNIVERSARY_EDITION
-	uintptr_t WorldToCamMatrix = REL::ID(406126).address(), ViewPort = REL::ID(406160).address();  //Anniversary Edition
-#else
-	uintptr_t WorldToCamMatrix = REL::ID(519579).address(), ViewPort = REL::ID(519618).address();  //Special Edition
-#endif
+	uintptr_t WorldToCamMatrix = RELOCATION_ID(519579, 406126).address(), ViewPort = RELOCATION_ID(519618, 406160).address();
 
 	RE::NiCamera::WorldPtToScreenPt3((float(*)[4])(WorldToCamMatrix), *((RE::NiRect<float>*)ViewPort), niWorldLoc, screenLocOut.x, screenLocOut.y, zVal, 1e-5f);
 	RE::GRectF rect = movie->GetVisibleFrameRect();

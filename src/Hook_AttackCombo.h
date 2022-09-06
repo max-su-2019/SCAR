@@ -9,13 +9,8 @@ namespace SCAR
 	public:
 		static void InstallHook()
 		{
-#if ANNIVERSARY_EDITION
-			static std::uint32_t baseID = 207890, offset = 0x1;  //Anniversary Edition
-#else
-			static std::uint32_t baseID = 261399, offset = 0x1;  //Special Edition
-#endif
-			REL::Relocation<std::uintptr_t> AnimEventSinkVtbl{ REL::ID(baseID) };
-			_ProcessEvent = AnimEventSinkVtbl.write_vfunc(offset, ProcessEvent);
+			REL::Relocation<std::uintptr_t> AnimEventSinkVtbl{ RELOCATION_ID(261399, 207890) };
+			_ProcessEvent = AnimEventSinkVtbl.write_vfunc(0x1, ProcessEvent);
 			INFO("Hook Process Animation Event!");
 		}
 
