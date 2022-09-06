@@ -130,7 +130,7 @@ bool Util::GetBoundingBox(CollisionFocusObject& clObject, ObjectBound& bound)
 				float scaleInverse = RE::bhkWorld::GetWorldScaleInverse();
 
 				RE::hkVector4 bhkBodyPosition;
-				rigidBody->getPosition(bhkBodyPosition);
+				rigidBody->GetPosition(bhkBodyPosition);
 				// just gets the data out of the register Havok uses into a more usable format
 				float bodyPosition[4];
 				_mm_store_ps(bodyPosition, bhkBodyPosition.quad);
