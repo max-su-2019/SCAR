@@ -1,5 +1,6 @@
-DLLEXPORT constinit auto SKSEPlugin_Version = []() noexcept
-{
+#include "LoadGame.h"
+
+DLLEXPORT constinit auto SKSEPlugin_Version = []() noexcept {
 	SKSE::PluginVersionData data{};
 
 	data.PluginVersion(Plugin::Version);
@@ -10,16 +11,14 @@ DLLEXPORT constinit auto SKSEPlugin_Version = []() noexcept
 	return data;
 }();
 
-
 DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface*, SKSE::PluginInfo* pluginInfo)
 {
-    pluginInfo->name = SKSEPlugin_Version.pluginName;
-    pluginInfo->infoVersion = SKSE::PluginInfo::kVersion;
-    pluginInfo->version = SKSEPlugin_Version.pluginVersion;
+	pluginInfo->name = SKSEPlugin_Version.pluginName;
+	pluginInfo->infoVersion = SKSE::PluginInfo::kVersion;
+	pluginInfo->version = SKSEPlugin_Version.pluginVersion;
 
-    return true;
+	return true;
 }
-
 
 DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
@@ -31,11 +30,17 @@ DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 
 	REL::Module::reset();
 	SKSE::Init(a_skse);
-	
+
 	INFO("{} v{} loaded", Plugin::NAME, Plugin::Version);
 
 	// do stuff
+	auto g_message = SKSE::GetMessagingInterface();
+	if (!g_message) {
+		ERROR("Messaging Interface Not Found!");
+		return false;
+	}
 
+	g_message->RegisterListener(SCAR::EventCallback);
 
 	return true;
 }

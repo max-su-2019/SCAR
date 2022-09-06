@@ -72,7 +72,7 @@ namespace SCAR
 
 		RE::BSAnimationGraphManagerPtr graphMgr;
 		if (a_actor->GetAnimationGraphManager(graphMgr) && graphMgr) {
-			auto behaviourGraph = graphMgr->graphs[0] ? graphMgr->graphs[0]->behaviourGraph : nullptr;
+			auto behaviourGraph = graphMgr->graphs[0] ? graphMgr->graphs[0]->behaviorGraph : nullptr;
 			auto activeNodes = behaviourGraph ? behaviourGraph->activeNodes : nullptr;
 			if (activeNodes) {
 				for (auto nodeInfo : *activeNodes) {

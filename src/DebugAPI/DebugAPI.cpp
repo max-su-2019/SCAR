@@ -372,8 +372,9 @@ void DebugOverlayMenu::Register()
 		DebugOverlayMenu::Load();
 
 		INFO("BTPS: successfully registered DebugOverlayMenu");
-	} else
+	} else {
 		ERROR("BTPS: failed to register DebugOverlayMenu");
+	}
 }
 
 void DebugOverlayMenu::Load()
@@ -381,8 +382,9 @@ void DebugOverlayMenu::Load()
 	auto msgQ = RE::UIMessageQueue::GetSingleton();
 	if (msgQ) {
 		msgQ->AddMessage(MENU_NAME, RE::UI_MESSAGE_TYPE::kShow, nullptr);
-	} else
-		logger::warn("BTPS: failed to show DebugOverlayMenu");
+	} else {
+		ERROR("BTPS: failed to show DebugOverlayMenu");
+	}
 }
 
 void DebugOverlayMenu::Unload()
@@ -390,8 +392,9 @@ void DebugOverlayMenu::Unload()
 	auto msgQ = RE::UIMessageQueue::GetSingleton();
 	if (msgQ) {
 		msgQ->AddMessage(MENU_NAME, RE::UI_MESSAGE_TYPE::kHide, nullptr);
-	} else
-		logger::warn("BTPS: failed to hide DebugOverlayMenu");
+	} else {
+		ERROR("BTPS: failed to hide DebugOverlayMenu");
+	}
 }
 
 void DebugOverlayMenu::Show(std::string source)

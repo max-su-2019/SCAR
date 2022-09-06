@@ -182,7 +182,7 @@ namespace PRECISION_API
 	[[nodiscard]] inline void* RequestPluginAPI(const InterfaceVersion a_interfaceVersion = InterfaceVersion::V1)
 	{
 		auto pluginHandle = GetModuleHandleA("Precision.dll");
-		_RequestPluginAPI requestAPIFunction = (_RequestPluginAPI)GetProcAddress(pluginHandle, "RequestPluginAPI");
+		_RequestPluginAPI requestAPIFunction = pluginHandle ? (_RequestPluginAPI)GetProcAddress(pluginHandle, "RequestPluginAPI") : nullptr;
 		if (requestAPIFunction) {
 			return requestAPIFunction(a_interfaceVersion);
 		}
