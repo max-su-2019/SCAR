@@ -55,7 +55,7 @@ namespace SCAR
 				auto dataHandler = DataHandler::GetSingleton();
 				if (dataHandler && dataHandler->precisionPtr) {
 					auto collisionType = leftAttack ? RequestedAttackCollisionType::LeftWeapon : RequestedAttackCollisionType::RightWeapon;
-					return dataHandler->precisionPtr->GetAttackCollisionCapsuleLength(a_attacker->GetHandle(), collisionType);
+					return (dataHandler->precisionPtr->GetAttackCollisionCapsuleLength(a_attacker->GetHandle(), collisionType) + a_attacker->currentProcess->cachedValues->cachedRadius);
 				} else {
 					auto obj = a_attacker->GetEquippedObject(leftAttack);
 					auto weap = obj ? obj->As<RE::TESObjectWEAP>() : nullptr;
