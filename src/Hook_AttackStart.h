@@ -9,24 +9,23 @@ namespace SCAR
 
 	class RecheckAttackDistancHook
 	{
-#if ANNIVERSARY_EDITION
 		// 1-6-353: 0x837410 + 0x404
-		static inline constexpr std::uint64_t FuncID = 49170;
-		static inline constexpr std::uint64_t AIFuncID = 49171;
-		static inline constexpr std::ptrdiff_t OffsetL = 0x404;
-		static inline constexpr std::ptrdiff_t OffsetH = 0x409;
-#else
+		static inline constexpr std::uint64_t AE_FuncID = 49170;
+		static inline constexpr std::uint64_t AE_AIFuncID = 49171;
+		static inline constexpr std::ptrdiff_t AE_OffsetL = 0x404;
+		static inline constexpr std::ptrdiff_t AE_OffsetH = 0x409;
+
 		// 1-5-97: 0x80C020 + 0x4A6
-		static inline constexpr std::uint64_t FuncID = 48139;
-		static inline constexpr std::uint64_t AIFuncID = 48140;
-		static inline constexpr std::ptrdiff_t OffsetL = 0x4A6;
-		static inline constexpr std::ptrdiff_t OffsetH = 0x4AB;
-#endif
+		static inline constexpr std::uint64_t SE_FuncID = 48139;
+		static inline constexpr std::uint64_t SE_AIFuncID = 48140;
+		static inline constexpr std::ptrdiff_t SE_OffsetL = 0x4A6;
+		static inline constexpr std::ptrdiff_t SE_OffsetH = 0x4AB;
+
 		// al
 		// r15 / r13
 		// rsp+68
 		// rsp+20
-		static inline constexpr Patch Prolog
+		static inline constexpr Patch AE_Prolog
 		{
 			// call AIFunc
 			"\xE8\x00\x00\x00\x00"
@@ -34,37 +33,47 @@ namespace SCAR
 			"\x48\x89\xC1"
 			// mov rdx,
 			"\x4C\x89"
-#if ANNIVERSARY_EDITION
 			// r15
 			"\xFA"
-#else
-			// r13
-			"\xEA"
-#endif
 			// mov r8, [rsp+0x68]
 			"\x4C\x8B\x44\x24\x68"
 			// mov r9, [rsp+0x20]
 			"\x4C\x8B\x4C\x24\x20"
-#if ANNIVERSARY_EDITION
 			// push r13 ~ r15
 			"\x41\x55\x41\x57",
-#else
-			// push r12 ~ r13
-			"\x41\x54\x41\x55",
-#endif
-				25
+			25
 		};
 
-		static inline constexpr Patch Epilog
+		static inline constexpr Patch SE_Prolog
 		{
-#if ANNIVERSARY_EDITION
+			// call AIFunc
+			"\xE8\x00\x00\x00\x00"
+			// mov rcx, rax
+			"\x48\x89\xC1"
+			// mov rdx,
+			"\x4C\x89"
+			// r13
+			"\xEA"
+			// mov r8, [rsp+0x68]
+			"\x4C\x8B\x44\x24\x68"
+			// mov r9, [rsp+0x20]
+			"\x4C\x8B\x4C\x24\x20"
+			// push r12 ~ r13
+			"\x41\x54\x41\x55",
+			25
+		};
+
+		static inline constexpr Patch AE_Epilog
+		{
 			// pop r15 ~ r13
 			"\x41\x5F\x41\x5D",
-#else
+			4
+		};
+
+		static inline constexpr Patch SE_Epilog{
 			// pop r13 ~ r12
 			"\x41\x5D\x41\x5C",
-#endif
-				4
+			4
 		};
 
 		static bool RecheckAttackDistance(bool a_originResult, RE::Actor* a_attacker, RE::Actor* a_target, RE::AttackData* a_attackData);
@@ -74,10 +83,15 @@ namespace SCAR
 		{
 			SKSE::AllocTrampoline(static_cast<size_t>(1) << 7);
 
-			auto handle = DKUtil::Hook::AddCaveHook<OffsetL, OffsetH>(DKUtil::Hook::IDToAbs(FuncID), FUNC_INFO(RecheckAttackDistance), &Prolog, &Epilog);
+			auto handle = DKUtil::Hook::AddCaveHook(
+				DKUtil::Hook::IDToAbs(AE_FuncID, SE_FuncID),
+				DKUtil::Hook::RuntimeOffset(AE_OffsetL, AE_OffsetH, SE_OffsetL, SE_OffsetH),
+				FUNC_INFO(RecheckAttackDistance),
+				DKUtil::Hook::RuntimePatch(&AE_Prolog, &SE_Prolog),
+				DKUtil::Hook::RuntimePatch(&AE_Epilog, &SE_Epilog));
 
 			// recalculate displacement
-			DKUtil::Hook::WriteImm(handle->TramEntry + sizeof(OpCode), static_cast<Imm32>(DKUtil::Hook::IDToAbs(AIFuncID) - handle->TramEntry - 0x5));
+			DKUtil::Hook::WriteImm(handle->TramEntry + sizeof(OpCode), static_cast<Imm32>(DKUtil::Hook::IDToAbs(AE_AIFuncID, SE_AIFuncID) - handle->TramEntry - 0x5));
 
 			handle->Enable();
 		}
