@@ -18,12 +18,7 @@ namespace SCAR
 		auto localVector = invMatrix * (targPos - attackerPos);
 		auto localDistance = std::sqrtf(localVector.x * localVector.x + localVector.y * localVector.y);
 
-		auto offsetRadius = a_attacker->currentProcess->cachedValues->cachedRadius + a_target->currentProcess->cachedValues->cachedRadius + 144.f;
-
-		if (localDistance <= offsetRadius)
-			return true;
-
-		return a_attacker->CanNavigateToPosition(a_attacker->GetPosition(), a_target->GetPosition(), 2.0f, offsetRadius);
+		return a_attacker->CanNavigateToPosition(a_attacker->GetPosition(), a_target->GetPosition(), 2.0f, a_attacker->currentProcess->cachedValues->cachedRadius);
 	}
 
 	bool AttackRangeCheck::WithinAttackRange(RE::Actor* a_attacker, RE::Actor* a_targ, float max_distance, float min_distance, float a_startAngle, float a_endAngle)
