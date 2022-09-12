@@ -7,7 +7,7 @@ namespace SCAR
 {
 	using namespace DKUtil::Alias;
 
-	class RecheckAttackDistancHook
+	class AttackDistancHook
 	{
 		// 1-6-353: 0x837410 + 0x404
 		static inline constexpr std::uint64_t AE_FuncID = 49170;
@@ -31,10 +31,8 @@ namespace SCAR
 			"\xE8\x00\x00\x00\x00"
 			// mov rcx, rax
 			"\x48\x89\xC1"
-			// mov rdx,
-			"\x4C\x89"
-			// r15
-			"\xFA"
+			// mov rdx, r15
+			"\x4C\x89\xFA"
 			// mov r8, [rsp+0x68]
 			"\x4C\x8B\x44\x24\x68"
 			// mov r9, [rsp+0x20]
@@ -44,16 +42,20 @@ namespace SCAR
 			25
 		};
 
+		static inline constexpr Patch AE_Epilog{
+			// pop r15 ~ r13
+			"\x41\x5F\x41\x5D",
+			4
+		};
+
 		static inline constexpr Patch SE_Prolog
 		{
 			// call AIFunc
 			"\xE8\x00\x00\x00\x00"
 			// mov rcx, rax
 			"\x48\x89\xC1"
-			// mov rdx,
-			"\x4C\x89"
-			// r13
-			"\xEA"
+			// mov rdx, r13
+			"\x4C\x89\xEA"
 			// mov r8, [rsp+0x68]
 			"\x4C\x8B\x44\x24\x68"
 			// mov r9, [rsp+0x20]
@@ -61,13 +63,6 @@ namespace SCAR
 			// push r12 ~ r13
 			"\x41\x54\x41\x55",
 			25
-		};
-
-		static inline constexpr Patch AE_Epilog
-		{
-			// pop r15 ~ r13
-			"\x41\x5F\x41\x5D",
-			4
 		};
 
 		static inline constexpr Patch SE_Epilog{
@@ -81,7 +76,7 @@ namespace SCAR
 	public:
 		static void Install()
 		{
-			SKSE::AllocTrampoline(static_cast<size_t>(1) << 7);
+			SKSE::AllocTrampoline(static_cast<size_t>(1) << 6);
 
 			auto handle = DKUtil::Hook::AddCaveHook(
 				DKUtil::Hook::IDToAbs(AE_FuncID, SE_FuncID),

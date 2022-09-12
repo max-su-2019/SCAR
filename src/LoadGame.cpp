@@ -12,6 +12,7 @@ namespace SCAR
 	{
 		if (msg->type == SKSE::MessagingInterface::kPostLoad) {
 			// For First Attack
+			SCAR::AttackDistancHook::Install();
 			SCAR::AttackAngleHook::InstallHook();
 			SCAR::AttackActionHook::InstallHook();
 			SCAR::CombatRadiusHook::Install();
@@ -25,6 +26,7 @@ namespace SCAR
 
 			auto dataHandler = SCAR::DataHandler::GetSingleton();
 			if (dataHandler->precisionPtr) {
+				INFO("Obtained PrecisionAPI - {:x}", AsAddress(dataHandler->precisionPtr));
 			}
 
 			if (dataHandler->settings->enableDebugLog.get_data()) {
