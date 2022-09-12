@@ -3,6 +3,7 @@
 #include "DebugAPI/DebugAPI.h"
 #include "Hook_AttackCombo.h"
 #include "Hook_AttackStart.h"
+#include "Hook_CombatRadius.h"
 #include "Hook_MainUpdate.h"
 
 namespace SCAR
@@ -11,9 +12,9 @@ namespace SCAR
 	{
 		if (msg->type == SKSE::MessagingInterface::kPostLoad) {
 			// For First Attack
-			SCAR::RecheckAttackDistancHook::Install();
 			SCAR::AttackAngleHook::InstallHook();
 			SCAR::AttackActionHook::InstallHook();
+			SCAR::CombatRadiusHook::Install();
 
 			// For Combo
 			SCAR::AnimEventHook::InstallHook();
@@ -24,7 +25,6 @@ namespace SCAR
 
 			auto dataHandler = SCAR::DataHandler::GetSingleton();
 			if (dataHandler->precisionPtr) {
-				INFO("Obtained PrecisionAPI - {:x}", (uintptr_t)dataHandler->precisionPtr);
 			}
 
 			if (dataHandler->settings->enableDebugLog.get_data()) {
