@@ -34,7 +34,7 @@ function Resolve-Files {
 
                 Get-ChildItem "$a_parent/$directory" -Recurse -File -ErrorAction SilentlyContinue | Where-Object {
                     ($_.Extension -in $SourceExt) -and 
-                    ($_.Name -ne 'Version.h')
+                    ($_.Name -notmatch 'Plugin.h|Version.h')
                 } | Resolve-Path -Relative | ForEach-Object {
                     if (!$env:RebuildInvoke) {
                         Write-Host "`t`t<$_>"
@@ -66,7 +66,6 @@ Write-Host "`n`t<$Folder> [$Mode]"
 
 # @@COPY
 if ($Mode -eq 'COPY') {
-
     # process newly added files
     $BuildFolder = Get-ChildItem (Get-Item $Path).Parent.Parent.FullName "$Project.sln" -Depth 2 -File -Exclude ('*CMakeFiles*', '*CLib*')
     $NewFiles = Get-ChildItem $BuildFolder.DirectoryName -File | Where-Object {$_.Extension -in $SourceExt}
@@ -151,33 +150,30 @@ if ($Mode -eq 'COPY') {
     
     $BtnCopyMO2 = New-Object System.Windows.Forms.Button -Property @{
         ClientSize = '70, 50'
-        Location = New-Object System.Drawing.Point(260, 19)
         Text = 'Copy to MO2'
+        Location = New-Object System.Drawing.Point(260, 19)
+        BackColor = 'Cyan'
         Add_Click = {
-            $BtnCopyMO2.Enabled = $false
             foreach ($runtime in @("$($env:MO2SkyrimAEPath)/mods", "$($env:MO2SkyrimSEPath)/mods", "$($env:MO2SkyrimVRPath)/mods")) {
                 if (Test-Path $runtime -PathType Container) {
                     Copy-Mod "$runtime/$Install"
                 }
             }
             $Message.Text += "`r`n- Copied to MO2."
-            $BtnCopyMO2.Enabled = $true
         }
     }
     
     $BtnCopyData = New-Object System.Windows.Forms.Button -Property @{
         ClientSize = '70, 50'
-        Location = New-Object System.Drawing.Point(260, 74)
         Text = 'Copy to Data'
+        Location = New-Object System.Drawing.Point(260, 74)
         Add_Click = {
-            $BtnCopyData.Enabled = $false
             foreach ($runtime in @("$($env:SkyrimAEPath)/data", "$($env:SkyrimSEPath)/data", "$($env:SkyrimVRPath)/data")) {
                 if (Test-Path $runtime -PathType Container) {
                     Copy-Mod "$runtime"
                 }
             }
             $Message.Text += "`r`n- Copied to game data."
-            $BtnCopyData.Enabled = $true
         }
     }
     
@@ -186,14 +182,12 @@ if ($Mode -eq 'COPY') {
         Text = 'Remove in Data'
         Location = New-Object System.Drawing.Point(260, 129)
         Add_Click = {
-            $BtnRemoveData.Enabled = $false
             foreach ($runtime in @("$($env:SkyrimAEPath)/data", "$($env:SkyrimSEPath)/data", "$($env:SkyrimVRPath)/data")) {
                 if (Test-Path "$runtime/SKSE/Plugins/$Project.dll" -PathType Leaf) {
                     Remove-Item "$runtime/SKSE/Plugins/$Project.dll" -Force -Confirm:$false -ErrorAction:SilentlyContinue | Out-Null
                 }
             }
             $Message.Text += "`r`n- Removed from game data."
-            $BtnRemoveData.Enabled = $true
         }
     }
     
@@ -201,6 +195,7 @@ if ($Mode -eq 'COPY') {
         ClientSize = '70, 50'
         Text = 'Show in Explorer'
         Location = New-Object System.Drawing.Point(260, 185)
+        BackColor = 'Yellow'
         Add_Click = {
             Invoke-Item $Path
         }
@@ -211,14 +206,11 @@ if ($Mode -eq 'COPY') {
         Text = 'SKSE (AE)'
         Location = New-Object System.Drawing.Point(20, 185)
         Add_Click = {
-            $BtnLaunchSKSEAE.Enabled = $false
-
             Push-Location $env:SkyrimAEPath
             Start-Process ./SKSE64_loader.exe
             Pop-Location
 
             $Message.Text += "`r`n- SKSE (AE) Launched."
-            $BtnLaunchSKSEAE.Enabled = $true
         }
     }
     if (!(Test-Path "$env:SkyrimAEPath/skse64_loader.exe" -PathType Leaf)) {
@@ -230,14 +222,11 @@ if ($Mode -eq 'COPY') {
         Text = 'SKSE (SE)'
         Location = New-Object System.Drawing.Point(100, 185)
         Add_Click = {
-            $BtnLaunchSKSESE.Enabled = $false
-
             Push-Location $env:SkyrimSEPath
             Start-Process ./SKSE64_loader.exe
             Pop-Location
 
             $Message.Text += "`r`n- SKSE (SE) Launched."
-            $BtnLaunchSKSESE.Enabled = $true
         }
     }
     if (!(Test-Path "$env:SkyrimSEPath/skse64_loader.exe" -PathType Leaf)) {
@@ -249,14 +238,11 @@ if ($Mode -eq 'COPY') {
         Text = 'SKSE (VR)'
         Location = New-Object System.Drawing.Point(180, 185)
         Add_Click = {
-            $BtnLaunchSKSEVR.Enabled = $false
-
             Push-Location $env:SkyrimVRPath
             Start-Process ./SKSE64_loader.exe
             Pop-Location
 
             $Message.Text += "`r`n- SKSE (VR) Launched."
-            $BtnLaunchSKSEVR.Enabled = $true
         }
     }
     if (!(Test-Path "$env:SkyrimVRPath/skse64_loader.exe" -PathType Leaf)) {
@@ -268,14 +254,12 @@ if ($Mode -eq 'COPY') {
         Text = 'Build Papyrus'
         Location = New-Object System.Drawing.Point(20, 240)
         Add_Click = {
-            $BtnBuildPapyrus.Enabled = $false
             $BtnBuildPapyrus.Text = 'Compiling...'
             
             $Invocation = "`"$($env:SkyrimSEPath)/Papyrus Compiler/PapyrusCompiler.exe`" `"$PSScriptRoot/Scripts/Source`" -f=`"$env:SkyrimSEPath/Papyrus Compiler/TESV_Papyrus_Flags.flg`" -i=`"$env:SkyrimSEPath/Data/Scripts/Source;$PSScriptRoot/Scripts;$PSScriptRoot/Scripts/Source`" -o=`"$PSScriptRoot/Scripts`" -a -op -enablecache -t=`"4`""
             Start-Process cmd.exe -ArgumentList "/k $Invocation && pause && exit"
             
             $BtnBuildPapyrus.Text = 'Build Papyrus'
-            $BtnBuildPapyrus.Enabled = $true
         }
     }
     
@@ -284,7 +268,6 @@ if ($Mode -eq 'COPY') {
         Text = 'Version'
         Location = New-Object System.Drawing.Point(100, 240)
         Add_Click = {
-            $BtnChangeVersion.Enabled = $false
             $NewVersion = $null
             while ($OldVersion -and !$NewVersion) {
                 $NewVersion = [Microsoft.VisualBasic.Interaction]::InputBox("Input the new versioning for $Project", 'Versioning', $OldVersion)
@@ -299,8 +282,6 @@ if ($Mode -eq 'COPY') {
 
             $Message.Text += "`r`n- Version changed $OldVersion -> $NewVersion"
             $OldVersion = $NewVersion
-
-            $BtnChangeVersion.Enabled = $true
         }
     }
     
@@ -309,7 +290,6 @@ if ($Mode -eq 'COPY') {
         Text = 'Publish Mod'
         Location = New-Object System.Drawing.Point(180, 240)
         Add_Click = {
-            $BtnPublish.Enabled = $false
             $BtnPublish.Text = 'Zipping...'
 
             Copy-Mod "$PSScriptRoot/Tmp/Data"
@@ -319,7 +299,6 @@ if ($Mode -eq 'COPY') {
 
             $Message.Text += "`r`n- Mod files zipped & ready to go."
             $BtnPublish.Text = 'Publish Mod'
-            $BtnPublish.Enabled = $true
         }
     }
     
@@ -383,8 +362,8 @@ if ($Mode -eq 'DISTRIBUTE') { # update script to every project
 # SIG # Begin signature block
 # MIIboQYJKoZIhvcNAQcCoIIbkjCCG44CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUeYTgjWlZJ/27JDRk/nm0Weg3
-# /kSgghYXMIIDBjCCAe6gAwIBAgIQbBejp82dcLdHI5AVyyqyxzANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUL10O38us2rLaFkAAv/CaJq/f
+# 2nKgghYXMIIDBjCCAe6gAwIBAgIQbBejp82dcLdHI5AVyyqyxzANBgkqhkiG9w0B
 # AQsFADAbMRkwFwYDVQQDDBBES1NjcmlwdFNlbGZDZXJ0MB4XDTIxMTIwMzExMTgx
 # OVoXDTIyMTIwMzExMzgxOVowGzEZMBcGA1UEAwwQREtTY3JpcHRTZWxmQ2VydDCC
 # ASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKCLTioNBJsXmC6rmQ9af4DL
@@ -505,28 +484,28 @@ if ($Mode -eq 'DISTRIBUTE') { # update script to every project
 # 9DCCBPACAQEwLzAbMRkwFwYDVQQDDBBES1NjcmlwdFNlbGZDZXJ0AhBsF6OnzZ1w
 # t0cjkBXLKrLHMAkGBSsOAwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgAChAoAA
 # MBkGCSqGSIb3DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAMBgor
-# BgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBQZMW9rSa7r2w3QyW0PzsvzIshGGDAN
-# BgkqhkiG9w0BAQEFAASCAQBF4nW0eSdsD9EuEdQrWeg11IhdoERZfrFSPRG2kHld
-# 7uIfymQRZmVs5cRGCcHNpRpmdu8Jnx3TRCQ+XCqhRGJLbd4ttsSUlMg7F6ZTmyqu
-# lChg8U0wATdnkJAWSv5nM/iQ6eV3712cOG60zsuBF2VM5ZTtOkJj/94LvlM/j6eX
-# o/x35oz4aLZXQknwL58X60FN39eHFhTMwulx/CnqpeAnQSWJ2zUBn3clb3lTqrin
-# QOq2TgeRknzly4MXZ4hvFwrrPl3F0V9k3NgeoR9qo2ffG65cEQWweGAJaT5HAqBH
-# 4YCbpFMwvMHZapzjow+xZ7TUczpuYllsf1jdaGOZiNf8oYIDIDCCAxwGCSqGSIb3
+# BgEEAYI3AgEVMCMGCSqGSIb3DQEJBDEWBBSKG7DwrX21ECIU6/345cP86w5apDAN
+# BgkqhkiG9w0BAQEFAASCAQB4TTLHRS3zsUvD84PWvqX8GYhg35vO8HyerjN9Mv4G
+# F1hF7RqHAGmYAjCyfqf+BTxbrfFaxh24EjVMgWVfKO/FhH8VEVHhstUAjbZECH42
+# ecoqOWs3qbG9gxAONCjQ6gTPWQ74+sRaqvs+t2PTFGYhRN8+bsYXC91DjXcPp1pd
+# g9bNzUKM/0NYWCL1ad7nMgoggBglkirfVRxZgLdacziNPGk67x18Xnv+kYiqeWO1
+# U+gmr5x04w7M+Gb/1MDsjAaL6CfdEftCI8/5Rtp6IRaBCs0r18fZ/Lrcw7CEUzdA
+# eyU4AhBlXHUPs4FQIhbMwtiBJqTk2Y6jPmKitJLBo5GjoYIDIDCCAxwGCSqGSIb3
 # DQEJBjGCAw0wggMJAgEBMHcwYzELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lD
 # ZXJ0LCBJbmMuMTswOQYDVQQDEzJEaWdpQ2VydCBUcnVzdGVkIEc0IFJTQTQwOTYg
 # U0hBMjU2IFRpbWVTdGFtcGluZyBDQQIQCnpKiJ7JmUKQBmM4TYaXnTANBglghkgB
 # ZQMEAgEFAKBpMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-# MQ8XDTIyMDgyNjE0MjgxMFowLwYJKoZIhvcNAQkEMSIEIFqrBXiPomX9Gx3376md
-# 5Ltf4wjjIbynBKF0nBrplxucMA0GCSqGSIb3DQEBAQUABIICABkGyzQduhCOz4Qa
-# 9wZUn4+ctCC8Iy1QZkzJaiLbnP56qYj97nq+itgta6sM4ydJO6cG3wJ9vKeENez5
-# XGBTmtHTtyB9tvRFbcB/O+TLxkAJpedi5DRBstn2uum0zCZrgUUGTjiq9Zd/Bs4H
-# 1+c5oaasYjylMByJ23IT/9YDTY4pOoQWiH4cJt0pXBerYYb7MLSWFHMlf0dMfDjq
-# 56FSWZ2V+UnJye6VqY4nlecVZeTvJ5A1ryhu4eyNndGvf+dtGdFadLUhu5mcKHTD
-# P4vHoTfYYw7FjKjEZVFNLyoDBj5R+7YMdBlNo65pUy7hxflAl3SlLEb2rWy9tilk
-# CKjbBG/d20Fqfkrq0vrsSA7WW7KtADZwsXEzwPBufGxabEwoLFE39XL8g4K8ftX9
-# JtvgSt+j5/8uZGbrjmzYMGMWBDw7v9bd0H82fsh/xhVNsYEiIy7OtkLysAbpELx7
-# AUy17cobsMDRlMfOCJ+e64SIjMebi/ZAZnWtZctHTfVcgNrMpWd2T2+GASBXsSQ5
-# 6QHtdxCBEHeFsUPqiSmRy1APC5JdW6k7G7sfOJdrynG8rHN/w+RsvFCUrNZpeZ4g
-# APj30iib+RRbvV3mmCpN82v+ljMR+UNW/GrNGPXlZSSkDaVuKk7JE88J6m4FufqQ
-# ej6X4zXIxNnUz7RxdKyqMumz2hvm
+# MQ8XDTIyMDkwODE1MzEzMFowLwYJKoZIhvcNAQkEMSIEIDf6RCAPs1+8Zcun2Jio
+# w+zPQI+GAnbfDdGRdwQdEwXEMA0GCSqGSIb3DQEBAQUABIICAKcOjiJc/IK2XaRM
+# VF/TXmaAKULRe2lWhTwd6Hfde4DhdbOWgmRv0yqgfZsDG/QOKpRJSplEWIDOrfdP
+# 72Wf3wXnr8Eqi+F7CtdnG5F2+G5/E/fWIEIqTJBF9cdbmctsltE30IPPrI0CGmEO
+# dPbyCYC8J0MK1qxYdrA6Wf0fGUGJJLWbP7PEDEOlQQtGrB8OGEsOPwctiM5seguX
+# zNvD0/vSTTP8rdPG1ZmhhEdsglmfdhzvjR2pN9x3Kab5MBPrCo5HZYCEan/40ZZR
+# NHmdQa1JPwGqG3Cu5WQmWi0iQdX92NZD8J8ZLJr8Rhodq/1wHsHtdBSUbJ6FRnoS
+# 4IbOR14AbZzomWK13Y3Xd4J8pszjP6IA8VkLf6kHnAhYZOrlwKHZL3SMBrhbZ3Jj
+# oneklTseD2BWKXjalj0oYbBMaazLydgFZ0nyo8kTqcUu8sFWxkxgBOt7sIj/wOj1
+# 1wVM6qCWmkRN0r/Kf1qon/Em1W63Y5Ptlz0f2oIRnbagxvjQRDHFwglBA/vmEQN+
+# 6bA6MYVblGTvxBVxIyarXKshBdSXtJLVLxOnleSsUrJVu7zWFCe/v1RQhaOBMl9m
+# F9CmH9sNWSqI8jzD9jJR6BnsXVqSRgbgcrbUgdItZ4TGaz4IY4xpJpJgebSTzPvZ
+# lpRDenwMBLqvfNOw5CYb1LGo3w6S
 # SIG # End signature block
