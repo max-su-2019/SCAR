@@ -3,7 +3,6 @@
 #include "DebugAPI/DebugAPI.h"
 #include "Hook_AttackCombo.h"
 #include "Hook_AttackStart.h"
-#include "Hook_CombatRadius.h"
 #include "Hook_MainUpdate.h"
 
 namespace SCAR
@@ -15,7 +14,6 @@ namespace SCAR
 			SCAR::AttackDistancHook::Install();
 			SCAR::AttackAngleHook::InstallHook();
 			SCAR::AttackActionHook::InstallHook();
-			SCAR::CombatRadiusHook::Install();
 
 			// For Combo
 			SCAR::AnimEventHook::InstallHook();

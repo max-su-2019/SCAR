@@ -9,6 +9,27 @@ namespace SCAR
 		if (!a_attacker || !a_target || !a_attacker->Get3D() || !a_target->Get3D() || !a_target->currentProcess || !a_attacker->currentProcess)
 			return false;
 
+		auto GetMeleeWeaponRange = [](RE::Actor* a_actor) -> float {
+			using TYPE = RE::CombatInventoryItem::TYPE;
+
+			float result = 0.f;
+			if (a_actor) {
+				auto combatCtrl = a_actor->combatController;
+				auto combatInv = combatCtrl ? combatCtrl->inventory : nullptr;
+				if (combatInv) {
+					for (const auto item : combatInv->equippedItems) {
+						if (item.item && item.item->GetType() == TYPE::kMelee) {
+							auto range = item.item->GetMaxRange();
+							if (range > result)
+								result = range;
+						}
+					}
+				}
+			}
+
+			return result;
+		};
+
 		auto attackerPos = a_attacker->Get3D()->world.translate;
 		auto targPos = a_target->Is3rdPersonVisible() ? a_target->Get3D()->world.translate : a_target->GetPosition();
 		auto matrix = a_attacker->Get3D()->world.rotate;
@@ -17,8 +38,10 @@ namespace SCAR
 
 		auto localVector = invMatrix * (targPos - attackerPos);
 		auto localDistance = std::sqrtf(localVector.x * localVector.x + localVector.y * localVector.y);
+		if (localDistance <= GetMeleeWeaponRange(a_attacker) + a_target->GetBoundRadius())
+			return true;
 
-		return a_attacker->CanNavigateToPosition(a_attacker->GetPosition(), a_target->GetPosition(), 2.0f, a_attacker->currentProcess->cachedValues->cachedRadius);
+		return a_attacker->CanNavigateToPosition(a_attacker->GetPosition(), a_target->GetPosition(), 2.0f, a_attacker->GetBoundRadius());
 	}
 
 	bool AttackRangeCheck::WithinAttackRange(RE::Actor* a_attacker, RE::Actor* a_targ, float max_distance, float min_distance, float a_startAngle, float a_endAngle)

@@ -13,7 +13,7 @@ include(GNUInstallDirs)
 # info
 project(
 	SCAR
-	VERSION 1.0.3
+	VERSION 1.0.4
 	LANGUAGES CXX
 )
 
