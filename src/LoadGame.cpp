@@ -11,16 +11,12 @@ namespace SCAR
 	{
 		if (msg->type == SKSE::MessagingInterface::kPostLoad) {
 			// For First Attack
-			SCAR::AttackDistancHook::Install();
-			SCAR::AttackAngleHook::InstallHook();
-			SCAR::AttackActionHook::InstallHook();
+			AttackDistancHook::Install();
+			AttackAngleHook::InstallHook();
+			AttackActionHook::InstallHook();
 
 			// For Combo
-			SCAR::AnimEventHook::InstallHook();
-
-			//DebugOverlayMenu
-			DebugOverlayMenu::Register();
-			SCAR::MainUpdateHook::Hook();
+			AnimEventHook::InstallHook();
 
 			auto dataHandler = SCAR::DataHandler::GetSingleton();
 			if (dataHandler->precisionPtr) {
@@ -30,6 +26,13 @@ namespace SCAR
 			if (dataHandler->settings->enableDebugLog.get_data()) {
 				spdlog::set_level(spdlog::level::debug);
 				DEBUG("Enable Debug Log!");
+			}
+
+			if (dataHandler->settings->enableDebugOverlay.get_data()) {
+				//DebugOverlayMenu
+				DebugOverlayMenu::Register();
+				MainUpdateHook::Hook();
+				DEBUG("Enable Debug Overlay!");
 			}
 		}
 	}

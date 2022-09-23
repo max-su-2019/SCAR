@@ -7,6 +7,7 @@ DLLEXPORT constinit auto SKSEPlugin_Version = []() noexcept {
 	data.PluginName(Plugin::NAME);
 	data.AuthorName(Plugin::AUTHOR);
 	data.UsesAddressLibrary(true);
+	data.HasNoStructUse(true);
 
 	return data;
 }();
@@ -23,7 +24,9 @@ DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface*, SKSE::Plugi
 DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
 #ifndef NDEBUG
-	while (!IsDebuggerPresent()) { Sleep(100); }
+	while (!IsDebuggerPresent()) {
+		Sleep(100);
+	}
 #endif
 
 	DKUtil::Logger::Init(Plugin::NAME, REL::Module::get().version().string());

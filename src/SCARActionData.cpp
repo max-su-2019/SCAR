@@ -55,7 +55,7 @@ namespace SCAR
 				auto dataHandler = DataHandler::GetSingleton();
 				if (dataHandler && dataHandler->precisionPtr) {
 					auto collisionType = leftAttack ? RequestedAttackCollisionType::LeftWeapon : RequestedAttackCollisionType::RightWeapon;
-					return (dataHandler->precisionPtr->GetAttackCollisionCapsuleLength(a_attacker->GetHandle(), collisionType) + a_attacker->currentProcess->cachedValues->cachedRadius);
+					return (dataHandler->precisionPtr->GetAttackCollisionCapsuleLength(a_attacker->GetHandle(), collisionType) + a_attacker->GetActorRuntimeData().currentProcess->cachedValues->cachedRadius);
 				} else {
 					auto obj = a_attacker->GetEquippedObject(leftAttack);
 					auto weap = obj ? obj->As<RE::TESObjectWEAP>() : nullptr;
@@ -92,7 +92,7 @@ namespace SCAR
 
 	bool SCARActionData::PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target)
 	{
-		if (!a_attacker || !a_target || !a_attacker->currentProcess)
+		if (!a_attacker || !a_target || !a_attacker->GetActorRuntimeData().currentProcess)
 			return false;
 
 		const float weaponReach = GetWeaponReach(a_attacker);
@@ -103,7 +103,7 @@ namespace SCAR
 				return false;
 			}
 
-			auto result = a_attacker->currentProcess->PlayIdle(a_attacker, GetActionObject(), IdleAnimation, true, true, a_target);
+			auto result = a_attacker->GetActorRuntimeData().currentProcess->PlayIdle(a_attacker, GetActionObject(), IdleAnimation, true, true, a_target);
 			if (result) {
 				DEBUG("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 					IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);

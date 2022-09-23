@@ -1,6 +1,6 @@
+#include "Hook_AttackStart.h"
 #include "DataHandler.h"
 #include "Function.h"
-#include "Hook_AttackStart.h"
 
 namespace SCAR
 {
@@ -16,11 +16,11 @@ namespace SCAR
 
 	bool AttackActionHook::PerformAttackAction(RE::TESActionData* a_actionData)
 	{
-		auto attacker = a_actionData && a_actionData->Subject_8 ? a_actionData->Subject_8->As<RE::Actor>() : nullptr;
-		auto targ = attacker ? attacker->currentCombatTarget.get() : nullptr;
+		auto attacker = a_actionData && a_actionData->source ? a_actionData->source->As<RE::Actor>() : nullptr;
+		auto targ = attacker ? attacker->GetActorRuntimeData().currentCombatTarget.get() : nullptr;
 		auto scarClip = attacker ? DataHandler::GetSCARDataClip(attacker) : nullptr;
-		if (scarClip){
-			if (targ && attacker->currentProcess && !attacker->IsPlayerRef() && attacker->RequestLOS(targ.get()) && AttackRangeCheck::CheckPathing(attacker, targ.get())) {
+		if (scarClip) {
+			if (targ && attacker->GetActorRuntimeData().currentProcess && !attacker->IsPlayerRef() && attacker->RequestLOS(targ.get()) && AttackRangeCheck::CheckPathing(attacker, targ.get())) {
 				DEBUG("Find SCAR Action Data in clip \"{}\" of \"{}\"", scarClip->animationName.c_str(), attacker->GetName());
 				auto dataArr = DataHandler::GetSCARActionData(scarClip);
 				std::sort(dataArr.begin(), dataArr.end(), SCARActionData::SortByWeight);

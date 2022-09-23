@@ -250,7 +250,7 @@ bool Util::GetBBCharacter(RE::TESObjectREFR* object, ObjectBound& bound)
 	if (!body)
 		return false;
 
-	auto scale = static_cast<float>(object->refScale) / 100.f * npc->GetBaseScale();
+	auto scale = static_cast<float>(object->GetReferenceRuntimeData().refScale) / 100.f * npc->GetBaseScale();
 
 	bound.boundMin = NiPointToVec(object->GetBoundMin() * scale);
 	bound.boundMax = NiPointToVec(object->GetBoundMax() * scale);
@@ -927,8 +927,8 @@ void Util::CellForEachReference(RE::TESObjectCELL* cell, std::function<bool(RE::
 	if (!cell)
 		return;
 
-	RE::BSSpinLockGuard locker(cell->spinLock);
-	for (const auto& ref : cell->references) {
+	RE::BSSpinLockGuard locker(cell->GetRuntimeData().spinLock);
+	for (const auto& ref : cell->GetRuntimeData().references) {
 		if (ref && !a_callback(*ref)) {
 			break;
 		}
