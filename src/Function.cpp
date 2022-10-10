@@ -46,12 +46,12 @@ namespace SCAR
 
 	bool AttackRangeCheck::WithinAttackRange(RE::Actor* a_attacker, RE::Actor* a_targ, float max_distance, float min_distance, float a_startAngle, float a_endAngle)
 	{
-		if (!a_attacker || !a_targ || !a_attacker->Get3D() || !a_targ->Get3D() || !a_targ->GetActorRuntimeData().currentProcess)
+		if (!a_attacker || !a_targ || !a_attacker->Get3D() || !a_targ->Get3D())
 			return false;
 
-		max_distance += a_targ->GetActorRuntimeData().currentProcess->cachedValues->cachedRadius;
+		max_distance += a_targ->GetBoundRadius();
 		if (min_distance > 0.f)
-			min_distance += a_targ->GetActorRuntimeData().currentProcess->cachedValues->cachedRadius;
+			min_distance += a_targ->GetBoundRadius() + a_attacker->GetBoundRadius();
 
 		auto attackerPos = a_attacker->Get3D()->world.translate;
 		auto targPos = a_targ->Is3rdPersonVisible() ? a_targ->Get3D()->world.translate : a_targ->GetPosition();
@@ -107,7 +107,7 @@ namespace SCAR
 		if (!dataHandler || !dataHandler->settings || !dataHandler->settings->enableDebugOverlay.get_data())
 			return;
 
-		if (!a_attacker || !a_targ || !a_attacker->Get3D() || !a_targ->Get3D() || !a_targ->GetActorRuntimeData().currentProcess)
+		if (!a_attacker || !a_targ || !a_attacker->Get3D() || !a_targ->Get3D())
 			return;
 
 		static constexpr int time = 1000;
@@ -134,7 +134,7 @@ namespace SCAR
 		DebugAPI::DrawArc(attackerPos, max_distance, a_startAngle, a_endAngle, matrix, time, greenColor);
 		DebugAPI::DrawArc(attackerPos, min_distance, a_startAngle, a_endAngle, matrix, time, redColor);
 
-		DebugAPI::DrawCircle(Util::NiPointToVec(targCenter), a_targ->GetActorRuntimeData().currentProcess->cachedValues->cachedRadius, Util::NiPointToVec(Rotation), time, yellowColor);
+		DebugAPI::DrawCircle(Util::NiPointToVec(targCenter), a_targ->GetBoundRadius(), Util::NiPointToVec(Rotation), time, yellowColor);
 	}
 
 }
