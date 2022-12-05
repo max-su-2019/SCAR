@@ -9,10 +9,10 @@ namespace SCAR
 		j.at("IdleAnimation").get_to(a_data.IdleAnimationEditorID);
 
 		j.at("MinDistance").get_to(a_data.minDistance);
-		a_data.minDistance = max(a_data.minDistance, 0.f);
+		a_data.minDistance = std::max(a_data.minDistance, 0.f);
 
 		j.at("MaxDistance").get_to(a_data.maxDistance);
-		a_data.maxDistance = max(a_data.maxDistance, 0.f);
+		a_data.maxDistance = std::max(a_data.maxDistance, 0.f);
 
 		j.at("StartAngle").get_to(a_data.startAngle);
 		a_data.startAngle = std::clamp(a_data.startAngle, -180.f, 180.f);
@@ -26,7 +26,7 @@ namespace SCAR
 		j.at("Type").get_to(a_data.actionType);
 
 		if (j.find("WeaponLength") != j.end())
-			a_data.weaponLength.emplace(max(j.at("WeaponLength").get<float>(), 0.f));
+			a_data.weaponLength.emplace(std::max(j.at("WeaponLength").get<float>(), 0.f));
 	}
 
 	const bool SCARActionData::IsLeftAttack() const
@@ -55,7 +55,7 @@ namespace SCAR
 				auto dataHandler = DataHandler::GetSingleton();
 				if (dataHandler && dataHandler->precisionPtr) {
 					auto collisionType = leftAttack ? RequestedAttackCollisionType::LeftWeapon : RequestedAttackCollisionType::RightWeapon;
-					return (dataHandler->precisionPtr->GetAttackCollisionCapsuleLength(a_attacker->GetHandle(), collisionType) + a_attacker->GetActorRuntimeData().currentProcess->cachedValues->cachedRadius);
+					return (dataHandler->precisionPtr->GetAttackCollisionCapsuleLength(a_attacker->GetHandle(), collisionType) + a_attacker->GetBoundRadius());
 				} else {
 					auto obj = a_attacker->GetEquippedObject(leftAttack);
 					auto weap = obj ? obj->As<RE::TESObjectWEAP>() : nullptr;

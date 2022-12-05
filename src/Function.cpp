@@ -11,7 +11,6 @@ namespace SCAR
 
 		auto GetMeleeWeaponRange = [](RE::Actor* a_actor) -> float {
 			using TYPE = RE::CombatInventoryItem::TYPE;
-
 			float result = 0.f;
 			if (a_actor) {
 				auto combatCtrl = a_actor->GetActorRuntimeData().combatController;
