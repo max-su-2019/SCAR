@@ -34,7 +34,7 @@ When there are multiple line of ActionData annotations inside an animation file,
     The conditions items of the idle animation would also be take into consideration when doing conditions checking.  
 
     *  `MaxDistance`: The maximum distance range for the ActionData to execute, only when the distance between the moveset owner to the target less than this value, the ActionData could be executed. The value of the distance must not be an negative number.  
-    Be caution that the you don't need to consider the weapon reach when filling the Max Distance value there, the weapon reach would be computed dynamically on SKSE plugin end.
+    Be caution that you don't need to consider the weapon reach when filling the Max Distance value there, the weapon reach would be computed dynamically on SKSE plugin end.
    
     *  `MinDistance`: The minmum distance range for the ActionData to execute, only when the distance between the moveset owner to the target greater than this value, the ActionData could be executed. The value of the distance must not be an negative number.  
     MinDistance could be used to disable the performing of long distance attack when the distance to the target is close.
