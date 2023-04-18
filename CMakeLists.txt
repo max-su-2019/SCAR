@@ -39,10 +39,10 @@ configure_file(
 execute_process(COMMAND powershell -ExecutionPolicy Bypass -File "${CMAKE_CURRENT_SOURCE_DIR}/!Update.ps1" "SOURCEGEN" "${PROJECT_VERSION}" "${CMAKE_CURRENT_BINARY_DIR}")
 include(${CMAKE_CURRENT_BINARY_DIR}/sourcelist.cmake)
 source_group(
-	TREE 
-		${CMAKE_CURRENT_SOURCE_DIR}
-	FILES 
-		${SOURCES}
+	TREE
+	${CMAKE_CURRENT_SOURCE_DIR}
+	FILES
+	${SOURCES}
 )
 
 source_group(
@@ -50,9 +50,39 @@ source_group(
 	FILES ${CMAKE_CURRENT_BINARY_DIR}/include/Version.h
 )
 
+# dependency macros
+macro(find_dependency_path DEPENDENCY FILE)
+	# searches extern for dependencies and if not checks the environment variable
+	if(NOT ${DEPENDENCY} STREQUAL "")
+		# Check extern
+		message(
+			STATUS
+			"Searching for ${DEPENDENCY} using file ${FILE}"
+		)
+		find_path("${DEPENDENCY}Path"
+			${FILE}
+			PATHS "extern/${DEPENDENCY}")
+
+		if("${${DEPENDENCY}Path}" STREQUAL "${DEPENDENCY}Path-NOTFOUND")
+			# Check path
+			message(
+				STATUS
+				"Getting environment for ${DEPENDENCY}Path: $ENV{${DEPENDENCY}Path}"
+			)
+			set("${DEPENDENCY}Path" "$ENV{${DEPENDENCY}Path}")
+		endif()
+
+		message(
+			STATUS
+			"Found ${DEPENDENCY} in ${${DEPENDENCY}Path}; adding"
+		)
+		add_subdirectory("${${DEPENDENCY}Path}" ${DEPENDENCY})
+	endif()
+endmacro()
+
 # dependencies
-add_subdirectory($ENV{CommonLibSSEPath} CommonLibSSE)
-add_subdirectory($ENV{DKUtilPath} DKUtil)
+find_dependency_path(CommonLibSSE include/REL/Relocation.h)
+find_dependency_path(DKUtil include/DKUtil/Config.hpp)
 find_package(spdlog CONFIG REQUIRED)
 
 # cmake target
@@ -60,63 +90,63 @@ find_package(spdlog CONFIG REQUIRED)
 add_library(
 	${PROJECT_NAME}
 	SHARED
-		${SOURCES}
-		${CMAKE_CURRENT_BINARY_DIR}/include/Version.h
-		${CMAKE_CURRENT_BINARY_DIR}/version.rc
-		.clang-format
-		vcpkg.json
+	${SOURCES}
+	${CMAKE_CURRENT_BINARY_DIR}/include/Version.h
+	${CMAKE_CURRENT_BINARY_DIR}/version.rc
+	.clang-format
+	vcpkg.json
 )
 
 # include dir
 target_include_directories(
 	${PROJECT_NAME}
 	PRIVATE
-		${CMAKE_CURRENT_BINARY_DIR}/include
-		${CMAKE_CURRENT_SOURCE_DIR}/include
-		${CMAKE_CURRENT_SOURCE_DIR}/src
+	${CMAKE_CURRENT_BINARY_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 # linkage
 target_link_libraries(
-	${PROJECT_NAME} 
+	${PROJECT_NAME}
 	PRIVATE
-		CommonLibSSE::CommonLibSSE
-		DKUtil::DKUtil
-		spdlog::spdlog
+	CommonLibSSE::CommonLibSSE
+	DKUtil::DKUtil
+	spdlog::spdlog
 )
 
 # compiler def
-if (MSVC)
+if(MSVC)
 	add_compile_definitions(_UNICODE)
 
 	target_compile_options(
 		${PROJECT_NAME}
 		PRIVATE
-			/MP
-			/await
-			/W0
-			/WX
-			/permissive-
-			/Zc:alignedNew
-			/Zc:auto
-			/Zc:__cplusplus
-			/Zc:externC
-			/Zc:externConstexpr
-			/Zc:forScope
-			/Zc:hiddenFriend
-			/Zc:implicitNoexcept
-			/Zc:lambda
-			/Zc:noexceptTypes
-			/Zc:preprocessor
-			/Zc:referenceBinding
-			/Zc:rvalueCast
-			/Zc:sizedDealloc
-			/Zc:strictStrings
-			/Zc:ternary
-			/Zc:threadSafeInit
-			/Zc:trigraphs
-			/Zc:wchar_t
-			/wd4200 # nonstandard extension used : zero-sized array in struct/union
+		/MP
+		/await
+		/W0
+		/WX
+		/permissive-
+		/Zc:alignedNew
+		/Zc:auto
+		/Zc:__cplusplus
+		/Zc:externC
+		/Zc:externConstexpr
+		/Zc:forScope
+		/Zc:hiddenFriend
+		/Zc:implicitNoexcept
+		/Zc:lambda
+		/Zc:noexceptTypes
+		/Zc:preprocessor
+		/Zc:referenceBinding
+		/Zc:rvalueCast
+		/Zc:sizedDealloc
+		/Zc:strictStrings
+		/Zc:ternary
+		/Zc:threadSafeInit
+		/Zc:trigraphs
+		/Zc:wchar_t
+		/wd4200 # nonstandard extension used : zero-sized array in struct/union
 	)
 endif()
 
@@ -124,26 +154,26 @@ endif()
 target_precompile_headers(
 	${PROJECT_NAME}
 	PRIVATE
-		src/PCH.h
+	src/PCH.h
 )
 
 # post build event
 add_custom_command(
-	TARGET 
-		${PROJECT_NAME}
+	TARGET
+	${PROJECT_NAME}
 	POST_BUILD
-		COMMAND 
-			powershell -NoProfile -ExecutionPolicy Bypass -File "${CMAKE_CURRENT_SOURCE_DIR}/!Update.ps1" "COPY" "${PROJECT_VERSION}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(ConfigurationName)" "${PROJECT_NAME}" "${ANNIVERSARY_EDITION}"
-		COMMENT 
-			"Updating project :))"
+	COMMAND
+	powershell -NoProfile -ExecutionPolicy Bypass -File " ${CMAKE_CURRENT_SOURCE_DIR}/!Update.ps1" "COPY" "${PROJECT_VERSION}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(ConfigurationName)" "${PROJECT_NAME}" "${ANNIVERSARY_EDITION} "
+	COMMENT
+	" Updating project :))"
 )
 
 # called via !Rebuild.ps1
 if(DEFINED GROUP)
-set_target_properties(
-	${PROJECT_NAME}
-	PROPERTIES
-	FOLDER
-	${GROUP}
-)
+	set_target_properties(
+		${PROJECT_NAME}
+		PROPERTIES
+		FOLDER
+		${GROUP}
+	)
 endif()

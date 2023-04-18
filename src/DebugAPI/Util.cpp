@@ -402,7 +402,7 @@ CollisionFocusObject Util::FindCollisionObjectRecursive(RE::NiNode* nodeIn, int 
 	}
 
 	// sometimes the collision object is on a child
-	for (auto child : nodeIn->children) {
+	for (auto child : nodeIn->GetChildren()) {
 		if (!child)
 			continue;
 
@@ -460,7 +460,7 @@ std::vector<CollisionFocusObject> Util::FindCollisionObjectListRecursive(RE::NiN
 			return nodesOut;
 	}
 
-	for (auto child : nodeIn->children) {
+	for (auto child : nodeIn->GetChildren()) {
 		if (!child)
 			continue;
 
@@ -508,7 +508,7 @@ std::vector<CollisionFocusObject> Util::FindAllCollisionObjectsRecursive(RE::NiN
 		nodesOut.push_back(newObj);
 	}
 
-	for (auto child : nodeIn->children) {
+	for (auto child : nodeIn->GetChildren()) {
 		if (!child)
 			continue;
 
@@ -536,7 +536,7 @@ bool Util::HasCollisionObjectRecursive(RE::NiNode* nodeIn, int recursionDepth /*
 	if (nodeIn->collisionObject)
 		return true;
 
-	for (auto child : nodeIn->children) {
+	for (auto child : nodeIn->GetChildren()) {
 		if (!child)
 			continue;
 
@@ -562,7 +562,7 @@ RE::NiNode* Util::GetChildNodeByName(RE::NiNode* nodeIn, const char* targetName)
 	if (!nodeIn)
 		return nullptr;
 
-	for (auto& childObj : nodeIn->children) {
+	for (auto& childObj : nodeIn->GetChildren()) {
 		if (!childObj.get())
 			continue;
 

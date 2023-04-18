@@ -1,16 +1,24 @@
 {
-    "name":  "scar",
-    "version-string":  "1.0.0",
-    "description":  "",
-    "license":  "MIT",
-    "dependencies":  [
-                         "effolkronium-random",
-                         "spdlog",
-						 "glm"
-                     ],
-    "features":  {
-                     "mo2-install":  {
-                                         "description":  "SCAR"
-                                     }
-                 }
+  "name": "scar",
+  "version-string": "1.0.7",
+  "description": "",
+  "license": "MIT",
+  "dependencies": [
+    "fast-cpp-csv-parser",
+    "fmt",
+    "rsm-binary-io",
+    "rapidcsv",
+    "spdlog",
+    "nlohmann-json",
+    "simpleini",
+    "tomlplusplus",
+    "xbyak",
+    "effolkronium-random",
+    "glm"
+  ],
+  "features": {
+    "mo2-install": {
+      "description": "SCAR"
+    }
+  }
 }

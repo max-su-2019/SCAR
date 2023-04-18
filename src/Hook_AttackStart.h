@@ -7,7 +7,7 @@ namespace SCAR
 {
 	using namespace DKUtil::Alias;
 
-	class AttackDistancHook
+	class AttackDistanceHook
 	{
 		// 1-6-353: 0x837410 + 0x404
 		static inline constexpr std::uint64_t AE_FuncID = 49170;

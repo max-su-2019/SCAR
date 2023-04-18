@@ -12,7 +12,8 @@
 			"cacheVariables": {
 				"SKSE_SUPPORT_XBYAK": "ON",
 				"SKSEPluginAuthor": "$env{SKSEPluginAuthor}"
-			}
+			},
+			"binaryDir": "${sourceDir}/build"
 		},
 		{
 			"name": "vcpkg",
