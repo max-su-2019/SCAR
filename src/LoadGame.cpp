@@ -11,7 +11,7 @@ namespace SCAR
 	{
 		if (msg->type == SKSE::MessagingInterface::kPostLoad) {
 			// For First Attack
-			AttackDistancHook::Install();
+			AttackDistanceHook::Install();
 			AttackAngleHook::InstallHook();
 			AttackActionHook::InstallHook();
 

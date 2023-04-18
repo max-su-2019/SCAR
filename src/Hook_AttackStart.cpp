@@ -4,7 +4,7 @@
 
 namespace SCAR
 {
-	bool AttackDistancHook::RecheckAttackDistance(bool a_originResult, RE::Actor* a_attacker, RE::Actor* a_target, RE::AttackData*)
+	bool AttackDistanceHook::RecheckAttackDistance(bool a_originResult, RE::Actor* a_attacker, RE::Actor* a_target, RE::AttackData*)
 	{
 		return a_attacker && a_target && DataHandler::GetSCARDataClip(a_attacker) ? true : a_originResult;
 	}
