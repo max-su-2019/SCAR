@@ -13,7 +13,7 @@ namespace SCAR
 	{
 		if (msg->type == SKSE::MessagingInterface::kPostLoad) {
 			// For First Attack
-			AttackDistancHook::Install();
+			AttackDistanceHook::Install();
 			AttackAngleHook::InstallHook();
 			AttackActionHook::InstallHook();
 
@@ -35,6 +35,10 @@ namespace SCAR
 
 			if (dataHandler->settings->enableDebugOverlay.get_data()) {
 				//DebugOverlayMenu
+				if (REL::Module::IsVR()) {
+					WARN("DebugOverlay not supported in VR; ignoring setting");
+					return;
+				}
 				DebugOverlayMenu::Register();
 				MainUpdateHook::Hook();
 				DEBUG("Enable Debug Overlay!");
