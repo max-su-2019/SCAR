@@ -103,7 +103,7 @@ namespace SCAR
 				return false;
 			}
 
-			auto result = a_attacker->GetActorRuntimeData().currentProcess->PlayIdle(a_attacker, GetActionObject(), IdleAnimation, true, true, a_target);
+			auto result = a_attacker->GetActorRuntimeData().currentProcess->SetupSpecialIdle(a_attacker, GetActionObject(), IdleAnimation, true, true, a_target);
 			if (result) {
 				DEBUG("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 					IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);

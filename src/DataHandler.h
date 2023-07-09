@@ -38,8 +38,11 @@ namespace SCAR
 		std::unique_ptr<Settings> settings;
 		IVPrecision1* precisionPtr = nullptr;
 
-		static const RE::hkbClipGenerator* GetSCARDataClip(RE::Actor* a_actor);
+		static RE::hkbClipGenerator* GetSCARDataClip(RE::Actor* a_actor);
 		static std::vector<SCARActionData> GetSCARActionData(const RE::hkbClipGenerator* a_clip);
+		static std::int32_t GetSCARAttackVariants(const std::string a_varFileName);
+		static bool HasSCARActionData(const RE::hkbClipGenerator* a_clip);
+		static bool IsSCARVariantClip(const RE::hkbClipGenerator* a_clip);
 
 	private:
 		DataHandler();

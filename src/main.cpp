@@ -31,7 +31,6 @@ DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 
 	DKUtil::Logger::Init(Plugin::NAME, REL::Module::get().version().string());
 
-	REL::Module::reset();
 	SKSE::Init(a_skse);
 
 	INFO("{} v{} loaded", Plugin::NAME, Plugin::Version);
