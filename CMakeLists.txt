@@ -13,7 +13,7 @@ include(GNUInstallDirs)
 # info
 project(
 	SCAR
-	VERSION 1.1.0
+	VERSION 1.1.1
 	LANGUAGES CXX
 )
 
@@ -163,7 +163,7 @@ add_custom_command(
 	${PROJECT_NAME}
 	POST_BUILD
 	COMMAND
-	powershell -NoProfile -ExecutionPolicy Bypass -File " ${CMAKE_CURRENT_SOURCE_DIR}/!Update.ps1" "COPY" "${PROJECT_VERSION}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(ConfigurationName)" "${PROJECT_NAME}" "${ANNIVERSARY_EDITION} "
+	powershell -NoProfile -ExecutionPolicy Bypass -File " ${CMAKE_CURRENT_SOURCE_DIR}/!Update.ps1" "COPY" "${PROJECT_VERSION}" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(ConfigurationName)" "${PROJECT_NAME}" "${ANNIVERSARY_EDITION}"
 	COMMENT
 	" Updating project :))"
 )

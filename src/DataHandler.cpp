@@ -116,30 +116,4 @@ namespace SCAR
 		return nullptr;
 	}
 
-	bool DataHandler::IsSCARVariantClip(const RE::hkbClipGenerator* a_clip)
-	{
-		auto binding = a_clip ? a_clip->binding : nullptr;
-		auto animation = binding ? binding->animation : nullptr;
-		if (!animation || animation->annotationTracks.empty())
-			return false;
-
-		for (auto anno : animation->annotationTracks[0].annotations) {
-			if (_strcmpi("SCAR_VariantClip", anno.text.c_str()) == 0)
-				return true;
-		}
-
-		return false;
-	}
-
-	std::int32_t DataHandler::GetSCARAttackVariants(const std::string a_varFileName)
-	{
-		constexpr std::string_view suffix = "_var$";
-		std::string fileName = a_varFileName.substr(0, a_varFileName.find_last_of('.'));
-		auto suffixPos = fileName.find_last_of(suffix);
-		if (suffixPos != std::string::npos) {
-			return std::stoi(fileName.substr(suffixPos + 1));
-		}
-
-		return -1;
-	}
 }
