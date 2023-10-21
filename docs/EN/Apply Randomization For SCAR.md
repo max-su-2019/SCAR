@@ -6,7 +6,7 @@ Please read about the [basic tutorial](/How%20To%20Patch%20Moveset%20For%20SCAR.
 ## Issue Descriptions
 
 When designing moveset for some special NPCs, such as boss enemy, you may meet the requirements to allow them perform two or more different set of combos attack animations randomly.  
-However, due to the ways how **Dynamic Animation Replacer** handle animations randomization, you cannot do that properly without mess up the SCAR AI data, since the SCAR AI data of the next combos attack animation is stored inside the previous one. But now, with the new **Animation variants** feature from **Open Animation Replacer** and the API it provied, following with the new update of SCAR plugin, we finally get the workaround to implement it correctly.
+However, due to the ways how **Dynamic Animation Replacer** handle animations randomization, you cannot do that properly without mess up the SCAR AI data, since the SCAR AI data of the next combos attack animation is stored inside the previous one. But now, with the new **Animation variants** feature from **Open Animation Replacer** and the API it provided, following with the new update of SCAR plugin, we finally get the workaround to implement it correctly.
 
 ## Requirements
 
