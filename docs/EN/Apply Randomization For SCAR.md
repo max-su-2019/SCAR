@@ -138,3 +138,90 @@ For the same reason, we should assign this condtion function for "SCARAttackVari
   }
 }
 ```
+
+So above is the complete workflow of creating the practical example moveset. And if you wanna to add one more moveset into the merged "Random Bandit Sword Moveset", let's assume this new added moveset is called "Bandit Sword Moveset 2" with files below:
+
+```
+└─Bandit Sword Moveset 2
+    mco_attack1.hkx
+    mco_attack2.hkx
+    mco_attack3.hkx
+    mco_powerattack1.hkx
+    mco_powerattack2.HKX
+    mco_powerattack3.hkx
+    mco_powerattack4.hkx
+    mco_powerattack5.hkx
+    mco_powerattack6.hkx
+    SCAR_1hmReadyDummy.hkx
+    SCAR_BlockIdleDummy.hkx
+```
+
+To merge this moveset into "Random Bandit Sword Moveset", firstly you should copy dummy animation files "SCAR_1hmReadyDummy.hkx" and "SCAR_BlockIdleDummy.hkx" into the "SCARDummyClips" folder, and rename them with the suffix `_scarVar$2`, such as "SCAR_1hm_scarVar\$2.hkx" and "SCAR_Block_scarVar\$2.hkx".
+
+Then simply create a sub mod folder named "SCARAttackVariants2", and copy all of those MCO attack animations inside the folder.
+
+After that, assigin this OAR conditon for "SCARAttackVariants2" sub mod:
+
+```json
+{
+  "condition": "CompareValues",
+  "requiredVersion": "1.0.0.0",
+  "Value A": {
+    "graphVariable": "SCAR_AttackVariants",
+    "graphVariableType": "Int"
+  },
+  "Comparison": "==",
+  "Value B": {
+    "value": 2.0
+  }
+}
+```
+
+That 's all! Now the "Bandit Sword Moveset 2" above should now able to merge in to random SCAR moveset and can be pick up to pefrom during attack. The file struct of the "Random Bandit Sword Moveset" after merged should be as below:
+
+```
+Random Bandit Sword Moveset
+│  config.json
+│
+├─SCARAttackVariants0
+│      config.json
+│      mco_attack1.hkx
+│      mco_attack2.HKX
+│      mco_attack3.HKX
+│      mco_powerattack1.hkx
+│      mco_powerattack2.HKX
+│      mco_powerattack3.hkx
+│      mco_powerattack4.HKX
+│
+├─SCARAttackVariants1
+│      config.json
+│      mco_attack1.hkx
+│      mco_attack2.hkx
+│      mco_attack3.hkx
+│      mco_powerattack1.hkx
+│
+├─SCARAttackVariants2
+│      config.json
+│      mco_attack1.hkx
+│      mco_attack2.hkx
+│      mco_attack3.hkx
+│      mco_powerattack1.hkx
+│      mco_powerattack2.HKX
+│      mco_powerattack3.hkx
+│      mco_powerattack4.hkx
+│      mco_powerattack5.hkx
+│      mco_powerattack6.hkx
+│
+└─SCARDummyClips
+    │  config.json
+    │
+    ├─_variants_SCAR_1hmReadyDummy
+    │      SCAR_1hm_scarVar$0.hkx
+    │      SCAR_1hm_scarVar$1.hkx
+    │      SCAR_1hm_scarVar$2.hkx
+    │
+    └─_variants_SCAR_BlockIdleDummy
+            SCAR_Block_scarVar$0.hkx
+            SCAR_Block_scarVar$1.hkx
+            SCAR_Block_scarVar$2.hkx
+```
