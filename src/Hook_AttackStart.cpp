@@ -4,43 +4,41 @@
 
 namespace SCAR
 {
-	bool AttackDistanceHook::RecheckAttackDistance(bool a_originResult, RE::Actor* a_attacker, RE::Actor* a_target, RE::AttackData*)
-	{
-		return a_attacker && a_target && DataHandler::GetSCARDataClip(a_attacker) ? true : a_originResult;
-	}
 
-	bool AttackAngleHook::GetAttackAngle(RE::Actor* a_attacker, RE::Actor* a_target, const RE::NiPoint3& a3, const RE::NiPoint3& a4, RE::BGSAttackData* a_attackData, float a6, void* a7, bool a8)
+	static inline bool PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_targ, RE::hkbClipGenerator* a_clip)
 	{
-		return a_attacker && a_target && DataHandler::GetSCARDataClip(a_attacker) ? true : _GetAttackAngle(a_attacker, a_target, a3, a4, a_attackData, a6, a7, a8);
-	}
-
-	bool AttackActionHook::PerformAttackAction(RE::TESActionData* a_actionData)
-	{
-		auto attacker = a_actionData && a_actionData->source ? a_actionData->source->As<RE::Actor>() : nullptr;
-		auto targ = attacker ? attacker->GetActorRuntimeData().currentCombatTarget.get() : nullptr;
-		auto scarClip = attacker ? DataHandler::GetSCARDataClip(attacker) : nullptr;
-		if (scarClip) {
-			if (targ && attacker->GetActorRuntimeData().currentProcess && !attacker->IsPlayerRef() && attacker->RequestLOS(targ.get()) && AttackRangeCheck::CheckPathing(attacker, targ.get())) {
-				DEBUG("Find SCAR Action Data in clip \"{}\" of \"{}\"", scarClip->animationName.c_str(), attacker->GetName());
-				bool IsAttacking = attacker->IsAttacking();
-				auto attackState = attacker->GetAttackState();
-				auto attackData = attacker->GetActorRuntimeData().currentProcess->high->attackData;
+		if (a_clip) {
+			if (a_targ && a_attacker->GetActorRuntimeData().currentProcess && !a_attacker->IsPlayerRef() && a_attacker->RequestLOS(a_targ) && AttackRangeCheck::CheckPathing(a_attacker, a_targ)) {
+				DEBUG("Find SCAR Action Data in clip \"{}\" of \"{}\"", a_clip->animationName.c_str(), a_attacker->GetName());
+				bool IsAttacking = a_attacker->IsAttacking();
+				auto attackState = a_attacker->GetAttackState();
+				auto attackData = a_attacker->GetActorRuntimeData().currentProcess->high->attackData;
 				if (attackData) {
 					attackData->data;
 				}
 
-				auto dataArr = DataHandler::GetSCARActionData(scarClip);
+				auto dataArr = DataHandler::GetSCARActionData(a_clip);
 				std::sort(dataArr.begin(), dataArr.end(), SCARActionData::SortByWeight);
 				for (auto data : dataArr) {
-					if (data.PerformSCARAction(attacker, targ.get()))
+					if (data.PerformSCARAction(a_attacker, a_targ))
 						return true;
 				}
 			}
-
-			return false;
 		}
 
-		return _PerformAttackAction(a_actionData);
+		return false;
+	}
+
+	bool AIAttackStartHook::StartAttack(RE::CombatBehaviorContextMelee* a_context)
+	{
+		RE::Actor* attacker = RE::CombatBehaviorTreeUtils::CombatBehaviorAttacker();
+		RE::Actor* target = RE::CombatBehaviorTreeUtils::CombatBehaviorTarget();
+		auto scarClip = attacker ? DataHandler::GetSCARDataClip(attacker) : nullptr;
+		if (scarClip && target) {
+			return PerformSCARAction(attacker, target, scarClip);
+		}
+
+		return _StartAttack(a_context);
 	}
 
 }

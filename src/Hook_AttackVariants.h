@@ -9,7 +9,7 @@ namespace SCAR
 		{
 			REL::Relocation<std::uintptr_t> Vtbl{ REL::ID(278766) };  //1.5.97 171D7A8
 			func = Vtbl.write_vfunc(0x4, &Hook_Activate);
-			INFO("Hook AnimClipActivate!");
+			INFO("{} Done!", __FUNCTION__);
 		}
 
 	private:

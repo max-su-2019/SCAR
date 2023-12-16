@@ -2,10 +2,10 @@
 #include "DataHandler.h"
 #include "DebugAPI/DebugAPI.h"
 #include "Hook_AttackCombo.h"
-//#include "Hook_AttackReset.h"
 #include "Hook_AttackStart.h"
 #include "Hook_AttackVariants.h"
 #include "Hook_MainUpdate.h"
+#include "DKUtil/Hook.hpp"
 
 namespace SCAR
 {
@@ -13,9 +13,7 @@ namespace SCAR
 	{
 		if (msg->type == SKSE::MessagingInterface::kPostLoad) {
 			// For First Attack
-			AttackDistanceHook::Install();
-			AttackAngleHook::InstallHook();
-			AttackActionHook::InstallHook();
+			AIAttackStartHook::InstallHook();
 
 			// For Combos Attack
 			AnimEventHook::InstallHook();
