@@ -4,6 +4,16 @@
 
 namespace SCAR
 {
+	float GetGameSettingFloat(const std::string a_name, const float a_default)
+	{
+		auto setting = RE::GameSettingCollection::GetSingleton()->GetSetting(a_name.c_str());
+		if (setting) {
+			return setting->GetFloat();
+		}
+
+		return a_default;
+	}
+
 	bool AttackRangeCheck::CheckPathing(RE::Actor* a_attacker, RE::Actor* a_target)
 	{
 		if (!a_attacker || !a_target || !a_attacker->Get3D() || !a_target->Get3D() || !a_target->GetActorRuntimeData().currentProcess || !a_attacker->GetActorRuntimeData().currentProcess)

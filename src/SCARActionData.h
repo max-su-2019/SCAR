@@ -14,6 +14,8 @@ namespace SCAR
 
 		std::string IdleAnimationEditorID = "";
 
+		std::string attackDataName = "";
+
 		float minDistance = 0.f;
 
 		float maxDistance = 150.f;
@@ -32,7 +34,7 @@ namespace SCAR
 		friend void from_json(const json& j, SCARActionData& a_data);
 		friend class DataHandler;
 
-		bool PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target);
+		bool PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target, RE::CombatBehaviorContextMelee* a_context);
 
 		static bool SortByWeight(SCARActionData a_data1, SCARActionData a_data2);
 

@@ -6,7 +6,12 @@ namespace SCAR
 {
 	void from_json(const json& j, SCARActionData& a_data)
 	{
-		j.at("IdleAnimation").get_to(a_data.IdleAnimationEditorID);
+		if (j.find("AttackData") != j.end()) {
+			j.at("AttackData").get_to(a_data.attackDataName);
+		} else {
+			j.at("IdleAnimation").get_to(a_data.IdleAnimationEditorID);
+			j.at("Type").get_to(a_data.actionType);
+		}
 
 		j.at("MinDistance").get_to(a_data.minDistance);
 		a_data.minDistance = std::max(a_data.minDistance, 0.f);
@@ -22,8 +27,6 @@ namespace SCAR
 
 		j.at("Chance").get_to(a_data.chance);
 		a_data.chance = std::clamp(a_data.chance, -180.f, 180.f);
-
-		j.at("Type").get_to(a_data.actionType);
 
 		if (j.find("WeaponLength") != j.end())
 			a_data.weaponLength.emplace(std::max(j.at("WeaponLength").get<float>(), 0.f));
@@ -90,29 +93,73 @@ namespace SCAR
 		return itr != actionMap.end() ? itr->second : DefaultObject::kActionRightAttack;
 	}
 
-	bool SCARActionData::PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target)
+	bool SCARActionData::PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target, RE::CombatBehaviorContextMelee* a_context)
 	{
 		if (!a_attacker || !a_target || !a_attacker->GetActorRuntimeData().currentProcess)
 			return false;
 
-		const float weaponReach = GetWeaponReach(a_attacker);
-		if (chance >= Random::get<float>(0.f, 100.f) && AttackRangeCheck::WithinAttackRange(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle())) {
-			auto IdleAnimation = RE::TESForm::LookupByEditorID<RE::TESIdleForm>(IdleAnimationEditorID);
-			if (!IdleAnimation) {
-				ERROR("Not Vaild Idle Animation Form Get: \"{}\"!", IdleAnimationEditorID);
-				return false;
+		static auto GetCombatData = [a_context](const std::string a_dataName) -> RE::CombatBehaviorContextMelee::CombatAttackData* {
+			for (auto& combatData : a_context->combatattackdatas) {
+				if (combatData.attackdata && _strcmpi(combatData.attackdata->event.c_str(), a_dataName.c_str()) == 0) {
+					return &combatData;
+				}
 			}
 
-			auto result = a_attacker->GetActorRuntimeData().currentProcess->SetupSpecialIdle(a_attacker, GetActionObject(), IdleAnimation, true, true, a_target);
-			if (result) {
-				DEBUG("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
-					IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
-				AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle());
-			} else
-				DEBUG("Play Idle Fail! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
-					IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
+			return nullptr;
+		};
 
-			return result;
+		const float weaponReach = weaponLength.has_value() ? weaponLength.value() * a_attacker->GetScale() : a_context->reach;
+		if (chance >= Random::get<float>(0.f, 100.f) && AttackRangeCheck::WithinAttackRange(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle())) {
+			if (!IdleAnimationEditorID.empty()) {
+				auto IdleAnimation = RE::TESForm::LookupByEditorID<RE::TESIdleForm>(IdleAnimationEditorID);
+				if (!IdleAnimation) {
+					ERROR("Not Vaild Idle Animation Form Get: \"{}\"!", IdleAnimationEditorID);
+					return false;
+				}
+
+				auto result = a_attacker->GetActorRuntimeData().currentProcess->SetupSpecialIdle(a_attacker, GetActionObject(), IdleAnimation, true, true, a_target);
+				if (result) {
+					DEBUG("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
+						IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
+					AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle());
+				} else
+					DEBUG("Play Idle Fail! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
+						IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
+
+				return result;
+			} else if (!attackDataName.empty()) {
+				auto combatData = GetCombatData(attackDataName);
+				if (!combatData) {
+					ERROR("Not Vaild Attack Data Get: \"{}\"!", attackDataName);
+					return false;
+				}
+
+				if (RE::AITimer::QTimer() - combatData->cooldown_timer.aiTimer <= combatData->cooldown_timer.timer) {
+					return false;
+				}
+
+				RE::CombatAnimation* combatAnim = RE::CombatAnimation::Create(a_attacker, RE::CombatAnimation::ANIM::kActionRightAttack);
+				auto attackData = combatData->attackdata;
+				if (!combatAnim || !attackData) {
+					return false;
+				}
+
+				combatAnim->animEvent = attackData->event;
+				auto result = (combatAnim->Execute());
+				if (result) {
+					combatData->cooldown_timer.aiTimer = RE::AITimer::QTimer();
+					combatData->cooldown_timer.timer = attackData->data.recoveryTime;
+
+					DEBUG("Perform SCAR Attack! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
+						attackDataName, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
+					AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle());
+				} else {
+					DEBUG("Fail to do SCAR Attack! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
+						attackDataName, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
+				}
+
+				return result;
+			}
 		}
 
 		return false;

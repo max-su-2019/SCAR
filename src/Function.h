@@ -2,6 +2,8 @@
 
 namespace SCAR
 {
+	float GetGameSettingFloat(const std::string a_name, const float a_default);
+
 	class AttackRangeCheck
 	{
 	public:
