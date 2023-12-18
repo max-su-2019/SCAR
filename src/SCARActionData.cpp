@@ -130,7 +130,6 @@ namespace SCAR
 			} else if (!attackDataName.empty()) {
 				auto combatData = GetCombatData(attackDataName);
 				if (!combatData) {
-					ERROR("Not Vaild Attack Data Get: \"{}\"!", attackDataName);
 					return false;
 				}
 
@@ -157,6 +156,10 @@ namespace SCAR
 					DEBUG("Fail to do SCAR Attack! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 						attackDataName, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
 				}
+
+				combatAnim->~CombatAnimation();
+				RE::free(combatAnim);
+				combatAnim = nullptr;
 
 				return result;
 			}
