@@ -30,6 +30,9 @@ namespace SCAR
 
 		if (j.find("WeaponLength") != j.end())
 			a_data.weaponLength.emplace(std::max(j.at("WeaponLength").get<float>(), 0.f));
+
+		if (j.find("CoolDownTime") != j.end())
+			a_data.coolDownTime.emplace(std::max(j.at("CoolDownTime").get<float>(), 0.f));
 	}
 
 	const bool SCARActionData::IsLeftAttack() const
@@ -147,7 +150,7 @@ namespace SCAR
 				auto result = (combatAnim->Execute());
 				if (result) {
 					combatData->cooldown_timer.aiTimer = RE::AITimer::QTimer();
-					combatData->cooldown_timer.timer = attackData->data.recoveryTime;
+					combatData->cooldown_timer.timer = coolDownTime.has_value() ? coolDownTime.value() : attackData->data.recoveryTime;
 
 					DEBUG("Perform SCAR Attack! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 						attackDataName, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);

@@ -30,6 +30,8 @@ namespace SCAR
 
 		std::optional<float> weaponLength;
 
+		std::optional<float> coolDownTime;
+
 	public:
 		friend void from_json(const json& j, SCARActionData& a_data);
 		friend class DataHandler;
