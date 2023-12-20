@@ -1,11 +1,10 @@
 #include "LoadGame.h"
+#include "DKUtil/Hook.hpp"
 #include "DataHandler.h"
 #include "DebugAPI/DebugAPI.h"
 #include "Hook_AttackCombo.h"
 #include "Hook_AttackStart.h"
-#include "Hook_AttackVariants.h"
 #include "Hook_MainUpdate.h"
-#include "DKUtil/Hook.hpp"
 
 namespace SCAR
 {
@@ -17,9 +16,6 @@ namespace SCAR
 
 			// For Combos Attack
 			AnimEventHook::InstallHook();
-
-			//For OAR Attack Variants
-			AnimClipActivateHook::InstallHook();
 
 			auto dataHandler = SCAR::DataHandler::GetSingleton();
 			if (dataHandler->precisionPtr) {

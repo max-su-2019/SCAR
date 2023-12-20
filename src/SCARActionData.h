@@ -28,6 +28,8 @@ namespace SCAR
 
 		std::string actionType = "RA";
 
+		std::int32_t variantID = 0;
+
 		std::optional<float> weaponLength;
 
 		std::optional<float> coolDownTime;

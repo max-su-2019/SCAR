@@ -33,6 +33,9 @@ namespace SCAR
 
 		if (j.find("CoolDownTime") != j.end())
 			a_data.coolDownTime.emplace(std::max(j.at("CoolDownTime").get<float>(), 0.f));
+
+		if (j.find("VariantID") != j.end())
+			a_data.variantID = std::max(j.at("VariantID").get<std::int32_t>(), 0);
 	}
 
 	const bool SCARActionData::IsLeftAttack() const
@@ -120,6 +123,7 @@ namespace SCAR
 					return false;
 				}
 
+				a_attacker->SetGraphVariableInt("SCAR_AttackVariants", variantID);
 				auto result = a_attacker->GetActorRuntimeData().currentProcess->SetupSpecialIdle(a_attacker, GetActionObject(), IdleAnimation, true, true, a_target);
 				if (result) {
 					DEBUG("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
@@ -146,6 +150,7 @@ namespace SCAR
 					return false;
 				}
 
+				a_attacker->SetGraphVariableInt("SCAR_AttackVariants", variantID);
 				combatAnim->animEvent = attackData->event;
 				auto result = (combatAnim->Execute());
 				if (result) {
