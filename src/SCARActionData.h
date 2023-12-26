@@ -30,6 +30,10 @@ namespace SCAR
 
 		std::int32_t variantID = 0;
 
+		float triggerStartTime = 0.f;
+
+		float triggerEndTime = std::numeric_limits<float>::max();
+
 		std::optional<float> weaponLength;
 
 		std::optional<float> coolDownTime;
@@ -38,7 +42,7 @@ namespace SCAR
 		friend void from_json(const json& j, SCARActionData& a_data);
 		friend class DataHandler;
 
-		bool PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target, RE::CombatBehaviorContextMelee* a_context);
+		bool PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target, RE::CombatBehaviorContextMelee* a_context, RE::hkbClipGenerator* a_clip);
 
 		static bool SortByWeight(SCARActionData a_data1, SCARActionData a_data2);
 

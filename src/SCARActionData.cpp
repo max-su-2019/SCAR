@@ -28,6 +28,12 @@ namespace SCAR
 		j.at("Chance").get_to(a_data.chance);
 		a_data.chance = std::clamp(a_data.chance, -180.f, 180.f);
 
+		if (j.find("TriggerStartTime") != j.end())
+			a_data.triggerStartTime = std::max(j.at("TriggerStartTime").get<float>(), 0.f);
+
+		if (j.find("TriggerEndTime") != j.end())
+			a_data.triggerEndTime = std::max(j.at("TriggerEndTime").get<float>(), a_data.triggerStartTime);
+
 		if (j.find("WeaponLength") != j.end())
 			a_data.weaponLength.emplace(std::max(j.at("WeaponLength").get<float>(), 0.f));
 
@@ -99,10 +105,14 @@ namespace SCAR
 		return itr != actionMap.end() ? itr->second : DefaultObject::kActionRightAttack;
 	}
 
-	bool SCARActionData::PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target, RE::CombatBehaviorContextMelee* a_context)
+	bool SCARActionData::PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target, RE::CombatBehaviorContextMelee* a_context, RE::hkbClipGenerator* a_clip)
 	{
 		if (!a_attacker || !a_target || !a_attacker->GetActorRuntimeData().currentProcess)
 			return false;
+
+		if (a_clip->localTime < triggerStartTime || a_clip->localTime > triggerEndTime) {
+			return false;
+		}
 
 		static auto GetCombatData = [a_context](const std::string a_dataName) -> RE::CombatBehaviorContextMelee::CombatAttackData* {
 			for (auto& combatData : a_context->combatattackdatas) {

@@ -21,7 +21,7 @@ namespace SCAR
 				auto dataArr = DataHandler::GetSCARActionData(a_clip);
 				std::sort(dataArr.begin(), dataArr.end(), SCARActionData::SortByWeight);
 				for (auto data : dataArr) {
-					if (data.PerformSCARAction(a_attacker, a_targ, a_context))
+					if (data.PerformSCARAction(a_attacker, a_targ, a_context, a_clip))
 						return true;
 				}
 			}
