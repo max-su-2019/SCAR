@@ -18,6 +18,7 @@ namespace SCAR
 	DataHandler::DataHandler()
 	{
 		precisionPtr = reinterpret_cast<PRECISION_API::IVPrecision1*>(PRECISION_API::RequestPluginAPI());
+		trueHUD_API = reinterpret_cast<TRUEHUD_API::IVTrueHUD5*>(TRUEHUD_API::RequestPluginAPI(TRUEHUD_API::InterfaceVersion::V5));
 		settings = std::make_unique<Settings>();
 	}
 

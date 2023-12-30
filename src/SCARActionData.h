@@ -48,8 +48,8 @@ namespace SCAR
 
 	private:
 		const DefaultObject GetActionObject() const;
-		_NODISCARD const float GetStartAngle() const { return startAngle / 180.f * std::numbers::pi; };
-		_NODISCARD const float GetEndAngle() const { return endAngle / 180.f * std::numbers::pi; };
+		_NODISCARD const float GetStartRadian() const { return startAngle / 180.f * std::numbers::pi; };
+		_NODISCARD const float GetEndRadian() const { return endAngle / 180.f * std::numbers::pi; };
 
 		_NODISCARD const bool IsLeftAttack() const;
 		_NODISCARD const bool IsBashAttack() const;

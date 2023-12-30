@@ -125,7 +125,7 @@ namespace SCAR
 		};
 
 		const float weaponReach = weaponLength.has_value() ? weaponLength.value() * a_attacker->GetScale() : a_context->reach;
-		if (chance >= Random::get<float>(0.f, 100.f) && AttackRangeCheck::WithinAttackRange(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle())) {
+		if (chance >= Random::get<float>(0.f, 100.f) && AttackRangeCheck::WithinAttackRange(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartRadian(), GetEndRadian())) {
 			if (!IdleAnimationEditorID.empty()) {
 				auto IdleAnimation = RE::TESForm::LookupByEditorID<RE::TESIdleForm>(IdleAnimationEditorID);
 				if (!IdleAnimation) {
@@ -138,7 +138,7 @@ namespace SCAR
 				if (result) {
 					DEBUG("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 						IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
-					AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle());
+					AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartRadian(), GetEndRadian());
 				} else
 					DEBUG("Play Idle Fail! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 						IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
@@ -169,7 +169,7 @@ namespace SCAR
 
 					DEBUG("Perform SCAR Attack! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 						attackDataName, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
-					AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartAngle(), GetEndAngle());
+					AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartRadian(), GetEndRadian());
 				} else {
 					DEBUG("Fail to do SCAR Attack! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 						attackDataName, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);

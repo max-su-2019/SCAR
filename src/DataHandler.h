@@ -2,11 +2,13 @@
 #include "DKUtil/Config.hpp"
 #include "PrecisionAPI/PrecisionAPI.h"
 #include "SCARActionData.h"
+#include "TrueHUD/TrueHUDAPI.h"
 
 namespace SCAR
 {
 	using namespace DKUtil::Alias;
 	using namespace PRECISION_API;
+	using namespace TRUEHUD_API;
 
 	class DataHandler
 	{
@@ -37,8 +39,10 @@ namespace SCAR
 
 		std::unique_ptr<Settings> settings;
 		IVPrecision1* precisionPtr = nullptr;
+		IVTrueHUD5* trueHUD_API = nullptr;
 
-		static RE::hkbClipGenerator* GetSCARDataClip(RE::Actor* a_actor);
+		static RE::hkbClipGenerator*
+			GetSCARDataClip(RE::Actor* a_actor);
 		static std::vector<SCARActionData> GetSCARActionData(const RE::hkbClipGenerator* a_clip);
 		static bool HasSCARActionData(const RE::hkbClipGenerator* a_clip);
 

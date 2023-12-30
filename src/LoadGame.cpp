@@ -1,10 +1,8 @@
 #include "LoadGame.h"
 #include "DKUtil/Hook.hpp"
 #include "DataHandler.h"
-#include "DebugAPI/DebugAPI.h"
 #include "Hook_AttackCombo.h"
 #include "Hook_AttackStart.h"
-#include "Hook_MainUpdate.h"
 
 namespace SCAR
 {
@@ -28,13 +26,17 @@ namespace SCAR
 			}
 
 			if (dataHandler->settings->enableDebugOverlay.get_data()) {
-				//DebugOverlayMenu
+				//DebugOverlay
+				if (!dataHandler->trueHUD_API) {
+					WARN("TrueHUD API Not Found! DebugOverlay Disabled");
+					return;
+				}
+
 				if (REL::Module::IsVR()) {
 					WARN("DebugOverlay not supported in VR; ignoring setting");
 					return;
 				}
-				DebugOverlayMenu::Register();
-				MainUpdateHook::Hook();
+
 				DEBUG("Enable Debug Overlay!");
 			}
 		}

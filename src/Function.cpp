@@ -53,7 +53,7 @@ namespace SCAR
 		return a_attacker->CanNavigateToPosition(a_attacker->GetPosition(), a_target->GetPosition(), 2.0f, a_attacker->GetBoundRadius());
 	}
 
-	bool AttackRangeCheck::WithinAttackRange(RE::Actor* a_attacker, RE::Actor* a_targ, float max_distance, float min_distance, float a_startAngle, float a_endAngle)
+	bool AttackRangeCheck::WithinAttackRange(RE::Actor* a_attacker, RE::Actor* a_targ, float max_distance, float min_distance, float a_startRadian, float a_endRadian)
 	{
 		if (!a_attacker || !a_targ || !a_attacker->Get3D() || !a_targ->Get3D())
 			return false;
@@ -105,45 +105,41 @@ namespace SCAR
 		else if (localAngle > std::numbers::pi)
 			localAngle -= 2 * std::numbers::pi;
 
-		const bool withInAngle = a_startAngle < a_endAngle ? localAngle >= a_startAngle && localAngle <= a_endAngle : !(localAngle >= a_endAngle && localAngle <= a_startAngle);
+		const bool withInAngle = a_startRadian < a_endRadian ? localAngle >= a_startRadian && localAngle <= a_endRadian : !(localAngle >= a_endRadian && localAngle <= a_startRadian);
 
 		return localDistance <= max_distance && localDistance >= min_distance && withInAngle;
 	}
 
-	void AttackRangeCheck::DrawOverlay(RE::Actor* a_attacker, RE::Actor* a_targ, float max_distance, float min_distance, float a_startAngle, float a_endAngle)
+	void AttackRangeCheck::DrawOverlay(RE::Actor* a_attacker, RE::Actor* a_targ, float max_distance, float min_distance, float a_startRadian, float a_endRadian)
 	{
 		auto dataHandler = DataHandler::GetSingleton();
-		if (!dataHandler || !dataHandler->settings || !dataHandler->settings->enableDebugOverlay.get_data() || REL::Module::IsVR())
+		if (!dataHandler || !dataHandler->settings || !dataHandler->settings->enableDebugOverlay.get_data() || REL::Module::IsVR() || !dataHandler->trueHUD_API)
 			return;
 
 		if (!a_attacker || !a_targ || !a_attacker->Get3D() || !a_targ->Get3D())
 			return;
 
-		static constexpr int time = 1000;
-		static constexpr auto redColor = glm::vec4(1.f, 0.f, 0.f, 1.f);
-		static constexpr auto greenColor = glm::vec4(0.f, 1.f, 0.f, 1.f);
-		static constexpr auto yellowColor = glm::vec4(1.f, 1.f, 0.f, 1.f);
+		static constexpr float time = 1.f;
+		static constexpr uint32_t redColor = 0xFF0000FF;
+		static constexpr uint32_t greenColor = 0x00FF00FF;
+		static constexpr uint32_t yellowColor = 0xFFFF00FF;
 
 		auto attackerPos = a_attacker->Get3D()->world.translate;
 		auto targPos = a_targ->Is3rdPersonVisible() ? a_targ->Get3D()->world.translate : a_targ->GetPosition();
 		auto matrix = a_attacker->Get3D()->world.rotate;
-
-		RE::NiPoint3 Rotation;
-		matrix.ToEulerAnglesXYZ(Rotation);
 
 		RE::NiMatrix3 invMatrix = matrix.Transpose();
 
 		auto localVector = invMatrix * (targPos - attackerPos);
 		auto targCenter = attackerPos + matrix * RE::NiPoint3(localVector.x, localVector.y, 0.f);
 
-		DebugOverlayMenu::Load();
-		DebugOverlayMenu::ToggleVisibility(true);
+		dataHandler->trueHUD_API->DrawLine(attackerPos, targCenter, time, yellowColor);
 
-		DebugAPI::DrawLineForMS(Util::NiPointToVec(attackerPos), Util::NiPointToVec(targCenter), time, yellowColor);
-		DebugAPI::DrawArc(attackerPos, max_distance, a_startAngle, a_endAngle, matrix, time, greenColor);
-		DebugAPI::DrawArc(attackerPos, min_distance, a_startAngle, a_endAngle, matrix, time, redColor);
+		dataHandler->trueHUD_API->DrawArc(attackerPos, max_distance, a_startRadian, a_endRadian, matrix, 16, time, greenColor);
+		dataHandler->trueHUD_API->DrawArc(attackerPos, min_distance, a_startRadian, a_endRadian, matrix, 16, time, redColor);
 
-		DebugAPI::DrawCircle(Util::NiPointToVec(targCenter), a_targ->GetBoundRadius(), Util::NiPointToVec(Rotation), time, yellowColor);
+		auto axis_x = RE::NiPoint3(matrix.entry[0][0], matrix.entry[0][1], matrix.entry[0][2]), axis_y = RE::NiPoint3(matrix.entry[1][0], matrix.entry[1][1], matrix.entry[1][2]);
+		dataHandler->trueHUD_API->DrawCircle(targCenter, axis_x, axis_y, a_targ->GetBoundRadius(), 26, time, yellowColor);
 	}
 
 }
