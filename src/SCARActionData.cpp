@@ -2,6 +2,8 @@
 #include "DataHandler.h"
 #include "Function.h"
 
+#undef GetObject
+
 namespace SCAR
 {
 	void from_json(const json& j, SCARActionData& a_data)
@@ -105,6 +107,36 @@ namespace SCAR
 		return itr != actionMap.end() ? itr->second : DefaultObject::kActionRightAttack;
 	}
 
+	bool SCARActionData::PerformSpecialIdle(RE::Actor* a_attacker, RE::Actor* a_target, RE::BGSAction* a_action, RE::TESIdleForm* a_Idle)
+	{
+		if (!a_attacker || !a_target || !a_attacker->GetActorRuntimeData().currentProcess)
+			return false;
+
+		if (!a_Idle->CheckConditions(a_attacker, a_target, false)) {
+			return false;
+		}
+
+		auto actionData = RE::TESActionData::Create();
+		if (!actionData) {
+			return false;
+		}
+
+		actionData->source.reset(a_attacker);
+		actionData->target.reset(a_target);
+		actionData->animObjIdle = a_Idle;
+		actionData->animEvent = a_Idle->animEventName;
+		actionData->action = a_action;
+
+		a_attacker->SetGraphVariableInt("SCAR_AttackVariants", variantID);
+		auto result = actionData->Process();
+
+		actionData->~TESActionData();
+		RE::free(actionData);
+		actionData = nullptr;
+
+		return result;
+	}
+
 	bool SCARActionData::PerformSCARAction(RE::Actor* a_attacker, RE::Actor* a_target, RE::CombatBehaviorContextMelee* a_context, RE::hkbClipGenerator* a_clip)
 	{
 		if (!a_attacker || !a_target || !a_attacker->GetActorRuntimeData().currentProcess)
@@ -133,8 +165,19 @@ namespace SCAR
 					return false;
 				}
 
-				a_attacker->SetGraphVariableInt("SCAR_AttackVariants", variantID);
-				auto result = a_attacker->GetActorRuntimeData().currentProcess->SetupSpecialIdle(a_attacker, GetActionObject(), IdleAnimation, true, true, a_target);
+				auto defaultObjMgr = RE::BGSDefaultObjectManager::GetSingleton();
+				if (!defaultObjMgr)
+					return false;
+
+				auto actionObj = GetActionObject();
+				auto actionForm = defaultObjMgr->GetObject(actionObj);
+				auto action = actionForm ? actionForm->As<RE::BGSAction>() : nullptr;
+				if (!action) {
+					ERROR("Not Vaild Action Type Get: \"{}\"!", actionType);
+					return false;
+				}
+
+				auto result = PerformSpecialIdle(a_attacker, a_target, action, IdleAnimation);
 				if (result) {
 					DEBUG("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 						IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
