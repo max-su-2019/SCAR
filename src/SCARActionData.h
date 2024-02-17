@@ -38,6 +38,8 @@ namespace SCAR
 
 		std::optional<float> coolDownTime;
 
+		std::optional<std::string> coolDownAlias;
+
 	public:
 		friend void from_json(const json& j, SCARActionData& a_data);
 		friend class DataHandler;
@@ -56,6 +58,9 @@ namespace SCAR
 		_NODISCARD const bool IsLeftAttack() const;
 		_NODISCARD const bool IsBashAttack() const;
 		_NODISCARD float GetWeaponReach(RE::Actor* a_attacker) const;
+
+		_NODISCARD const bool IsInAttackCoolDown(RE::CombatBehaviorContextMelee::CombatAttackData* a_coolDownData) const;
+		void UpdateAttackCoolDown(RE::CombatBehaviorContextMelee::CombatAttackData* a_coolDownData);
 	};
 
 	void from_json(const json& j, SCARActionData& a_data);

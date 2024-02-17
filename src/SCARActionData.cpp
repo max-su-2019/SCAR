@@ -42,6 +42,9 @@ namespace SCAR
 		if (j.find("CoolDownTime") != j.end())
 			a_data.coolDownTime.emplace(std::max(j.at("CoolDownTime").get<float>(), 0.f));
 
+		if (j.find("CoolDownAlias") != j.end())
+			a_data.coolDownAlias.emplace(j.at("CoolDownAlias").get<std::string>());
+
 		if (j.find("VariantID") != j.end())
 			a_data.variantID = std::max(j.at("VariantID").get<std::int32_t>(), 0);
 	}
@@ -87,6 +90,23 @@ namespace SCAR
 		}
 
 		return 0.f;
+	}
+
+	const bool SCARActionData::IsInAttackCoolDown(RE::CombatBehaviorContextMelee::CombatAttackData* a_coolDownData) const
+	{
+		if (a_coolDownData && RE::AITimer::QTimer() - a_coolDownData->cooldown_timer.aiTimer <= a_coolDownData->cooldown_timer.timer) {
+			return true;
+		}
+
+		return false;
+	}
+
+	void SCARActionData::UpdateAttackCoolDown(RE::CombatBehaviorContextMelee::CombatAttackData* a_coolDownData)
+	{
+		if (a_coolDownData && a_coolDownData->attackdata) {
+			a_coolDownData->cooldown_timer.aiTimer = RE::AITimer::QTimer();
+			a_coolDownData->cooldown_timer.timer = coolDownTime.has_value() ? coolDownTime.value() : a_coolDownData->attackdata->data.recoveryTime;
+		}
 	}
 
 	const DefaultObject SCARActionData::GetActionObject() const
@@ -142,6 +162,10 @@ namespace SCAR
 		if (!a_attacker || !a_target || !a_attacker->GetActorRuntimeData().currentProcess)
 			return false;
 
+		if (!a_context || !a_context->combatattackdatas.size()) {
+			return false;
+		}
+
 		if (a_clip->localTime < triggerStartTime || a_clip->localTime > triggerEndTime) {
 			return false;
 		}
@@ -177,8 +201,15 @@ namespace SCAR
 					return false;
 				}
 
+				auto coolDownData = coolDownAlias.has_value() ? GetCombatData(coolDownAlias.value()) : nullptr;
+				if (IsInAttackCoolDown(coolDownData)) {
+					return false;
+				}
+
 				auto result = PerformSpecialIdle(a_attacker, a_target, action, IdleAnimation);
 				if (result) {
+					UpdateAttackCoolDown(coolDownData);
+
 					DEBUG("Perform SCAR Action! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 						IdleAnimationEditorID, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
 					AttackRangeCheck::DrawOverlay(a_attacker, a_target, maxDistance + weaponReach, minDistance, GetStartRadian(), GetEndRadian());
@@ -193,7 +224,8 @@ namespace SCAR
 					return false;
 				}
 
-				if (RE::AITimer::QTimer() - combatData->cooldown_timer.aiTimer <= combatData->cooldown_timer.timer) {
+				auto coolDownData = coolDownAlias.has_value() ? GetCombatData(coolDownAlias.value()) : combatData;
+				if (IsInAttackCoolDown(coolDownData)) {
 					return false;
 				}
 
@@ -207,8 +239,7 @@ namespace SCAR
 				combatAnim->animEvent = attackData->event;
 				auto result = (combatAnim->Execute());
 				if (result) {
-					combatData->cooldown_timer.aiTimer = RE::AITimer::QTimer();
-					combatData->cooldown_timer.timer = coolDownTime.has_value() ? coolDownTime.value() : attackData->data.recoveryTime;
+					UpdateAttackCoolDown(coolDownData);
 
 					DEBUG("Perform SCAR Attack! Name : {}, Distance: {}-{}, Angle: {}-{}, Chance: {}, Type: {}, Weight {}",
 						attackDataName, minDistance, maxDistance, startAngle, endAngle, chance, actionType, weight);
