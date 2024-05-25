@@ -40,6 +40,8 @@ namespace SCAR
 
 		std::optional<std::string> coolDownAlias;
 
+		std::optional<std::string> conditionsAlias;
+
 	public:
 		friend void from_json(const json& j, SCARActionData& a_data);
 		friend class DataHandler;

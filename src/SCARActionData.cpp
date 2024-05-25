@@ -45,6 +45,9 @@ namespace SCAR
 		if (j.find("CoolDownAlias") != j.end())
 			a_data.coolDownAlias.emplace(j.at("CoolDownAlias").get<std::string>());
 
+		if (j.find("ConditionsAlias") != j.end())
+			a_data.conditionsAlias.emplace(j.at("ConditionsAlias").get<std::string>());
+
 		if (j.find("VariantID") != j.end())
 			a_data.variantID = std::max(j.at("VariantID").get<std::int32_t>(), 0);
 	}
@@ -170,7 +173,7 @@ namespace SCAR
 			return false;
 		}
 
-		static auto GetCombatData = [a_context](const std::string a_dataName) -> RE::CombatBehaviorContextMelee::CombatAttackData* {
+		static auto GetCombatData = [](RE::CombatBehaviorContextMelee* a_context, const std::string a_dataName) -> RE::CombatBehaviorContextMelee::CombatAttackData* {
 			for (auto& combatData : a_context->combatattackdatas) {
 				if (combatData.attackdata && _strcmpi(combatData.attackdata->event.c_str(), a_dataName.c_str()) == 0) {
 					return &combatData;
@@ -201,7 +204,7 @@ namespace SCAR
 					return false;
 				}
 
-				auto coolDownData = coolDownAlias.has_value() ? GetCombatData(coolDownAlias.value()) : nullptr;
+				auto coolDownData = coolDownAlias.has_value() ? GetCombatData(a_context, coolDownAlias.value()) : nullptr;
 				if (IsInAttackCoolDown(coolDownData)) {
 					return false;
 				}
@@ -219,12 +222,12 @@ namespace SCAR
 
 				return result;
 			} else if (!attackDataName.empty()) {
-				auto combatData = GetCombatData(attackDataName);
+				auto combatData = GetCombatData(a_context, attackDataName);
 				if (!combatData) {
 					return false;
 				}
 
-				auto coolDownData = coolDownAlias.has_value() ? GetCombatData(coolDownAlias.value()) : combatData;
+				auto coolDownData = coolDownAlias.has_value() ? GetCombatData(a_context, coolDownAlias.value()) : combatData;
 				if (IsInAttackCoolDown(coolDownData)) {
 					return false;
 				}
@@ -233,6 +236,13 @@ namespace SCAR
 				auto attackData = combatData->attackdata;
 				if (!combatAnim || !attackData) {
 					return false;
+				}
+
+				if (conditionsAlias.has_value()) {
+					auto IdleAnimation = RE::TESForm::LookupByEditorID<RE::TESIdleForm>(conditionsAlias.value());
+					if (IdleAnimation && !IdleAnimation->CheckConditions(a_attacker, a_target, false)) {
+						return false;
+					}
 				}
 
 				a_attacker->SetGraphVariableInt("SCAR_AttackVariants", variantID);
