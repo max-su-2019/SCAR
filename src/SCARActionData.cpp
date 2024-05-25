@@ -12,8 +12,9 @@ namespace SCAR
 			j.at("AttackData").get_to(a_data.attackDataName);
 		} else {
 			j.at("IdleAnimation").get_to(a_data.IdleAnimationEditorID);
-			j.at("Type").get_to(a_data.actionType);
 		}
+
+		j.at("Type").get_to(a_data.actionType);
 
 		j.at("MinDistance").get_to(a_data.minDistance);
 		a_data.minDistance = std::max(a_data.minDistance, 0.f);
@@ -130,6 +131,24 @@ namespace SCAR
 		return itr != actionMap.end() ? itr->second : DefaultObject::kActionRightAttack;
 	}
 
+	const ATTACK_TYPE SCARActionData::GetAttackType() const
+	{
+		static std::map<const std::string, const ATTACK_TYPE> actionMap = {
+			{ "RA", ATTACK_TYPE::WeaponRight },
+			{ "RPA", ATTACK_TYPE::WeaponRight },
+			{ "LA", ATTACK_TYPE::WeaponLeft },
+			{ "LPA", ATTACK_TYPE::WeaponLeft },
+			{ "DA", ATTACK_TYPE::WeaponRight },
+			{ "DPA", ATTACK_TYPE::WeaponRight },
+			{ "BA", ATTACK_TYPE::Shield },
+			{ "BPA", ATTACK_TYPE::Shield },
+			{ "IDLE", ATTACK_TYPE::WeaponRight }
+		};
+
+		auto itr = actionMap.find(actionType);
+		return itr != actionMap.end() ? itr->second : ATTACK_TYPE::WeaponRight;
+	}
+
 	bool SCARActionData::PerformSpecialIdle(RE::Actor* a_attacker, RE::Actor* a_target, RE::BGSAction* a_action, RE::TESIdleForm* a_Idle)
 	{
 		if (!a_attacker || !a_target || !a_attacker->GetActorRuntimeData().currentProcess)
@@ -173,7 +192,13 @@ namespace SCAR
 			return false;
 		}
 
-		static auto GetCombatData = [](RE::CombatBehaviorContextMelee* a_context, const std::string a_dataName) -> RE::CombatBehaviorContextMelee::CombatAttackData* {
+		auto actionObj = GetActionObject();
+		auto attackType = GetAttackType();
+		if (actionObj != DefaultObject::kActionIdle && attackType != a_context->attack_type) {
+			return false;
+		};
+
+		static auto GetCombatData = [this](RE::CombatBehaviorContextMelee* a_context, const std::string a_dataName) -> RE::CombatBehaviorContextMelee::CombatAttackData* {
 			for (auto& combatData : a_context->combatattackdatas) {
 				if (combatData.attackdata && _strcmpi(combatData.attackdata->event.c_str(), a_dataName.c_str()) == 0) {
 					return &combatData;
@@ -196,7 +221,6 @@ namespace SCAR
 				if (!defaultObjMgr)
 					return false;
 
-				auto actionObj = GetActionObject();
 				auto actionForm = defaultObjMgr->GetObject(actionObj);
 				auto action = actionForm ? actionForm->As<RE::BGSAction>() : nullptr;
 				if (!action) {

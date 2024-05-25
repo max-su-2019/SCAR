@@ -6,6 +6,7 @@ namespace SCAR
 	using json = nlohmann::json;
 
 	using DefaultObject = RE::BGSDefaultObjectManager::DefaultObject;
+	using ATTACK_TYPE = RE::CombatBehaviorContextMelee::ATTACK_TYPE;
 
 	struct SCARActionData
 	{
@@ -52,6 +53,7 @@ namespace SCAR
 
 	private:
 		const DefaultObject GetActionObject() const;
+		const ATTACK_TYPE GetAttackType() const;
 		bool PerformSpecialIdle(RE::Actor* a_attacker, RE::Actor* a_target, RE::BGSAction* a_action, RE::TESIdleForm* a_Idle);
 
 		_NODISCARD const float GetStartRadian() const { return startAngle / 180.f * std::numbers::pi; };
