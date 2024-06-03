@@ -137,7 +137,7 @@ After that, you should create an additional OAR animation folder, and add this c
     }
 }
 ```
-That 's it, should once this action data is picked and performed by SCAR, the "SCAR_AttackVariants" graph variable Int would be set to one, should OAR could pick the attack animation within this additional OAR animation folder.  
+That 's it! Once this action data is picked and performed by SCAR, the "SCAR_AttackVariants" graph variable Int would be set to 1 here, so OAR could pick the attack animation within this additional OAR animation folder.  
 For a more detailed practical example about this feature, check this [awesome animations mod](https://www.nexusmods.com/skyrimspecialedition/mods/120169) from Black.
 
 ---
