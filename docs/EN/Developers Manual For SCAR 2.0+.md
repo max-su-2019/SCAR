@@ -14,7 +14,7 @@ The process could be separated into two stages：
 
 In order to add SCAR AI data- <u>_SCAR Action Data_</u> (refer as "ActionData") for the first attack action of your moveset, You have to patch the <u>_Behavior_</u> first: creating a <u>_DummyAnimation_</u> under the behavior‘s <u>_AttackReadyStateMachine_</u>, then using this DummyAnimation as the container to store the ActionData of the first attack animations (In ADXP, that would be "MCO*attack1.hkx" & "MCO_powerattack1.hkx"), with it SCAR could retrieves the data from SKSE plugin end.
 <br/>  
-Luckily, For the attack behavior of <u>Character</u>, SCAR already created a DummyAnimation named "SCAR_1hmReadyDummy.hkx", so you don't need to patch behavior for character yourself (still need to do that for creature).
+Luckily, For the attack behavior of <u>_Character_</u>, SCAR already created a DummyAnimation named "SCAR_1hmReadyDummy.hkx", so you don't need to patch behavior for character yourself (still need to do that for creature).
 
 The remaining things you need to do is annotate the ActionData of your first attack inside the "SCAR_1hmReadyDummy.hkx", then include this animation file into your moveset's DAR folder.  
 <br/>
@@ -32,7 +32,7 @@ The content of the annotation could divided into three segments, as the picture 
   When there are multiple line of ActionData annotations inside an animation file, weight would be used to decide the priority of the ActionData, SCAR will check the anooations one by one following the descending order of the weight, that mean the ActionData with higher weight would be checking first, and the first ActionData that meet all the conditions would be perform, while the rest would be igronaed.
 
 - `prefix text`: The "SCAR_ActionData" text segment is nothing but a prefix identifier text. It does not contains any valid data, SCAR only use it to find out the one with SCAR Action Data from the many annotations.
-- `json data`: The last segment that enclosed in two curly braces is a standard [json format string](https://www.w3schools.com/js/js_json_syntax.asp), stored the actual data of an SCAR Action Data:
+- `json data`: The last segment that enclosed in two curly braces is a standard [json format string](https://www.w3schools.com/js/js_json_syntax.asp), stored the actual json key data of an SCAR Action Data:
 
   - `IdleAnimation` : The EditorID of the [Idle Animation](https://www.creationkit.com/index.php?title=Idle_Animations) that would be performed by the ActionData when all the conditions are meeting.
     Idle Animation is defined inside an esp/esm/esl plugin, SCAR itself already contains two valid idle animation: "ADXP_NPCPowerAttack" and "ADXP_NPCNormalAttack" in it `scar-adxp-patch.esp`, which could be used to perform powerAttack and normalAttack separately.  
@@ -118,7 +118,27 @@ Here is an anno example:
 ```
 
 #### - Attack Variant
-WIP
+Combining with Open Animation Replacer, SCAR-v2.0 + has introduced a kind of attack animation variant system which allow animator implement more variants of attack animations in their SCAR moveset. To do that you simply added an additional key data called `VariantID` into your Action Data annotation, which could set the value of a graph variable Int "SCAR_AttackVariants" the same as this `VariantID` value you have annotated. The range of the `VariantID` value should be a integer and greater than 0. Let's assuming that `VariantID` value is 1, so the annotation should be sth likes that:
+```
+1.000000 SCAR_ActionData{"AttackData":"attackStart", "MinDistance":0, "MaxDistance":139, "StartAngle":-60, "EndAngle":60, "Chance":100, "Type":"RA", "VariantID":1}
+```
+After that, you should create an additional OAR animation folder, and add this condtion function into the folder 's config file:
+```json
+{
+    "condition": "CompareValues",
+    "requiredVersion": "1.0.0.0",
+    "Value A": {
+        "graphVariable": "SCAR_AttackVariants",
+        "graphVariableType": "Int"
+    },
+    "Comparison": "==",
+    "Value B": {
+        "value": 1.0
+    }
+}
+```
+That 's it, should once this action data is picked and performed by SCAR, the "SCAR_AttackVariants" graph variable Int would be set to one, should OAR could pick the attack animation within this additional OAR animation folder.  
+For a more detailed practical example about this feature, check this [awesome animations mod](https://www.nexusmods.com/skyrimspecialedition/mods/120169) from Black.
 
 ---
 
@@ -158,7 +178,14 @@ Codes Example:
 Indicate that there has 60% chance start the next attack, 40% chance to stop the attack combos.
 
 #### - Trigger Time
-WIP
+SCAR-v2.0+ allow you to assign `TriggerStartTime` & `TriggerEndTime` for an action data, intend to support the case of making transition to different next attack animations when the attack event was fired at different animation time. For an annotations example like this:
+```
+0.833333 SCAR_ComboStart
+1.833333 SCAR_ComboStart
+1.000000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCPowerAttack", "MinDistance":0, "MaxDistance":139, "StartAngle":-60, "EndAngle":60, "Chance":30, "Type":"RPA", "TriggerStartTime":0.8, "TriggerEndTime":1.0}
+0.500000 SCAR_ActionData{"IdleAnimation":"ADXP_NPCNormalAttack", "MinDistance":0, "MaxDistance":48, "StartAngle":-60, "EndAngle":60, "Chance":100, "Type":"RA","TriggerStartTime":1.0}
+```
+The "ADXP_NPCPowerAttack" action data here would only vaild when animation playtime at between 0.8 - 1.0, therefore it could fire by the first `SCAR_ComboStart` which annotated in 0.833333, but would not triggered on the second one that annotated in 1.833333. While the normal attack one would only fire by the second `SCAR_ComboStart` which annotated in 1.833333.
 
 ---
 
