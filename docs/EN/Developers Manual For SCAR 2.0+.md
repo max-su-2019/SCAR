@@ -14,7 +14,7 @@ The process could be separated into two stages：
 
 In order to add SCAR AI data- <u>_SCAR Action Data_</u> (refer as "ActionData") for the first attack action of your moveset, You have to patch the <u>_Behavior_</u> first: creating a <u>_DummyAnimation_</u> under the behavior‘s <u>_AttackReadyStateMachine_</u>, then using this DummyAnimation as the container to store the ActionData of the first attack animations (In ADXP, that would be "MCO*attack1.hkx" & "MCO_powerattack1.hkx"), with it SCAR could retrieves the data from SKSE plugin end.
 <br/>  
-Luckily, For the attack behavior of <u>\_Character*</u>, SCAR already created a DummyAnimation named "SCAR_1hmReadyDummy.hkx", so you don't need to patch behavior for character yourself (still need to do for creature).
+Luckily, For the attack behavior of <u>Character</u>, SCAR already created a DummyAnimation named "SCAR_1hmReadyDummy.hkx", so you don't need to patch behavior for character yourself (still need to do that for creature).
 
 The remaining things you need to do is annotate the ActionData of your first attack inside the "SCAR_1hmReadyDummy.hkx", then include this animation file into your moveset's DAR folder.  
 <br/>
