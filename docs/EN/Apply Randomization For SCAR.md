@@ -1,7 +1,6 @@
-# Apply Randomization For SCAR Moveset
+# Apply Randomization For SCAR Moveset(Outdated)
 
-This tutorial would instruct you about how to properly create random moveset that could works with SCAR.  
-Please read about the [basic tutorial](/How%20To%20Patch%20Moveset%20For%20SCAR.md) before come into this one!
+**Attention! This doc is no longer available, check the [AttackVariant](https://github.com/max-su-2019/SCAR/blob/main/docs/EN/Developers%20Manual%20For%20SCAR%202.0%2B.md#--attack-variant) feature instead!** 
 
 ## Issue Descriptions
 
