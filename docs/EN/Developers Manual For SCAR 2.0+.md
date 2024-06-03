@@ -37,7 +37,7 @@ The content of the annotation could divided into three segments, as the picture 
   - `IdleAnimation` : The EditorID of the [Idle Animation](https://www.creationkit.com/index.php?title=Idle_Animations) that would be performed by the ActionData when all the conditions are meeting.
     Idle Animation is defined inside an esp/esm/esl plugin, SCAR itself already contains two valid idle animation: "ADXP_NPCPowerAttack" and "ADXP_NPCNormalAttack" in it `scar-adxp-patch.esp`, which could be used to perform powerAttack and normalAttack separately.  
     The conditions items of the idle animation would also be take into consideration when doing conditions checking.  
-    If you feel like not real necessary to create an `Idle Animation` record in the esp plugin but simply want to perform the actual attack event directly, You can even using an [AttackData](#attack-data) in replace of `IdleAnimation` data within the ActionData.
+    If you feel like not real necessary to create an `Idle Animation` record in the esp plugin but simply want to perform the actual attack event directly, You can even using an [AttackData](#--attack-data) in replace of `IdleAnimation` data within the ActionData.
 
   - `MaxDistance`: The maximum distance range for the ActionData to execute, only when the distance between the moveset owner to the target less than this value, the ActionData could be executed. The value of the distance must not be an negative number.
     Be caution that you don't need to consider the weapon reach when filling the Max Distance value there, the weapon reach would be computed dynamically on SKSE plugin end.
