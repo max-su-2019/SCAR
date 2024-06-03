@@ -94,7 +94,7 @@ SCAR-v2.0+ has added the support for using _attack data_ to perform attack actio
 ```
 1.000000 SCAR_ActionData{"AttackData":"attackStart", "MinDistance":0, "MaxDistance":139, "StartAngle":-60, "EndAngle":60, "Chance":100, "Type":"RA"}
 ```
-Be caution that you can only choice to use either one of attack data or idle animation for an SCAR action data.
+Be caution that you can only choose to use either one of attack data or idle animation for an SCAR action data.
 
 #### - Cool Down Time
 SCAR-v2.0+ allow you to set up a _cool down duration_ for the attack data you are using to perfrom SCAR attack action, therefore the same attack data action would not re-perform by the npcs during the cool down interval time. A vaild cool down time value should be greater than zero.    
